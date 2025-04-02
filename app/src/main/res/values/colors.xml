@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="transparent_black">#80000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="blue_sky">#4fb5e2</color>
+    <color name="dark_gray">#2b2626</color>
+    <color name="gray">#716e6e</color>
+    <!-- Couleurs ciel volcan : dégradé vertical -->
+    <color name="volcan100">#342c2b</color>
+    <color name="volcan200">#761414</color>
+    <!-- Couleurs sable égypte : gradient vertical -->
+    <color name="egyptian_floor100">#ffde59</color>
+    <color name="egyptian_floor200">#ff914d</color>
+    <!-- Couleurs pour d=un dégradé dans le ciel -->
+    <color name="blue100">#bce1f1</color>
+    <color name="blue101">#2ec1ff</color>
+    <color name="blue102">#498ca8</color>
+    <!-- |||||||||||||||||||||||||||||||||||||||||||||||||||-->
+    <color name="green100">#05b60c</color>
+    <color name="green200">#227233</color>
+    <color name="green300">#146125</color>
+    <color name="transparent_green300">#80146125</color>
+    <color name="red">#ba1a1a</color>
+</resources>
