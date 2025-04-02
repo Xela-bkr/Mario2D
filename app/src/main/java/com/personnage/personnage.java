@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 public class personnage extends View {
+    // commentaire
 
     //****VARIABLES****//
     public int x, y, largeur, hauteur, marcheCompteur;
