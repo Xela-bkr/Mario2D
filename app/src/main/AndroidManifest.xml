@@ -13,7 +13,7 @@
         android:theme="@style/Theme.Mario2D"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".menu.MainActivity"
             android:screenOrientation="landscape"
             android:exported="true">
             <intent-filter>

@@ -1,12 +1,10 @@
-package com.example.mario2d;
+package com.example.mario2d.menu;
 
 import android.os.Bundle;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import com.example.mario2d.R;
 
 public class MainActivity extends AppCompatActivity {
 
