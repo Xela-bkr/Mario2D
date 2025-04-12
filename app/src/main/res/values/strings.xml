@@ -3,6 +3,11 @@
     <string name="game_title">Mario Bros</string>
     <string name="world">World : </string>
     <string name="time">Time : </string>
+    <string name="world1">World : Prairie</string>
+    <string name="world2">World : Ghostland</string>
+    <string name="world3">World : Volcano</string>
+    <string name="world4">World : 4</string>
+    <string name="world5">World : 5</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

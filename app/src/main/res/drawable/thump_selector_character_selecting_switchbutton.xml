@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Etat lorsque le Switch est décoché -->
+    <item android:state_checked="false" android:state_activated="false" android:drawable="@drawable/thumb_false">
+    </item>
+
+    <!-- Etat lorsque le Switch est coché -->
+    <item android:state_checked="true" android:state_activated="true" android:drawable="@drawable/thumb_true">
+    </item>
+
+</selector>

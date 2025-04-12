@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true" android:state_activated="true" android:drawable="@drawable/sounfeffects_off">
+        <shape android:shape="oval">
+            <solid android:color="@color/green200"/>
+            <gradient android:angle="120"
+                android:startColor="@color/green100"
+                android:endColor="@color/green200"/>
+        </shape>
+    </item>
+    <item android:state_checked="false" >
+        <shape android:shape="oval">
+            <solid android:color="@color/red"/>
+            <gradient android:angle="120"
+                android:startColor="@color/red"
+                android:endColor="@color/volcan200"/>
+        </shape>
+    </item>
+</selector>
