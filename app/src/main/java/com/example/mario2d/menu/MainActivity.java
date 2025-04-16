@@ -3,12 +3,14 @@ package com.example.mario2d.menu;
 import static java.security.AccessController.getContext;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -23,6 +25,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.mario2d.R;
+import com.example.mario2d.game.loop.GameActivity;
 
 import java.util.ArrayList;
 
@@ -164,6 +167,34 @@ public class MainActivity extends AppCompatActivity {
         soundSwitch.setChecked(false);
         musicSwitch.setChecked(false);
         personnageSwitch.setChecked(false);
+
+        Button play = findViewById(R.id.play_button);
+        play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, GameActivity.class);
+                intent.putExtra("displayWidth", level1.displayWidth);
+                intent.putExtra("displayHeight", level1.displayHeight);
+                intent.putExtra("characterWidth", level1.CHARACTER_WIDTH);
+                intent.putExtra("characterHeight", level1.CHARACTER_HEIGHT);
+                intent.putExtra("floorWidth", level1.FLOOR_WIDTH);
+                intent.putExtra("floorHeight", level1.FLOOR_HEIGHT);
+                intent.putExtra("floorRate", level1.FLOOR_RATE);
+                intent.putExtra("castleWidth", level1.CASTLE_WIDTH);
+                intent.putExtra("castleHeight", level1.CASTLE_HEIGHT);
+                intent.putExtra("blocWidth", level1.BLOC_WIDTH);
+                intent.putExtra("blocHeight", level1.BLOC_HEIGHT);
+                intent.putExtra("pipeWidth", level1.PIPE_WIDTH);
+                intent.putExtra("pipeHeight", level1.PIPE_HEIGHT);
+                intent.putExtra("levelSelected", currentLevelSelected);
+                intent.putExtra("leftHandMode", leftMode);
+                intent.putExtra("soundEffect", soundEffect);
+                intent.putExtra("music", music);
+                intent.putExtra("selectedCharacter", currentSelectedCharacter);
+                // TODO passer l'historique du joueur si implémentation d'historique
+                startActivity(intent);
+            }
+        });
 
     }
     //****GETTERS****//
