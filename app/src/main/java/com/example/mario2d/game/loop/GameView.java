@@ -27,8 +27,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private Boolean leftHandMode, soundEffect, music;
     private Player player;
     private ArrayList<Floor> floor;
-    private int x, y;
 
+    @Deprecated
     public GameView(Context context, int displayWidth, int displayHeight, int CHARACTER_WIDTH, int CHARACTER_HEIGHT, int FLOOR_WIDTH,
                     int FLOOR_HEIGHT, int FLOOR_RATE, int CASTLE_WIDTH, int CASTLE_HEIGHT, int BLOC_WIDTH, int BLOC_HEIGHT,
                     int PIPE_WIDTH, int PIPE_HEIGHT, int LEVEL_SELECTED, int CHARACTER_SELECTED, boolean leftHandMode,
@@ -43,7 +43,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         this.LEVEL_SELECTED = LEVEL_SELECTED; this.CHARACTER_SELECTED = CHARACTER_SELECTED;this.leftHandMode = leftHandMode;
         this.soundEffect = soundEffect; this.music=music;
 
-        this.x = 0; this.y = 100;
         this.characterBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.mario_arret_droite);
 
         if(CHARACTER_SELECTED==1){

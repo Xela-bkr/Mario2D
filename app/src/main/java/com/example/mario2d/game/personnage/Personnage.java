@@ -10,12 +10,25 @@ import com.example.mario2d.game.Origin;
 
 import java.util.HashMap;
 
+/**
+ * Classe Personnage implémentant l'ensemble des attibuts dont les joueur et ennemis ont besoin
+ * @see Player
+ */
+
 //TODO Add "item" Object attribute
 //TODO Implement character's Skin
 public class Personnage extends Origin{
 
     //----VARIABLES----//
+    /**
+     * Variable isJumping (bool) pour déternimer si le personnage st en train de sauter ou non
+     * Variable isRight (bool) pour déterminer si le personnage est orienté à droite ou non
+     * Variable isWalking (bool) pour déternimer si le personnage est en train de marcher ou non TODO add reference to collision management
+     */
     protected Boolean isJumping, isRight, isWalking;
+    /**
+     * Variable compteurMarche : utile à la fonction de marche du personnage
+     */
     protected int compteurMarche;
 
     //----CONSTRUCTEUR----//
@@ -41,8 +54,8 @@ public class Personnage extends Origin{
     /**
      *  setDirection
      * @param b -> Boolean
-     * @implNote True = character is on the right
-     * @implNote False = character is on the left
+     * True = character is on the right
+     * False = character is on the left
      */
     public void setDirection(Boolean b){this.isRight = b;}
     //----GETTERS----//
@@ -53,12 +66,12 @@ public class Personnage extends Origin{
     public int getCompteurMarche() {return compteurMarche;}
 
     //----METHODES----//
-    public void addResourceToSpriteBank(String key, int resource){spriteBank.put(key, resource);}
-
     /**
-     * Walk function : set the current bitmap attribute
+     * Fonction walk() permet de faire marcher le personage en modifiant son image (attribut)
+     * @see Origin
      * @param frequence
-     * @implNote the frequency is a value that determines how fast the character's bitmap is changing between two possibilities.
+     * La fréquence détermine à quelle vitesse les images simulant la marche alternent
+     * Plus la fréquence est haute, plus la marche sera lente.
      */
     public void walk(int frequence){
         String key = this.getName();
@@ -78,6 +91,10 @@ public class Personnage extends Origin{
             setBitmap(key);
         }
     }
+
+    /**
+     * Fonction jump modifiant l'image (attribut) du personnage
+     */
     public void jump(){
         String key = getName()+"_saute";
         if(isRight){key+="_droite";}

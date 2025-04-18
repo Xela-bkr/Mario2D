@@ -29,23 +29,47 @@ import com.example.mario2d.game.loop.GameActivity;
 
 import java.util.ArrayList;
 
+/**
+ * Actvité prinipale constituant le menu du jeu
+ */
 public class MainActivity extends AppCompatActivity {
 
     //****VARIABLES****//
+    /**
+     * Constantes pour définir le prsonnage sélectionné par le joueur.
+     */
     public static int MARIO_SELECTED = 1;
     public static int LUIGI_SELECTED = 2;
+
+    /**
+     * Layout pour le sous-menu dédié aux paramètres
+     */
     public LinearLayout settingLayout;
     public int currentSelectedCharacter;
     public int currentLevelSelected;
+    /**
+     * Instances des niveaux à afficher.
+     */
     public AbstractFragment level1 = AbstractFragment.newInstance(R.drawable.redbrick, R.drawable.castle, R.drawable.mario_arret_droite, R.drawable.brownbloc, R.drawable.bloc, R.drawable.greenpipe, R.color.blue_sky);
     public AbstractFragment level2 = AbstractFragment.newInstance(R.drawable.greenbrick, R.drawable.castle, R.drawable.mario_arret_droite, R.drawable.brownbloc, R.drawable.bloc, R.drawable.greenpipe, R.color.dark_gray);
     public AbstractFragment level3 = AbstractFragment.newInstance(R.drawable.yellowbrick, R.drawable.castle, R.drawable.mario_arret_droite, R.drawable.brownbloc, R.drawable.bloc, R.drawable.greenpipe, R.color.blue_sky);
     public AbstractFragment level4 = AbstractFragment.newInstance(R.drawable.darkbrick, R.drawable.castle, R.drawable.mario_arret_droite, R.drawable.brownbloc, R.drawable.bloc, R.drawable.greenpipe, R.color.volcan200);
     public AbstractFragment level5 = AbstractFragment.newInstance(R.drawable.nuageplatform, R.drawable.castle, R.drawable.mario_arret_droite, R.drawable.brownbloc, R.drawable.bloc, R.drawable.greenpipe, R.color.blue_sky);
 
+    /**
+     * Paramètres de l'interface "setting"
+     */
     public Boolean leftMode, soundEffect, music;
 
     //****METHODES****//
+
+    /**
+     * onCreate. Fonction dans laquelle tous les composants du menu sont instaciés et paramétrés.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         System.out.println("OnCreate Method called");
@@ -136,18 +160,10 @@ public class MainActivity extends AppCompatActivity {
                 final int CHARACTER_HEIGHT = (int)(1.86f*CHARACTER_WIDTH);
                 if(isChecked){
                     setCurrentCharacter(LUIGI_SELECTED);
-                    //for(Fragment lev : levels){
-                        //AbstractFragment level = (AbstractFragment)lev;
-                        //level.setChar(level.getView(), level.CHARACTER_WIDTH, level.CHARACTER_HEIGHT, R.drawable.luigi_arret_droite);
-                    //}
                     moveFragment(fragmentManager);
                 }
                 else{
                     setCurrentCharacter(MARIO_SELECTED);
-                    //for(Fragment lev : levels){
-                        //AbstractFragment level = (AbstractFragment)lev;
-                        //level.setChar(level.getView(), level.CHARACTER_WIDTH, level.CHARACTER_HEIGHT, R.drawable.mario_arret_droite);
-                    //}
                     moveFragment(fragmentManager);
                 }
             }
@@ -205,6 +221,10 @@ public class MainActivity extends AppCompatActivity {
     public void setCurrentCharacter(int c) {this.currentSelectedCharacter = c;}
     public void setLeftHandMode(Boolean b){this.leftMode = b;}
     public void setCurrentLevelSelected(int i){this.currentLevelSelected=i;}
+
+    /**
+     * Restaure les paramètres par défaut.
+     */
     public void setDefaultValues(){
         setCurrentCharacter(1);
         setCurrentLevelSelected(1);
@@ -213,11 +233,22 @@ public class MainActivity extends AppCompatActivity {
     public void setSoundEffect(boolean b){this.soundEffect=b;}
     public void setMusic(boolean b){this.music=b;}
     //**** AUTRES METHODES ****//
+
+    /**
+     * @param fragManager
+     * Intialise le premier fragment à afficher du FragmentManager
+     */
     public void initFirstFragment(FragmentManager fragManager){
         fragManager.beginTransaction()
                 .replace(R.id.mainmenu_fragment, level1)
                 .setReorderingAllowed(true).commit();
     }
+
+    /**
+     * @param fm
+     * Fonction permettant de changer de niveau en fonction de l'attribut "currentLevelSelected"
+     * Utilise le FragmentManager de l'interfece.
+     */
     public void moveFragment(FragmentManager fm){
         switch(currentLevelSelected){
             case 0 :
@@ -337,6 +368,11 @@ public class MainActivity extends AppCompatActivity {
         this.settingLayout.setActivated(false);
         this.settingLayout.setVisibility(View.GONE);
     }
+
+    /**
+     * Permet de changer dynamiquement le nom du monde affiché à l'écran
+     * @param level
+     */
     public void changetitle(int level){
         TextView tv = findViewById(R.id.world);
         switch(level){

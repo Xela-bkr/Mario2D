@@ -8,13 +8,29 @@ import com.example.mario2d.R;
 
 import java.util.HashMap;
 
+/**
+ * Classe contenant les attributs communs à tous les composants du jeu :
+ * coordonnées, dimentions, contexte, nom, image (bitmap) et la spriteBank
+ */
 public class Origin {
+    /**
+     * SpriteBank : permet d'associer chaque nom d'image (string) à sa resource R.drawable.*
+     */
     protected HashMap<String, Integer> spriteBank = new HashMap<String, Integer>();
     protected int x, y, width, height;
     protected Bitmap bitmap;
     protected String name;
     protected Context context;
 
+    /**
+     * Constructeur
+     * @param context
+     * @param name
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     */
     public Origin(Context context, String name, int x, int y, int width, int height){
         this.name = name; this.x = x; this.y = y;
         this.width = width; this.height = height;
@@ -23,11 +39,32 @@ public class Origin {
         System.out.println("SpriteBank length : " + spriteBank.size());
     }
 
+    /**
+     * @param x
+     */
     //----SETTERS----//
     public void setX(int x){this.x = x;}
+
+    /**
+     * @param y
+     */
     public void setY(int y){this.y = y;}
+
+    /**
+     * @param width
+     */
     public void setWidth(int width){this.width = width;}
+
+    /**
+     * @param height
+     */
     public void setHeight(int height){this.height = height;}
+
+    /**
+     * Défini l'attribut bitmap.
+     * @param key
+     * ce paramètre est la clé du spriteBank donnat accès à la ressource associée
+     */
     public void setBitmap(String key){
         if(spriteBank.get(key)!=null){
             Bitmap bit = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(key));
@@ -38,9 +75,14 @@ public class Origin {
             this.bitmap = Bitmap.createScaledBitmap(bit, getWidth(), getHeight(), true);
         }
     }
+    /**
+     * @param context
+     */
     public void setContext(Context context){this.context = context;}
+    /**
+     * @param name
+     */
     public void setName(String name){this.name = name;}
-
     //----GETTERS----//
     public int getX(){return this.x;}
     public int getY(){return this.y;}
@@ -50,6 +92,11 @@ public class Origin {
     public HashMap<String, Integer> getSpriteBank() {return spriteBank;}
     public Bitmap getBitmap(){return this.bitmap;}
     public void addResourceToSpriteBank(String key, int resource){spriteBank.put(key, resource);}
+
+    /**
+     * Initialise l'ensemble des données du spriteBank.
+     * C'est cette fonction qu'il faut modifier de préférence pour ajouter/supprimer/modifier une ressource
+     */
     public void initSpriteBank(){
         // Mario
         //TODO Add dead mario resource when time 'll come
