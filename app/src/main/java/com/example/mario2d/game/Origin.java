@@ -38,23 +38,19 @@ public class Origin {
         this.initSpriteBank();
         System.out.println("SpriteBank length : " + spriteBank.size());
     }
-
     /**
      * @param x
      */
     //----SETTERS----//
     public void setX(int x){this.x = x;}
-
     /**
      * @param y
      */
     public void setY(int y){this.y = y;}
-
     /**
      * @param width
      */
     public void setWidth(int width){this.width = width;}
-
     /**
      * @param height
      */
@@ -90,7 +86,9 @@ public class Origin {
     public int getHeight(){return this.height;}
     public String getName(){return this.name;}
     public HashMap<String, Integer> getSpriteBank() {return spriteBank;}
-    public Bitmap getBitmap(){return this.bitmap;}
+    public Bitmap getBitmap(){
+        return this.bitmap;
+    }
     public void addResourceToSpriteBank(String key, int resource){spriteBank.put(key, resource);}
 
     /**
@@ -118,15 +116,17 @@ public class Origin {
 
         //Items
         spriteBank.put("bloc", R.drawable.bloc);
-        spriteBank.put("brownBloc", R.drawable.brownbloc);
+        spriteBank.put("brownbloc", R.drawable.brownbloc);
         spriteBank.put("castle", R.drawable.castle);
-        spriteBank.put("darkBrick", R.drawable.darkbrick);
-        spriteBank.put("greenBrick", R.drawable.greenbrick);
-        spriteBank.put("greenPipe", R.drawable.greenpipe);
+        spriteBank.put("darkbrick", R.drawable.darkbrick);
+        spriteBank.put("greenbrick", R.drawable.greenbrick);
+        spriteBank.put("greenpipe", R.drawable.greenpipe);
         spriteBank.put("nuage", R.drawable.nuage);
-        spriteBank.put("nuagePlatform", R.drawable.nuageplatform);
+        spriteBank.put("nuageplatform", R.drawable.nuageplatform);
         spriteBank.put("piece", R.drawable.piece);
-        spriteBank.put("redBrick", R.drawable.redbrick);
-        spriteBank.put("yellowBrick", R.drawable.yellowbrick);
+        spriteBank.put("redbrick", R.drawable.redbrick);
+        spriteBank.put("yellowbrick", R.drawable.yellowbrick);
     }
+    public void translateX(int dx){this.setX(this.getX()+dx);}
+    public void translateY(int dy){this.setY(this.getY()+dy);}
 }

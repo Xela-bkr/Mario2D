@@ -1,5 +1,7 @@
 package com.example.mario2d.game.personnage;
 
+import static java.security.AccessController.getContext;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -43,7 +45,7 @@ public class Personnage extends Origin{
      */
     public Personnage(Context context, String name, int x, int y, int width, int height){
         super(context, name, x, y, width, height);
-        this.isJumping = false; this.isRight = false; this.isWalking = false;
+        this.isJumping = false; this.isRight = true; this.isWalking = false;
         this.setBitmap(name+"_arret_droite");
     }
     //----SETTERS----//
@@ -57,7 +59,7 @@ public class Personnage extends Origin{
      * True = character is on the right
      * False = character is on the left
      */
-    public void setDirection(Boolean b){this.isRight = b;}
+    public void setDirectionRight(Boolean b){this.isRight = b;}
     //----GETTERS----//
     public boolean getWalkState(){return this.isWalking;}
     public Boolean getJumping() {return isJumping;}
@@ -74,22 +76,24 @@ public class Personnage extends Origin{
      * Plus la fréquence est haute, plus la marche sera lente.
      */
     public void walk(int frequence){
+        if(name==null){name="mario";}
         String key = this.getName();
+
         if(compteurMarche>=0 && compteurMarche<frequence){
             key+="_marche";
             if(isRight){key+="_droite";}
             else{key+="_gauche";}
         }
-        if(compteurMarche>=frequence && compteurMarche<2*frequence){
+        else if(compteurMarche>=frequence && compteurMarche<=2*frequence){
             key+="_arret";
             if(isRight){key+="_droite";}
             else{key+="_gauche";}
         }
         if(compteurMarche>=2*frequence){setCompteurMarche(0);}
-
         if(spriteBank.get(key)!=null){
             setBitmap(key);
-        }
+        } else{setBitmap("bloc");}
+        compteurMarche++;
     }
 
     /**

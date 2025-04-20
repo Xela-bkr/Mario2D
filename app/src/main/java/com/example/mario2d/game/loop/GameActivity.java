@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mario2d.game.objet.Castle;
 import com.example.mario2d.game.objet.Floor;
 import com.example.mario2d.game.personnage.Player;
 
@@ -34,12 +35,14 @@ public class GameActivity extends AppCompatActivity {
         ArrayList<Floor> floor = new ArrayList<Floor>();
         setFloor(floor);
 
+        ArrayList<Castle> castles = new ArrayList<Castle>();
+        setCastles(castles);
         //TODO add extra extractions for user's history data
 
         //setContentView(new GameView(this, displayWidth, displayHeight, CHARACTER_WIDTH, CHARACTER_HEIGHT, FLOOR_WIDTH,
                 //FLOOR_HEIGHT, FLOOR_RATE, CASTLE_WIDTH, CASTLE_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT, PIPE_WIDTH, PIPE_HEIGHT,
                 //LEVEL_SELECTED, CHARACTER_SELECTED, leftHandMode, soundEffect, music));
-        setContentView(new GameView(this, player, floor));
+        setContentView(new GameView(this, displayWidth, displayHeight,leftHandMode, LEVEL_SELECTED, player, floor, castles));
     }
     public void setExtraData(Bundle extras){
         displayWidth = extras.getInt("displayWidth");
@@ -66,20 +69,33 @@ public class GameActivity extends AppCompatActivity {
         String key;
         switch (LEVEL_SELECTED){
             case 1 :
-                key="redBrick"; break;
+                key="redbrick"; break;
             case 2 :
-                key="greenBrick"; break;
+                key="greenbrick"; break;
             case 3 :
-                key="yellowBrick"; break;
+                key="yellowbrick"; break;
             case 4 :
-                key="darkBrick"; break;
-            case 5 : key="nuagePlatform"; break;
-            default : key="bloc"; break;
+                key="darkbrick"; break;
+            case 5 :
+                key="nuageplatform"; break;
+            default :
+                key="bloc"; break;
         }
         for(int i = 0; i<FLOOR_RATE+1; i++){
             int x = i*FLOOR_WIDTH;
             Floor f = new Floor(this, key, x, y, FLOOR_WIDTH, FLOOR_HEIGHT);
             floor.add(f);
         }
+    }
+    public void setCastles(ArrayList<Castle> castles){
+        final int castleStartX = 0;
+        final int castleEndX = displayWidth*10;
+        final int castleY = displayHeight - FLOOR_HEIGHT - CASTLE_HEIGHT;
+
+        Castle castleStart = new Castle(this, "castle", castleStartX, castleY, CASTLE_WIDTH, CASTLE_HEIGHT);
+        Castle castleEnd = new Castle(this, "castle", castleEndX, castleY, CASTLE_WIDTH, CASTLE_HEIGHT);
+
+        castles.add(castleStart);
+        castles.add(castleEnd);
     }
 }
