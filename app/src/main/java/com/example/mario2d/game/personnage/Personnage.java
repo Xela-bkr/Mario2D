@@ -9,7 +9,9 @@ import androidx.annotation.NonNull;
 
 import com.example.mario2d.R;
 import com.example.mario2d.game.Origin;
+import com.example.mario2d.game.objet.Objet;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -104,5 +106,41 @@ public class Personnage extends Origin{
         if(isRight){key+="_droite";}
         else{key+="_gauche";}
         setBitmap(key);
+    }
+    public boolean[] detectCollision(Objet objet){
+
+        // [haut, droite, bas, gauche] -> en haut de l'objet, à droite de l'objet ...
+        boolean[] result = new boolean[4];
+        Arrays.fill(result, false);
+
+        // collision en haut :
+        boolean ch1 = getX()<=objet.getX() + objet.getWidth();
+        boolean ch2 = getX() + getWidth() >= objet.getX();
+        boolean ch3 = getY() + getHeight() >= objet.getY();
+        boolean ch4 = getY() < objet.getY();
+        result[0] = ch1 && ch2 && ch3 && ch4;
+
+        //collision à droite
+        boolean cd1 = getY()<=objet.getY()+objet.getHeight();
+        boolean cd2 = getY()+getHeight()>=objet.getY();
+        boolean cd3 = getX()>objet.getX();
+        boolean cd4 = getX()<=objet.getX()+objet.getWidth();
+        result[1] = cd1 && cd2 && cd3 && cd4;
+
+        // collision en bas :
+        boolean cb1 = getY() <= objet.getY() + objet.getHeight();
+        boolean cb2 = getY() > objet.getY();
+        boolean cb3 = getX() <= objet.getX() + objet.getWidth();
+        boolean cb4 = getX() + getWidth() >= objet.getX();
+        result[2] = cb1 && cb2 && cb3 && cb4;
+
+        // collision à gauche :
+        boolean cg1 = getY() <= objet.getY() + objet.getHeight();
+        boolean cg2 = getY() + getHeight() >= objet.getY();
+        boolean cg3 = getX() + getWidth() >= objet.getX();
+        boolean cg4 = getX() > objet.getX();
+        result[3] = cg1 && cg2 && cg3 && cg4;
+
+        return result;
     }
 }

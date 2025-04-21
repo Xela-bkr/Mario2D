@@ -1,7 +1,9 @@
 package com.example.mario2d.game.loop;
 
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mario2d.game.objet.Castle;
@@ -17,6 +19,7 @@ public class GameActivity extends AppCompatActivity {
             CASTLE_WIDTH, CASTLE_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT, PIPE_WIDTH, PIPE_HEIGHT, LEVEL_SELECTED, CHARACTER_SELECTED;
 
     private Boolean leftHandMode, soundEffect, music;
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -38,10 +41,6 @@ public class GameActivity extends AppCompatActivity {
         ArrayList<Castle> castles = new ArrayList<Castle>();
         setCastles(castles);
         //TODO add extra extractions for user's history data
-
-        //setContentView(new GameView(this, displayWidth, displayHeight, CHARACTER_WIDTH, CHARACTER_HEIGHT, FLOOR_WIDTH,
-                //FLOOR_HEIGHT, FLOOR_RATE, CASTLE_WIDTH, CASTLE_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT, PIPE_WIDTH, PIPE_HEIGHT,
-                //LEVEL_SELECTED, CHARACTER_SELECTED, leftHandMode, soundEffect, music));
         setContentView(new GameView(this, displayWidth, displayHeight,leftHandMode, LEVEL_SELECTED, player, floor, castles));
     }
     public void setExtraData(Bundle extras){

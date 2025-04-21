@@ -11,6 +11,7 @@
     <color name="volcan200">#761414</color>
     <!-- Couleurs sable égypte : gradient vertical -->
     <color name="egyptian_floor100">#ffde59</color>
+    <color name="jaune_poussin">#eea90a</color>
     <color name="egyptian_floor200">#ff914d</color>
     <!-- Couleurs pour d=un dégradé dans le ciel -->
     <color name="blue100">#bce1f1</color>

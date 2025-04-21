@@ -1,5 +1,9 @@
 package com.example.mario2d.game.loop;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 public class GameLoop implements Runnable{
     private Boolean running;
     private Thread thread;
@@ -9,6 +13,7 @@ public class GameLoop implements Runnable{
         gameView = gView;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void run() {
 
@@ -65,5 +70,9 @@ public class GameLoop implements Runnable{
     public void update(){
         gameView.update();
     }
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void render(){gameView.render();}
+
+    public boolean isRunning(){return this.running;}
+
 }
