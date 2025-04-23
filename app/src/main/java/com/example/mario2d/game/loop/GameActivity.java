@@ -6,8 +6,11 @@ import android.os.Bundle;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mario2d.game.objet.BrownBloc;
 import com.example.mario2d.game.objet.Castle;
 import com.example.mario2d.game.objet.Floor;
+import com.example.mario2d.game.objet.Pipe;
+import com.example.mario2d.game.objet.YellowBloc;
 import com.example.mario2d.game.personnage.Player;
 
 import java.util.ArrayList;
@@ -40,8 +43,16 @@ public class GameActivity extends AppCompatActivity {
 
         ArrayList<Castle> castles = new ArrayList<Castle>();
         setCastles(castles);
+
+        ArrayList<BrownBloc> brownBlocs = new ArrayList<BrownBloc>();
+        ArrayList<YellowBloc> yellowBlocs = new ArrayList<YellowBloc>();
+        setBlocs(brownBlocs, yellowBlocs);
+
+        ArrayList<Pipe> pipes = new ArrayList<Pipe>();
+        setPipes(pipes);
         //TODO add extra extractions for user's history data
-        setContentView(new GameView(this, displayWidth, displayHeight,leftHandMode, LEVEL_SELECTED, player, floor, castles));
+        setContentView(new GameView(this, displayWidth, displayHeight,leftHandMode, LEVEL_SELECTED,
+                player, floor, castles, brownBlocs, yellowBlocs, pipes));
     }
     public void setExtraData(Bundle extras){
         displayWidth = extras.getInt("displayWidth");
@@ -91,10 +102,86 @@ public class GameActivity extends AppCompatActivity {
         final int castleEndX = displayWidth*10;
         final int castleY = displayHeight - FLOOR_HEIGHT - CASTLE_HEIGHT;
 
-        Castle castleStart = new Castle(this, "castle", castleStartX, castleY, CASTLE_WIDTH, CASTLE_HEIGHT);
-        Castle castleEnd = new Castle(this, "castle", castleEndX, castleY, CASTLE_WIDTH, CASTLE_HEIGHT);
+        String name = "castle";
+        if(LEVEL_SELECTED == 2){name="greencastle";}
+
+        Castle castleStart = new Castle(this, name, castleStartX, castleY, CASTLE_WIDTH, CASTLE_HEIGHT);
+        Castle castleEnd = new Castle(this, name, castleEndX, castleY, CASTLE_WIDTH, CASTLE_HEIGHT);
 
         castles.add(castleStart);
         castles.add(castleEnd);
+    }
+    public void setBlocs(ArrayList<BrownBloc> brownBlocs, ArrayList<YellowBloc> yellowBlocs){
+
+        String blocName = "bloc";
+
+        int Y_COORD = displayHeight - FLOOR_HEIGHT - CHARACTER_HEIGHT - BLOC_HEIGHT*2;
+
+        int[] BX = new int[1];
+        int[] YX = new int[1];
+
+        switch (LEVEL_SELECTED){
+            case 1 :
+                blocName = "brownbloc";
+                BX = new int[]{600, 600 + BLOC_WIDTH * 2};
+                YX = new int[]{600+BLOC_WIDTH};
+                break;
+            case 2 :
+                BX = new int[]{600, 600+BLOC_WIDTH*2, 600+BLOC_WIDTH*4};
+                YX = new int[]{600+BLOC_WIDTH, 600+BLOC_WIDTH*3};
+                blocName = "greenbloc";
+                break;
+            case 3 :
+                BX = new int[]{600, 600+BLOC_WIDTH*2, 600+BLOC_WIDTH*4, 600+BLOC_WIDTH*6};
+                YX = new int[]{600+BLOC_WIDTH, 600+BLOC_WIDTH*3, 600+BLOC_WIDTH*5};
+                blocName = "goldenbloc";
+                break;
+            case 4 :
+                BX = new int[]{600, 600+BLOC_WIDTH*2, 600+BLOC_WIDTH*4, 600+BLOC_WIDTH*6, 600+BLOC_WIDTH*8};
+                YX = new int[]{600+BLOC_WIDTH, 600+BLOC_WIDTH*3, 600+BLOC_WIDTH*5, 600+BLOC_WIDTH*7};
+                blocName = "darkbloc";
+                break;
+            case 5 :
+                BX = new int[]{600, 600+BLOC_WIDTH*2, 600+BLOC_WIDTH*4, 600+BLOC_WIDTH*6, 600+BLOC_WIDTH*8, 600+BLOC_WIDTH*10};
+                YX = new int[]{600+BLOC_WIDTH, 600+BLOC_WIDTH*3, 600+BLOC_WIDTH*5, 600+BLOC_WIDTH*7, 600+BLOC_WIDTH*9};
+                blocName = "brownbloc";
+                break;
+
+        }
+        for(int i = 0; i<BX.length; i++){
+            BrownBloc b = new BrownBloc(this, blocName, BX[i], Y_COORD, BLOC_WIDTH, BLOC_HEIGHT);
+            brownBlocs.add(b);
+        }
+        for(int i = 0; i<YX.length; i++){
+            YellowBloc b = new YellowBloc(this, "bloc", YX[i], Y_COORD, BLOC_WIDTH, BLOC_HEIGHT);
+            yellowBlocs.add(b);
+        }
+    }
+    public void setPipes(ArrayList<Pipe> pipes){
+
+        int Y = displayHeight - FLOOR_HEIGHT - PIPE_HEIGHT;
+        int[] X  = new int[0];
+
+        switch (LEVEL_SELECTED){
+            case 1 :
+                X = new int[]{1500, 2500};
+                break;
+            case 2 :
+                X = new int[]{1500, 2500};
+                break;
+            case 3 :
+                X = new int[]{1500, 2500};
+                break;
+            case 4 :
+                X = new int[]{1500, 2500};
+                break;
+            case 5 :
+                X = new int[]{1500, 2500};
+                break;
+        }
+        for(int i = 0 ; i<X.length; i++){
+            Pipe p = new Pipe(this, "greenpipe", X[i], Y, PIPE_WIDTH, PIPE_HEIGHT);
+            pipes.add(p);
+        }
     }
 }

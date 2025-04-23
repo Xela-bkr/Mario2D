@@ -13,6 +13,7 @@ import com.example.mario2d.game.objet.Objet;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * Classe Personnage implémentant l'ensemble des attibuts dont les joueur et ennemis ont besoin
@@ -34,6 +35,15 @@ public class Personnage extends Origin{
      * Variable compteurMarche : utile à la fonction de marche du personnage
      */
     protected int compteurMarche;
+    /**
+     * Variable pour contrôler le temps de saut.
+     */
+    protected long jumpTime;
+    /**
+     * Dictionnaire recensant des tableaux d'état de collision pour chaque type d'objet.
+     */
+    protected HashMap<String, boolean[]> collisionMatrix = new HashMap<String, boolean[]>();
+    protected int maxY, minY;
 
     //----CONSTRUCTEUR----//
     /**
@@ -49,11 +59,14 @@ public class Personnage extends Origin{
         super(context, name, x, y, width, height);
         this.isJumping = false; this.isRight = true; this.isWalking = false;
         this.setBitmap(name+"_arret_droite");
+        this.setCollisionMatrixToFalse();
+        this.minY = getY();
     }
     //----SETTERS----//
     public void setCompteurMarche(int i){this.compteurMarche = i;}
     public void setWalkingSate(Boolean walkingState){this.isWalking = walkingState;}
     public void setJumpingState(Boolean jumpingState){this.isJumping = jumpingState;}
+    public void setJumpTime(long jumpTime){this.jumpTime = jumpTime;}
 
     /**
      *  setDirection
@@ -68,6 +81,7 @@ public class Personnage extends Origin{
     public Boolean getRightState() {return isRight;}
     public Boolean getWalkingState() {return isWalking;}
     public int getCompteurMarche() {return compteurMarche;}
+    public long getJumpTime(){return this.jumpTime;}
 
     //----METHODES----//
     /**
@@ -107,6 +121,41 @@ public class Personnage extends Origin{
         else{key+="_gauche";}
         setBitmap(key);
     }
+
+    /**
+     * Initialise et/ou réinitialise la matrice de collision.
+     * Tout deviens false
+     */
+    public void setCollisionMatrixToFalse(){
+        boolean[] tab = new boolean[4];
+        Arrays.fill(tab, false);
+        if(collisionMatrix.isEmpty()){
+            collisionMatrix.put("castle", tab);
+            collisionMatrix.put("floor", tab);
+            collisionMatrix.put("yellowbloc", tab);
+            collisionMatrix.put("brownbloc", tab);
+            collisionMatrix.put("pipe", tab);
+            collisionMatrix.put("piece", tab);
+        }
+        else{
+            for(String key : collisionMatrix.keySet()){collisionMatrix.put(key, tab);}
+        }
+    }
+
+    /**
+     * Ajouter ou modifier une paire clef/valeur dans la matrice de collision
+     * @param key
+     * @param tab
+     */
+    public void setCollisionMatrix(String key, boolean[]tab){collisionMatrix.put(key, tab);}
+
+    public HashMap<String, boolean[]> getCollisionMatrix() {return collisionMatrix;}
+
+    /**
+     * Detecter s'il y a collision avec un objet.
+     * @param objet
+     * @return
+     */
     public boolean[] detectCollision(Objet objet){
 
         // [haut, droite, bas, gauche] -> en haut de l'objet, à droite de l'objet ...
@@ -114,33 +163,98 @@ public class Personnage extends Origin{
         Arrays.fill(result, false);
 
         // collision en haut :
-        boolean ch1 = getX()<=objet.getX() + objet.getWidth();
-        boolean ch2 = getX() + getWidth() >= objet.getX();
+        boolean ch1 = getX() < objet.getX() + objet.getWidth();
+        boolean ch2 = getX() + getWidth() > objet.getX();
         boolean ch3 = getY() + getHeight() >= objet.getY();
         boolean ch4 = getY() < objet.getY();
-        result[0] = ch1 && ch2 && ch3 && ch4;
+        boolean ch5 = getY()+getHeight() <= objet.getY() + objet.getHeight()/2;
+        result[0] = ch1 && ch2 && ch3 && ch4 && ch5;
 
         //collision à droite
-        boolean cd1 = getY()<=objet.getY()+objet.getHeight();
-        boolean cd2 = getY()+getHeight()>=objet.getY();
-        boolean cd3 = getX()>objet.getX();
-        boolean cd4 = getX()<=objet.getX()+objet.getWidth();
+        boolean cd1 = getY() < objet.getY() + objet.getHeight();
+        boolean cd2 = getY() + getHeight() > objet.getY();
+        boolean cd3 = getX() >= objet.getX() + objet.getWidth()/2;
+        boolean cd4 = getX() < objet.getX() + objet.getWidth();
         result[1] = cd1 && cd2 && cd3 && cd4;
 
         // collision en bas :
         boolean cb1 = getY() <= objet.getY() + objet.getHeight();
-        boolean cb2 = getY() > objet.getY();
-        boolean cb3 = getX() <= objet.getX() + objet.getWidth();
-        boolean cb4 = getX() + getWidth() >= objet.getX();
+        boolean cb2 = getY() >= objet.getY() + objet.getHeight()/2;
+        boolean cb3 = getX() < objet.getX() + objet.getWidth();
+        boolean cb4 = getX() + getWidth() > objet.getX();
         result[2] = cb1 && cb2 && cb3 && cb4;
 
         // collision à gauche :
-        boolean cg1 = getY() <= objet.getY() + objet.getHeight();
-        boolean cg2 = getY() + getHeight() >= objet.getY();
+        boolean cg1 = getY() < objet.getY() + objet.getHeight();
+        boolean cg2 = getY() + getHeight() > objet.getY();
         boolean cg3 = getX() + getWidth() >= objet.getX();
-        boolean cg4 = getX() > objet.getX();
+        boolean cg4 = getX() + getWidth() <= objet.getX() + objet.getWidth()/2;
         result[3] = cg1 && cg2 && cg3 && cg4;
 
         return result;
     }
+
+    /**
+     * Detecter si le personnage a une collision à la droite de n'importe quel objet
+     * @return
+     */
+    public boolean collisionInRightWithObject(){
+        String[] keys = {"castle", "yellowbloc", "brownbloc", "pipe"};
+        boolean b = false;
+        for(String key : keys)
+            if((collisionMatrix.get(key))[1]) {
+                b = true;
+                break;
+            }
+        return b;
+    }
+
+    /**
+     * Detecter si le personnage a une collision à la gauche de n'importe quel objet
+     * @return
+     */
+    public boolean collisionInLeftWithObject(){
+        String[] keys = {"castle", "yellowbloc", "brownbloc", "pipe"};
+        boolean b = false;
+        for(String key : keys)
+            if((collisionMatrix.get(key))[3]) {
+                b = true;
+                break;
+            }
+        return b;
+    }
+
+    /**
+     * Detecter si le personnage a une collision en haut de n'importe quel objet
+     * @return
+     */
+    public boolean collisionOnTopWithObject(){
+        String[] keys = {"castle", "yellowbloc", "brownbloc", "pipe"};
+        boolean b = false;
+        for(String key : keys)
+            if((collisionMatrix.get(key))[0]) {
+                b = true;
+                break;
+            }
+        return b;
+    }
+
+    /**
+     * Detecter si le personnage a une collision en bas de n'importe que objet.
+     * @return
+     */
+    public boolean collisionOnBottomWithObject(){
+        String[] keys = {"castle", "yellowbloc", "brownbloc", "pipe"};
+        boolean b = false;
+        for(String key : keys)
+            if((collisionMatrix.get(key))[2]) {
+                b = true;
+                break;
+            }
+        return b;
+    }
+    public int getMaxY(){return this.maxY;}
+    public void setMaxY(int m){this.maxY = maxY;}
+    public int getMinY(){return this.minY;}
+    public void setMinY(int m){this.minY = m;}
 }

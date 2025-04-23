@@ -117,7 +117,11 @@ public class Origin {
         //Items
         spriteBank.put("bloc", R.drawable.bloc);
         spriteBank.put("brownbloc", R.drawable.brownbloc);
+        spriteBank.put("greenbloc", R.drawable.greenbloc);
+        spriteBank.put("goldenbloc", R.drawable.goldenbloc);
+        spriteBank.put("darkbloc", R.drawable.darkbloc);
         spriteBank.put("castle", R.drawable.castle);
+        spriteBank.put("greencastle", R.drawable.greencastle);
         spriteBank.put("darkbrick", R.drawable.darkbrick);
         spriteBank.put("greenbrick", R.drawable.greenbrick);
         spriteBank.put("greenpipe", R.drawable.greenpipe);
