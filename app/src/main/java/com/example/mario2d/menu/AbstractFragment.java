@@ -104,7 +104,7 @@ public class AbstractFragment extends Fragment {
         CHARACTER_WIDTH = (int)(0.05*displayWidth);
         CHARACTER_HEIGHT = (int)(MAIN_CHAR_AGR_COEFF*CHARACTER_WIDTH);
 
-        FLOOR_WIDTH = (int)(0.11*displayWidth);
+        FLOOR_WIDTH = (int)(0.10*displayWidth);
         FLOOR_HEIGHT = FLOOR_WIDTH;
         FLOOR_RATE = (int)displayWidth/FLOOR_WIDTH + 1;
 

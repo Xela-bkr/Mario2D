@@ -60,11 +60,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
      */
     private AbstractButton menuButton, pauseButton, retryButton, exitButton;
     public Player player;
-    private ArrayList<Floor> floor;
-    private ArrayList<Castle> castles;
-    private ArrayList<BrownBloc> brownBlocs;
-    private ArrayList<YellowBloc> yellowBlocs;
-    private ArrayList<Pipe> pipes;
+    private ArrayList<Objet> objets;
+    private ArrayList<Floor> floor = new ArrayList<Floor>();
+    private ArrayList<Castle> castles = new ArrayList<Castle>();
+    private ArrayList<BrownBloc> brownBlocs = new ArrayList<BrownBloc>();
+    private ArrayList<YellowBloc> yellowBlocs = new ArrayList<YellowBloc>();
+    private ArrayList<Pipe> pipes = new ArrayList<Pipe>();
 
     /**
      * Largeur du menuLatéral initial à afficher si le jeu est en pause
@@ -82,13 +83,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
      * @param leftHandMode
      * @param LEVEL_SELECTED
      * @param player
-     * @param floor
-     * @param castles
+     * @param objets
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public GameView(Context context, int displayWidth, int displayHeight, boolean leftHandMode, int LEVEL_SELECTED, Player player,
-                    ArrayList<Floor> floor, ArrayList<Castle> castles, ArrayList<BrownBloc> brownBlocs,
-                    ArrayList<YellowBloc> yellowBlocs, ArrayList<Pipe> pipes){
+    public GameView(Context context, int displayWidth, int displayHeight, boolean leftHandMode, int LEVEL_SELECTED, Player player, ArrayList<Objet> objets){
         super(context);
         getHolder().addCallback(this);
 
@@ -101,11 +99,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         this.afficherMenuLateral = false;
 
         this.player = player;
-        this.floor = floor;
-        this.castles = castles;
-        this.brownBlocs = brownBlocs;
-        this.yellowBlocs = yellowBlocs;
-        this.pipes = pipes;
+        this.objets = objets;
+
+        for(Objet objet : objets){
+            if(objet instanceof Castle){castles.add((Castle) objet);}
+            if(objet instanceof YellowBloc){yellowBlocs.add((YellowBloc) objet);}
+            if(objet instanceof BrownBloc){brownBlocs.add((BrownBloc) objet);}
+            if(objet instanceof Pipe){pipes.add((Pipe) objet);}
+            if(objet instanceof Floor){floor.add((Floor) objet);}
+        }
 
         this.exit = false;
         this.gravity = true;
@@ -149,10 +151,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         joystickPointerId = -1; jumpPointerId = -1; menuPointerId = -1; pausePointerId = -1;
         retryPointerId = -1; exitPointerId = -1;
-
-        System.out.println(String.format("Player X : %d | Player Y : %d", player.getX(), player.getY()));
-        System.out.println(String.format("Player Width : %d | Player Height : %d", player.getWidth(), player.getHeight()));
-        System.out.println(String.format("display dimansions : %d   %d", displayWidth, displayHeight));
     }
 
     /**
@@ -304,31 +302,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
      */
     public void moveWorld(){
         if(joystick.getIsPressed()){
-            if(joystick.orientedInRight()){
-                for(Floor fl : floor){
-                    fl.translateX(-dx);
-                    if(fl.getX()+fl.getWidth()<=0){fl.setX(this.displayWidth+1);}
-                }
-                for(Castle c : castles){c.translateX(-dx);}
-                for(BrownBloc bb : brownBlocs){bb.translateX(-dx);}
-                for(YellowBloc yb : yellowBlocs){yb.translateX(-dx);}
-                for(Pipe pipe : pipes){pipe.translateX(-dx);}
-            }
-            else{
-                for(Floor fl : floor){
-                    fl.translateX(dx);
-                    if(fl.getX()>=this.displayWidth){
-                        fl.setX(-fl.getWidth());
-                    }
-                }
-                for(Castle c : castles){c.translateX(dx);}
-                for(BrownBloc bb : brownBlocs){bb.translateX(dx);}
-                for(YellowBloc yb : yellowBlocs){yb.translateX(dx);}
-                for(Pipe pipe : pipes){pipe.translateX(dx);}
+            setDx(joystick.orientedInRight() ? -5 : 5);
+            for(Objet obj : objets){obj.translateX(dx);}
+            for(Floor floor : floor){
+                if(floor.getX() + floor.getWidth() <= 0){floor.setX(displayWidth);}
+                if(floor.getX() > displayWidth){floor.setX(-floor.getWidth());}
             }
         }
     }
-
     /**
      * Fonction de mise à jour graphique du GemeView
      * Appelé par le gameLoop à chaque Loop
@@ -341,38 +322,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             if (canvas != null) {
                 setBackgroundColor(LEVEL_SELECTED, canvas);
                 Paint paint = new Paint();
-                for(int i = 0; i<floor.size(); i++){
-                    int x = floor.get(i).getX();
-                    int y = floor.get(i).getY();
-                    Bitmap b = floor.get(i).getBitmap();
-                    canvas.drawBitmap(b, x, y, paint);
-                }
-                if(this.player.getBitmap()!=null){
-                    canvas.drawBitmap(player.getBitmap(), player.getX(), player.getY(), paint);
-                }
+                if(this.player.getBitmap()!=null){canvas.drawBitmap(player.getBitmap(), player.getX(), player.getY(), paint);}
+                for(Objet obj : objets){canvas.drawBitmap(obj.getBitmap(), obj.getX(), obj.getY(), paint);}
                 joystick.draw(canvas);
-                for(Castle c : castles){
-                    if(c.getBitmap()!=null){
-                        canvas.drawBitmap(c.getBitmap(), c.getX(), c.getY(), paint);
-                    }
-                }
-                for(BrownBloc bb : brownBlocs){
-                    if(bb.getBitmap()!=null){
-                        canvas.drawBitmap(bb.getBitmap(), bb.getX(), bb.getY(), paint);
-                    }
-                }
-                for(YellowBloc yb : yellowBlocs){
-                    if(yb.getBitmap()!=null){
-                        canvas.drawBitmap(yb.getBitmap(), yb.getX(), yb.getY(), paint);
-                    }
-                }
-                for(Pipe pipe : pipes){
-                    if(pipe.getBitmap()!=null){
-                        canvas.drawBitmap(pipe.getBitmap(), pipe.getX(), pipe.getY(), paint);
-                    }
-                }
-                if(menuButton.getIsPressed()){
-                    afficherMenuLateral(canvas);}
+                if(menuButton.getIsPressed()){afficherMenuLateral(canvas);}
                 menuButton.draw(canvas);
             }
         } catch (Exception e) {
@@ -390,43 +343,20 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
      */
     public void update(){
         joystick.update();
+        player.pushPositions(new int[]{player.getX(), player.getY()});
         updateCollision();
         gravity();
+        player.setWalkingSate(false);
         if(joystick.getIsPressed()){
-            if(joystick.orientedInRight()){
-                player.setDirectionRight(true);
-                if(!player.collisionInLeftWithObject()){
-                    player.setWalkingSate(true);
-                    updatePayerMove();
-                    moveWorld();
-                }
-                if(player.getX()<(int)(displayWidth/3 - 3)){
-                    player.translateX(3);
-                }
-                if(player.getX()>(int)(displayWidth/3 + 3)){
-                    player.translateX(-3);
-                }
-            }
-            else{
-                player.setDirectionRight(false);
-                if(!player.collisionInRightWithObject()){
-                    player.setWalkingSate(true);
-                    updatePayerMove();
-                    moveWorld();
-                }
-                player.walk(10);
-                if(player.getX()<(int)(displayWidth/2 - 3)){
-                    player.translateX(3);
-                }
-                if(player.getX()>(int)(displayWidth/2 + 3)){
-                    player.translateX(-3);
-                }
-            }
+            boolean move = false;
+            player.setDirectionRight(joystick.orientedInRight());
+            if(player.getRightState() && !player.collisionInLeftWithObject()){move = true;}
+            if(!player.getRightState() && !player.collisionInRightWithObject()){move = true;}
+
+            player.setWalkingSate(move);
+            if(player.getWalkingState()){moveWorld();}
         }
-        else {
-            player.setWalkingSate(false);
-            updatePayerMove();
-        }
+        updatePayerMove();
     }
 
     /**
@@ -501,8 +431,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         int menuX = 100;
         int menuY = (int)(displayHeight*0.07);
 
-        //int col1 = ContextCompat.getColor(getContext(), R.color.egyptian_floor200);
-        //int col2 = ContextCompat.getColor(getContext(), R.color.jaune_poussin);
         Color[] colors = {Color.valueOf(Color.BLACK), Color.valueOf(Color.WHITE)};
         menuButton = new AbstractButton(getContext(), menuX, menuY, menuButtonWidth, menuButtonHeight, true, colors, null);
         menuButton.setBorderWidth(10);
@@ -601,28 +529,35 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
      * TODO implémenter les cas de collisions multiples
      */
     public void updateCollision(){
+
+        int[] brownBlocOffset = new int[]{player.getJumping() ? player.getSpeedVectorY() : 5, player.getWalkingState() ? this.dx : 0};
+        int[] yellowBlocOffset = new int[]{player.getJumping() ? player.getSpeedVectorY() : 5, player.getWalkingState() ? this.dx : 0};
+        int[] floorOffset = new int[]{player.getJumping() ? player.getSpeedVectorY() : 0};
+        int[] pipeOffset = new int[]{player.getJumping() ? player.getSpeedVectorY() : 5, player.getWalkingState() ? this.dx : 0};
+        int[] castleOffset = new int[]{player.getJumping() ? player.getSpeedVectorY() : 5, player.getWalkingState() ? this.dx : 2};
+
         for(Castle castle : castles){
-            boolean[] tab = player.detectCollision(castle);
+            boolean[] tab = player.detectCollision(castle, castleOffset);
             player.setCollisionMatrix("castle", tab);
             if(tab[0] || tab[1] || tab[2] || tab[3]){break;}
         }
         for(Floor floor : floor){
-            boolean[] tab = player.detectCollision(floor);
+            boolean[] tab = player.detectCollision(floor, floorOffset);
             player.setCollisionMatrix("floor", tab);
             if(tab[0] || tab[1] || tab[2] || tab[3]){break;}
         }
         for(BrownBloc bb : brownBlocs){
-            boolean[] tab = player.detectCollision(bb);
+            boolean[] tab = player.detectCollision(bb, brownBlocOffset);
             player.setCollisionMatrix("brownbloc", tab);
             if(tab[0] || tab[1] || tab[2] || tab[3]){break;}
         }
         for(YellowBloc yb : yellowBlocs){
-            boolean[] tab = player.detectCollision(yb);
+            boolean[] tab = player.detectCollision(yb, yellowBlocOffset);
             player.setCollisionMatrix("yellowbloc", tab);
             if(tab[0] || tab[1] || tab[2] || tab[3]){break;}
         }
         for(Pipe pipe : pipes){
-            boolean[] tab = player.detectCollision(pipe);
+            boolean[] tab = player.detectCollision(pipe, pipeOffset);
             player.setCollisionMatrix("pipe", tab);
             if(tab[0] || tab[1] || tab[2] || tab[3]){break;}
         }
@@ -633,11 +568,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             long currentTime = System.nanoTime();
             long deltaTime = currentTime - player.getJumpTime();
             player.jump();
-            if(deltaTime <= ascentTime){
-                player.translateY(-12);
+            if(deltaTime <= ascentTime && !player.collisionOnBottomWithObject()){
+                int dy = -(player.getJumpImpulse() - player.getGravityConstant()*player.getCompteurSaut());
+                player.translateY(dy);
+                player.increaseCompteurSaut();
             }
             else{
                 player.setJumpingState(false);
+                player.setCompteurSaut(0);
                 gravity = true;
             }
         }

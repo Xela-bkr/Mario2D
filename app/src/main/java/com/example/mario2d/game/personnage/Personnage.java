@@ -11,16 +11,15 @@ import com.example.mario2d.R;
 import com.example.mario2d.game.Origin;
 import com.example.mario2d.game.objet.Objet;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 
 /**
  * Classe Personnage implémentant l'ensemble des attibuts dont les joueur et ennemis ont besoin
- * @see Player
  */
 
-//TODO Add "item" Object attribute
 //TODO Implement character's Skin
 public class Personnage extends Origin{
 
@@ -28,13 +27,13 @@ public class Personnage extends Origin{
     /**
      * Variable isJumping (bool) pour déternimer si le personnage st en train de sauter ou non
      * Variable isRight (bool) pour déterminer si le personnage est orienté à droite ou non
-     * Variable isWalking (bool) pour déternimer si le personnage est en train de marcher ou non TODO add reference to collision management
+     * Variable isWalking (bool) pour déternimer si le personnage est en train de marcher ou non
      */
     protected Boolean isJumping, isRight, isWalking;
     /**
      * Variable compteurMarche : utile à la fonction de marche du personnage
      */
-    protected int compteurMarche;
+    protected int compteurMarche, gravityConstant, jumpImpulse, compteurSaut;
     /**
      * Variable pour contrôler le temps de saut.
      */
@@ -44,6 +43,7 @@ public class Personnage extends Origin{
      */
     protected HashMap<String, boolean[]> collisionMatrix = new HashMap<String, boolean[]>();
     protected int maxY, minY;
+    protected int[][] positions;
 
     //----CONSTRUCTEUR----//
     /**
@@ -61,13 +61,17 @@ public class Personnage extends Origin{
         this.setBitmap(name+"_arret_droite");
         this.setCollisionMatrixToFalse();
         this.minY = getY();
+        this.gravityConstant = 1;
+        this.jumpImpulse = 24;
+        this.compteurSaut = 0;
+        this.positions = new int[2][2];
+        Arrays.fill(positions, new int[]{0, 0});
     }
     //----SETTERS----//
     public void setCompteurMarche(int i){this.compteurMarche = i;}
     public void setWalkingSate(Boolean walkingState){this.isWalking = walkingState;}
     public void setJumpingState(Boolean jumpingState){this.isJumping = jumpingState;}
     public void setJumpTime(long jumpTime){this.jumpTime = jumpTime;}
-
     /**
      *  setDirection
      * @param b -> Boolean
@@ -75,6 +79,11 @@ public class Personnage extends Origin{
      * False = character is on the left
      */
     public void setDirectionRight(Boolean b){this.isRight = b;}
+
+    public void setCompteurSaut(int compteurSaut){this.compteurSaut = compteurSaut;}
+    public void setJumpImpulse(int jumpImpulse){this.jumpImpulse = jumpImpulse;}
+    public void setGravityConstant(int gravityConstant) {this.gravityConstant = gravityConstant;}
+
     //----GETTERS----//
     public boolean getWalkState(){return this.isWalking;}
     public Boolean getJumping() {return isJumping;}
@@ -82,7 +91,9 @@ public class Personnage extends Origin{
     public Boolean getWalkingState() {return isWalking;}
     public int getCompteurMarche() {return compteurMarche;}
     public long getJumpTime(){return this.jumpTime;}
-
+    public int getCompteurSaut() {return compteurSaut;}
+    public int getJumpImpulse() {return jumpImpulse;}
+    public int getGravityConstant() {return gravityConstant;}
     //----METHODES----//
     /**
      * Fonction walk() permet de faire marcher le personage en modifiant son image (attribut)
@@ -156,37 +167,40 @@ public class Personnage extends Origin{
      * @param objet
      * @return
      */
-    public boolean[] detectCollision(Objet objet){
+    public boolean[] detectCollision(Objet objet, int...error){
 
         // [haut, droite, bas, gauche] -> en haut de l'objet, à droite de l'objet ...
         boolean[] result = new boolean[4];
         Arrays.fill(result, false);
 
+        int verticalError = error.length==2 ? error[0] : 5;
+        int lateralError = error.length==2 ? error[1] : 4;
+
         // collision en haut :
-        boolean ch1 = getX() < objet.getX() + objet.getWidth();
-        boolean ch2 = getX() + getWidth() > objet.getX();
-        boolean ch3 = getY() + getHeight() >= objet.getY();
+        boolean ch1 = getX() < objet.getX() + objet.getWidth() - lateralError;
+        boolean ch2 = getX() + getWidth() > objet.getX() + lateralError;
+        boolean ch3 = getY() + getHeight() >= objet.getY() - verticalError;
         boolean ch4 = getY() < objet.getY();
         boolean ch5 = getY()+getHeight() <= objet.getY() + objet.getHeight()/2;
         result[0] = ch1 && ch2 && ch3 && ch4 && ch5;
 
         //collision à droite
-        boolean cd1 = getY() < objet.getY() + objet.getHeight();
-        boolean cd2 = getY() + getHeight() > objet.getY();
+        boolean cd1 = getY() < objet.getY() + objet.getHeight() - lateralError;
+        boolean cd2 = getY() + getHeight() > objet.getY() + lateralError;
         boolean cd3 = getX() >= objet.getX() + objet.getWidth()/2;
         boolean cd4 = getX() < objet.getX() + objet.getWidth();
         result[1] = cd1 && cd2 && cd3 && cd4;
 
         // collision en bas :
-        boolean cb1 = getY() <= objet.getY() + objet.getHeight();
+        boolean cb1 = getY() <= objet.getY() + objet.getHeight() + verticalError;
         boolean cb2 = getY() >= objet.getY() + objet.getHeight()/2;
-        boolean cb3 = getX() < objet.getX() + objet.getWidth();
-        boolean cb4 = getX() + getWidth() > objet.getX();
+        boolean cb3 = getX() < objet.getX() + objet.getWidth() - lateralError;
+        boolean cb4 = getX() + getWidth() > objet.getX() + lateralError;
         result[2] = cb1 && cb2 && cb3 && cb4;
 
         // collision à gauche :
-        boolean cg1 = getY() < objet.getY() + objet.getHeight();
-        boolean cg2 = getY() + getHeight() > objet.getY();
+        boolean cg1 = getY() < objet.getY() + objet.getHeight() - lateralError;
+        boolean cg2 = getY() + getHeight() > objet.getY() + lateralError;
         boolean cg3 = getX() + getWidth() >= objet.getX();
         boolean cg4 = getX() + getWidth() <= objet.getX() + objet.getWidth()/2;
         result[3] = cg1 && cg2 && cg3 && cg4;
@@ -257,4 +271,13 @@ public class Personnage extends Origin{
     public void setMaxY(int m){this.maxY = maxY;}
     public int getMinY(){return this.minY;}
     public void setMinY(int m){this.minY = m;}
+    public void increaseCompteurSaut(){this.compteurSaut ++;}
+    public void decreaseCompteurSaut(){this.compteurSaut --;}
+    public void pushPositions(int[] pos){
+        int[] pos0 = positions[0];
+        positions[0] = pos;
+        positions[1] = pos0;
+    }
+    public int getSpeedVectorX(){return positions[0][0]-positions[1][0];}
+    public int getSpeedVectorY(){return positions[0][1]-positions[1][1];}
 }
