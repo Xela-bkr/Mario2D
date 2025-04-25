@@ -9,9 +9,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.mario2d.game.objet.BrownBloc;
 import com.example.mario2d.game.objet.Castle;
 import com.example.mario2d.game.objet.Floor;
+import com.example.mario2d.game.objet.Item;
 import com.example.mario2d.game.objet.Objet;
+import com.example.mario2d.game.objet.Piece;
 import com.example.mario2d.game.objet.Pipe;
 import com.example.mario2d.game.objet.YellowBloc;
+import com.example.mario2d.game.personnage.Goomba;
+import com.example.mario2d.game.personnage.Personnage;
 import com.example.mario2d.game.personnage.Player;
 
 import java.util.ArrayList;
@@ -38,9 +42,24 @@ public class GameActivity extends AppCompatActivity {
 
         ArrayList<Objet> objets = new ArrayList<Objet>();
         setObjets(objets);
+
+        ArrayList<Personnage> persos = new ArrayList<Personnage>();
+        final int GOOMBA_WIDTH = (int) (displayWidth*0.05);
+        final int GOOMBA_HEIGHT = GOOMBA_WIDTH;
+
+        final int GOOMBAY = displayHeight - FLOOR_HEIGHT - GOOMBA_HEIGHT - 30;
+        int[] goombaX = new int[]{1500, 2700};
+
+        for(int x : goombaX){
+            Goomba g = new Goomba(this, "goomba", x, GOOMBAY, GOOMBA_WIDTH, GOOMBA_HEIGHT);
+            persos.add(g);
+        }
+        System.out.printf("floor height : %d, floor width : %d", FLOOR_HEIGHT, FLOOR_WIDTH);
+        //setCharacter(persos);
+
         //TODO add extra extractions for user's history data
         setContentView(new GameView(this, displayWidth, displayHeight,leftHandMode, LEVEL_SELECTED,
-                player, objets));
+                player, objets, persos));
     }
     public void setExtraData(Bundle extras){
         displayWidth = extras.getInt("displayWidth");
@@ -69,6 +88,7 @@ public class GameActivity extends AppCompatActivity {
         String staticBlocKey = "brownbloc";
         String pipeKey = "greenpipe";
         String floorKey = "redbrick";
+        String pieceKey = "piece";
 
         final int castleY = displayHeight - FLOOR_HEIGHT - CASTLE_HEIGHT;
         final int mysteryBlocY = displayHeight - FLOOR_HEIGHT - CHARACTER_HEIGHT - BLOC_HEIGHT*2;
@@ -80,6 +100,15 @@ public class GameActivity extends AppCompatActivity {
         int[] staticBlocX = {600, 600+BLOC_WIDTH*2};
         int[] mysteryBlocX = {600+BLOC_WIDTH};
         int[] pipeX = {2000, 3000};
+
+        final int PIECE_WIDTH = (int)(displayWidth*0.04);
+        final int PIECE_HEIGHT = (int)(PIECE_WIDTH*1.1378);
+        final int pieceY = displayHeight - FLOOR_HEIGHT - PIECE_HEIGHT;
+
+        final int ITEM_WIDTH = PIECE_WIDTH;
+        final int ITEM_HEIGHT = ITEM_WIDTH;
+
+        int[][] pieces = new int[][]{{900, pieceY}, {900+PIECE_WIDTH, pieceY}, {900+PIECE_WIDTH*2, pieceY}};
 
         switch (LEVEL_SELECTED){
             case 2 :
@@ -110,15 +139,41 @@ public class GameActivity extends AppCompatActivity {
         }
         for(int x : mysteryBlocX){
             YellowBloc yb = new YellowBloc(this, mysteryBlocKey, x, mysteryBlocY, BLOC_WIDTH, BLOC_HEIGHT);
+            int itemX = (int)(yb.getX() + (yb.getWidth() - ITEM_WIDTH)/2);
+            int itemY = (int)(yb.getY() + (yb.getHeight() - ITEM_HEIGHT)/2);
+
+            Item item = new Item(this, "piece", itemX, itemY, ITEM_WIDTH, ITEM_HEIGHT);
+            item.setActivated(false);
+            yb.setItem(item);
+            objets.add(item);
             objets.add(yb);
         }
         for(int x : pipeX){
             Pipe p = new Pipe(this, pipeKey, x, pipeY, PIPE_WIDTH, PIPE_HEIGHT);
             objets.add(p);
         }
-        for(int i = 0; i<FLOOR_RATE; i++){
+        FLOOR_RATE = (int) (castleX[1]/FLOOR_WIDTH) +1;
+        for(int i = -1; i<FLOOR_RATE; i++){
             Floor fl = new Floor(this, floorKey, i*FLOOR_WIDTH, floorY, FLOOR_WIDTH, FLOOR_HEIGHT);
             objets.add(fl);
         }
+        for(int[] coord : pieces){
+            Piece piece = new Piece(this, pieceKey, coord[0], coord[1], PIECE_WIDTH, PIECE_HEIGHT);
+            objets.add(piece);
+        }
+    }
+    public void setCharacter(ArrayList<Personnage> persos){
+
+        final int GOOMBA_WIDTH = (int) (displayWidth*0.5);
+        final int GOOMBA_HEIGHT = GOOMBA_WIDTH;
+
+        final int GOOMBAY = displayHeight - FLOOR_HEIGHT - GOOMBA_HEIGHT - 30;
+        int[] goombaX = new int[]{1500, 2700};
+
+        for(int x : goombaX){
+            Goomba g = new Goomba(this, "goomba", x, GOOMBAY, GOOMBA_WIDTH, GOOMBA_HEIGHT);
+            persos.add(g);
+        }
+
     }
 }

@@ -9,12 +9,15 @@ import androidx.annotation.NonNull;
 
 import com.example.mario2d.R;
 import com.example.mario2d.game.Origin;
+import com.example.mario2d.game.objet.Floor;
 import com.example.mario2d.game.objet.Objet;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
+
+import kotlin.RequiresOptIn;
 
 /**
  * Classe Personnage implémentant l'ensemble des attibuts dont les joueur et ennemis ont besoin
@@ -29,7 +32,7 @@ public class Personnage extends Origin{
      * Variable isRight (bool) pour déterminer si le personnage est orienté à droite ou non
      * Variable isWalking (bool) pour déternimer si le personnage est en train de marcher ou non
      */
-    protected Boolean isJumping, isRight, isWalking;
+    protected Boolean isJumping, isRight, isWalking, isAlive;
     /**
      * Variable compteurMarche : utile à la fonction de marche du personnage
      */
@@ -58,7 +61,7 @@ public class Personnage extends Origin{
     public Personnage(Context context, String name, int x, int y, int width, int height){
         super(context, name, x, y, width, height);
         this.isJumping = false; this.isRight = true; this.isWalking = false;
-        this.setBitmap(name+"_arret_droite");
+        if(name.equals("mario") || name.equals("luigi")){this.setBitmap(name+"_arret_droite");}
         this.setCollisionMatrixToFalse();
         this.minY = getY();
         this.gravityConstant = 1;
@@ -66,6 +69,7 @@ public class Personnage extends Origin{
         this.compteurSaut = 0;
         this.positions = new int[2][2];
         Arrays.fill(positions, new int[]{0, 0});
+        this.isAlive = true;
     }
     //----SETTERS----//
     public void setCompteurMarche(int i){this.compteurMarche = i;}
@@ -83,8 +87,10 @@ public class Personnage extends Origin{
     public void setCompteurSaut(int compteurSaut){this.compteurSaut = compteurSaut;}
     public void setJumpImpulse(int jumpImpulse){this.jumpImpulse = jumpImpulse;}
     public void setGravityConstant(int gravityConstant) {this.gravityConstant = gravityConstant;}
+    public void setAlive(Boolean alive) {isAlive = alive;}
 
     //----GETTERS----//
+    public Boolean getAlive() {return isAlive;}
     public boolean getWalkState(){return this.isWalking;}
     public Boolean getJumping() {return isJumping;}
     public Boolean getRightState() {return isRight;}
@@ -147,12 +153,12 @@ public class Personnage extends Origin{
             collisionMatrix.put("brownbloc", tab);
             collisionMatrix.put("pipe", tab);
             collisionMatrix.put("piece", tab);
+            collisionMatrix.put("item", tab);
         }
         else{
             for(String key : collisionMatrix.keySet()){collisionMatrix.put(key, tab);}
         }
     }
-
     /**
      * Ajouter ou modifier une paire clef/valeur dans la matrice de collision
      * @param key
@@ -187,7 +193,7 @@ public class Personnage extends Origin{
         //collision à droite
         boolean cd1 = getY() < objet.getY() + objet.getHeight() - lateralError;
         boolean cd2 = getY() + getHeight() > objet.getY() + lateralError;
-        boolean cd3 = getX() >= objet.getX() + objet.getWidth()/2;
+        boolean cd3 = getX() + lateralError >= objet.getX() + objet.getWidth()/2;
         boolean cd4 = getX() < objet.getX() + objet.getWidth();
         result[1] = cd1 && cd2 && cd3 && cd4;
 
@@ -202,7 +208,7 @@ public class Personnage extends Origin{
         boolean cg1 = getY() < objet.getY() + objet.getHeight() - lateralError;
         boolean cg2 = getY() + getHeight() > objet.getY() + lateralError;
         boolean cg3 = getX() + getWidth() >= objet.getX();
-        boolean cg4 = getX() + getWidth() <= objet.getX() + objet.getWidth()/2;
+        boolean cg4 = getX() + getWidth() +lateralError <= objet.getX() + objet.getWidth()/2;
         result[3] = cg1 && cg2 && cg3 && cg4;
 
         return result;
@@ -252,7 +258,6 @@ public class Personnage extends Origin{
             }
         return b;
     }
-
     /**
      * Detecter si le personnage a une collision en bas de n'importe que objet.
      * @return
@@ -267,6 +272,13 @@ public class Personnage extends Origin{
             }
         return b;
     }
+    public boolean[] detectCollisionWithFloor(Floor floor, int...margin){
+        boolean[] result = new boolean[4];
+        Arrays.fill(result, false);
+        int marge = margin.length>0 ? margin[0] : 0;
+        result[0] = getY() + getHeight() + marge >= floor.getY();
+        return result;
+    }
     public int getMaxY(){return this.maxY;}
     public void setMaxY(int m){this.maxY = maxY;}
     public int getMinY(){return this.minY;}
@@ -280,4 +292,6 @@ public class Personnage extends Origin{
     }
     public int getSpeedVectorX(){return positions[0][0]-positions[1][0];}
     public int getSpeedVectorY(){return positions[0][1]-positions[1][1];}
+
+    public void increasePieceCount() {}
 }

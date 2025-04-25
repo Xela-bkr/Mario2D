@@ -10,10 +10,14 @@ public class Item extends Objet{
         this.isUsing = false;
         this.isPerimed = false;
     }
-    public boolean isCollected() {return isCollected;}
+    public boolean getIsCollected() {return isCollected;}
     public boolean isUsing() {return isUsing;}
-    public boolean isPerimed() {return isPerimed;}
+    public boolean getIsPerimed() {return isPerimed;}
     public void setCollected(boolean collected) {isCollected = collected;}
     public void setUsing(boolean using) {isUsing = using;}
     public void setPerimed(boolean perimed) {isPerimed = perimed;}
+    public void slideAnimation(int limit, int step){
+        if(getY()<limit + step){translateY(-step);}
+        else{setIsPickabe(true);}
+    }
 }

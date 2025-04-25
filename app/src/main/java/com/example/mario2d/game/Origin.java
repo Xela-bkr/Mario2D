@@ -21,6 +21,7 @@ public class Origin {
     protected Bitmap bitmap;
     protected String name;
     protected Context context;
+    protected boolean activated;
 
     /**
      * Constructeur
@@ -35,8 +36,8 @@ public class Origin {
         this.name = name; this.x = x; this.y = y;
         this.width = width; this.height = height;
         this.context = context;
+        this.activated = true;
         this.initSpriteBank();
-        System.out.println("SpriteBank length : " + spriteBank.size());
     }
     /**
      * @param x
@@ -71,6 +72,17 @@ public class Origin {
             this.bitmap = Bitmap.createScaledBitmap(bit, getWidth(), getHeight(), true);
         }
     }
+    public void setBitmap(Bitmap bitmap, String key){
+        if(spriteBank.get(key)!=null){
+            Bitmap bit = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(key));
+            bitmap = Bitmap.createScaledBitmap(bit, getWidth(), getHeight(), true);
+        }
+        else{
+            Bitmap bit = BitmapFactory.decodeResource(context.getResources(), spriteBank.get("bloc"));
+            bitmap = Bitmap.createScaledBitmap(bit, getWidth(), getHeight(), true);
+        }
+    }
+    public void setBitmap(Bitmap b){this.bitmap = b;}
     /**
      * @param context
      */
@@ -79,6 +91,7 @@ public class Origin {
      * @param name
      */
     public void setName(String name){this.name = name;}
+    public void setActivated(boolean b){this.activated = b;}
     //----GETTERS----//
     public int getX(){return this.x;}
     public int getY(){return this.y;}
@@ -89,6 +102,7 @@ public class Origin {
     public Bitmap getBitmap(){
         return this.bitmap;
     }
+    public boolean getActivated(){return this.activated;}
     public void addResourceToSpriteBank(String key, int resource){spriteBank.put(key, resource);}
 
     /**
@@ -130,7 +144,14 @@ public class Origin {
         spriteBank.put("piece", R.drawable.piece);
         spriteBank.put("redbrick", R.drawable.redbrick);
         spriteBank.put("yellowbrick", R.drawable.yellowbrick);
+
+        // Ennemies
+        spriteBank.put("goomba_marche_1", R.drawable.goomba_marche_1);
+        spriteBank.put("goomba_marche_2", R.drawable.goomba_marche_2);
+        spriteBank.put("goomba_mort", R.drawable.goomba_mort);
     }
     public void translateX(int dx){this.setX(this.getX()+dx);}
     public void translateY(int dy){this.setY(this.getY()+dy);}
+    public void shrinkWidth(int i){setWidth(getWidth() - i);}
+    public void increaseWidth(int i){setWidth(getWidth() + i);}
 }
