@@ -5,15 +5,17 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 public class Koopa extends Ennemy {
-    private int compteurMort, compteurRotate;
-    private boolean carapaceMode, lauchingMode;
+    private int compteurMort, compteurRotate, compteurCarapace;
+    private boolean carapaceMode, lauchingMode, isLaunchable;
     private Bitmap arret_droite, arret_gauche, marche_droite, marche_gauche, carapace_face, rotate_1, rotate_2, rotate_3;
     public Koopa(Context context, String name, int x, int y, int width, int height) {
         super(context, name, x, y, width, height);
         setBitmaps();
         compteurMort = 0;
+        compteurCarapace = 0;
         carapaceMode = false;
         lauchingMode = false;
+        isLaunchable = false;
     }
     public void setBitmaps(){
         Bitmap b1 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_arret_droite"));
@@ -55,17 +57,38 @@ public class Koopa extends Ennemy {
     }
     @Override
     public void dead() {
-        if (!getAlive()) {setAlive(false);}
-        if(compteurMort < 20){setBitmap(carapace_face);}
-        else{setActivated(false);}
+        if (!getAlive()) {
+            int height = getHeight();
+            setHeight((int) (getHeight()/2));
+            setWidth(getWidth()/2);
+            setY(getY() + height/2);
+            this.bitmap = carapace_face;
+            setAlive(false);
+        }
+        if(compteurMort > 20){setActivated(false);}
         compteurMort ++;
     }
     public void carapaceMode(){
-        int height = getHeight();
-        setHeight((int) (getHeight()/2));
-        setWidth(getWidth()/2);
-        setY(getY() + height/2);
-        carapaceMode = true;
+        if(!carapaceMode){
+            if(! (getHeight() < initHeight) && !(getWidth() < initWidth)){
+                int height = getHeight();
+                setHeight((int) (getHeight()/2));
+                setWidth(getWidth()/2);
+                setY(getY() + height/2);
+            }
+            this.bitmap = carapace_face;
+            carapaceMode = true;
+            compteurCarapace = 0;
+        }
+        else if(compteurCarapace < 100){lauchingMode = false;}
+        else if(compteurCarapace >= 100){
+            carapaceMode = false;
+            lauchingMode = false;
+            setY(initY);
+            setHeight(initHeight);
+            setWidth(initWidth);
+        }
+        compteurCarapace++;
     }
     public void launch(int compteur, int frequence){
         if(compteurMort < compteur){
@@ -93,4 +116,23 @@ public class Koopa extends Ennemy {
     public boolean getCarapaceMode(){return this.carapaceMode;}
     public boolean getLauchingMode(){return this.lauchingMode;}
     public void setCompteurMort(int compteurMort){this.compteurMort = compteurMort;}
+    public void setLauchingMode(boolean l){this.lauchingMode = true;}
+    public boolean getIsLaunchable(){return this.isLaunchable;}
+    public void update(int collision, Player player){
+
+        if(player.getIsInvincible() && player.getInvincibleCompteurEtoile() > 0){dead();}
+
+        else if(collision == 0){
+            if(carapaceMode){launch(100, 10); player.setInvincibleCompteur(30);}
+            else{carapaceMode();}
+        }
+        else{
+            if(lauchingMode && !player.getIsInvincible()){
+                player.decreaseLife();
+                player.setInvincibleCompteur(100);
+                player.setIsInvincible(true);
+            }
+            if(carapaceMode){launch(100, 10); player.setInvincibleCompteur(30);}
+        }
+    }
 }

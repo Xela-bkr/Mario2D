@@ -591,37 +591,24 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 }
             }
             for(Ennemy ennemy : ennemies){
-                if(onScreen(ennemy, 0, 0) && ennemy.getActivated() && ennemy.getAlive()){
+                if(onScreen(ennemy, 0, 0) && ennemy.getActivated()){
                     boolean[] tab = player.detectCollision(ennemy, 0, 0);
                     player.setCollisionMatrix("ennemy", tab);
                     if(tab[0]){
                         if(ennemy instanceof Koopa){
-                            if(((Koopa) ennemy).getCarapaceMode()){
-                                ((Koopa) ennemy).launch(100, 8);
-                            }
-                            else if(!((Koopa) ennemy).getCarapaceMode() && !((Koopa) ennemy).getLauchingMode()){
-                                ((Koopa) ennemy).carapaceMode();
-                            }
+                            ((Koopa) ennemy).update(0, this.player);
                         }
                         else{
-                            System.out.println("ennemy is dead");
                             ennemy.setAlive(false);
                             ennemy.dead();
-                            break;
                         }
+                        break;
                     }
                     if(tab[1] || tab[2] || tab[3]){
                         if(ennemy instanceof Koopa){
-                            if(((Koopa) ennemy).getLauchingMode()){
-                                player.decreaseLife();
-                                player.setInvincibleCompteur(100);
-                                player.setIsInvincible(true);
-                            }
-                            else if(((Koopa) ennemy).getCarapaceMode()){
-                                ((Koopa) ennemy).launch(100, 20);
-                            }
+                            ((Koopa) ennemy).update(1, this.player);
                         }
-                        if(!player.getIsInvincible() ){
+                        else if(!player.getIsInvincible() ){
                             player.decreaseLife();
                             player.setInvincibleCompteur(100);
                             player.setIsInvincible(true);
@@ -744,6 +731,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 }
                 if(((Koopa) en).getCarapaceMode()){((Koopa) en).carapaceMode();}
                 if(((Koopa) en).getLauchingMode()){((Koopa) en).launch(100, 8);}
+                if(!en.getAlive() && en.getActivated()){en.dead();}
             }
             else if(!en.getAlive() && en.getActivated()){
                 en.dead();

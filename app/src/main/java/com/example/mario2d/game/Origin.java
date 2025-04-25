@@ -17,7 +17,7 @@ public class Origin {
      * SpriteBank : permet d'associer chaque nom d'image (string) à sa resource R.drawable.*
      */
     protected HashMap<String, Integer> spriteBank = new HashMap<String, Integer>();
-    protected int x, y, width, height;
+    protected int x, y, width, height, initWidth, initHeight, initY, initX;
     protected Bitmap bitmap;
     protected String name;
     protected Context context;
@@ -38,6 +38,8 @@ public class Origin {
         this.context = context;
         this.activated = true;
         this.initSpriteBank();
+        this.initX = x; this.initY = y;
+        this.initWidth = width; this.initHeight = height;
     }
     /**
      * @param x
