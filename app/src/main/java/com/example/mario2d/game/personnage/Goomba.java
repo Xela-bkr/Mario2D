@@ -44,4 +44,7 @@ public class Goomba extends Ennemy{
         else{setActivated(false);}
         compteurMort ++;
     }
+
+    @Override
+    public void decreaseLife() {dead();}
 }

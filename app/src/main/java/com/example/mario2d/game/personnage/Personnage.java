@@ -118,27 +118,7 @@ public class Personnage extends Origin{
      * La fréquence détermine à quelle vitesse les images simulant la marche alternent
      * Plus la fréquence est haute, plus la marche sera lente.
      */
-    public void walk(int frequence){
-        if(name==null){name="mario";}
-        String key = this.getName();
-
-        if(compteurMarche>=0 && compteurMarche<frequence){
-            key+="_marche";
-            if(isRight){key+="_droite";}
-            else{key+="_gauche";}
-        }
-        else if(compteurMarche>=frequence && compteurMarche<=2*frequence){
-            key+="_arret";
-            if(isRight){key+="_droite";}
-            else{key+="_gauche";}
-        }
-        if(compteurMarche>=2*frequence){setCompteurMarche(0);}
-        if(spriteBank.get(key)!=null){
-            setBitmap(key);
-        } else{setBitmap("bloc");}
-        compteurMarche++;
-    }
-
+    public void walk(int frequence){}
     /**
      * Fonction jump modifiant l'image (attribut) du personnage
      */
@@ -148,7 +128,6 @@ public class Personnage extends Origin{
         else{key+="_gauche";}
         setBitmap(key);
     }
-
     /**
      * Initialise et/ou réinitialise la matrice de collision.
      * Tout deviens false
@@ -177,7 +156,6 @@ public class Personnage extends Origin{
     public void setCollisionMatrix(String key, boolean[]tab){collisionMatrix.put(key, tab);}
 
     public HashMap<String, boolean[]> getCollisionMatrix() {return collisionMatrix;}
-
     /**
      * Detecter s'il y a collision avec un objet.
      * @param objet
@@ -189,37 +167,46 @@ public class Personnage extends Origin{
         boolean[] result = new boolean[4];
         Arrays.fill(result, false);
 
-        int verticalError = error.length==2 ? error[0] : 5;
-        int lateralError = error.length==2 ? error[1] : 4;
+        int verticalError = 5;
+        int lateralError = 4;
 
+        if(error.length == 2){
+            verticalError = error[0];
+            lateralError = error[1];
+        }
+
+        boolean segment_vertical_gauche = getX() + getWidth() > objet.getX() + lateralError;
+        boolean segment_vertical_droit = getX() < objet.getX() + objet.getWidth() - lateralError;
+        boolean segment_horizontal_haut = getY() + getHeight() > objet.getY() + lateralError;
+        boolean segment_horizontal_bas = getY() < objet.getY() + objet.getHeight() - lateralError;
         // collision en haut :
-        boolean ch1 = getX() < objet.getX() + objet.getWidth() - lateralError;
-        boolean ch2 = getX() + getWidth() > objet.getX() + lateralError;
+        //boolean ch1 = getX() < objet.getX() + objet.getWidth() - lateralError;
+        //boolean ch2 = getX() + getWidth() > objet.getX() + lateralError;
         boolean ch3 = getY() + getHeight() >= objet.getY() - verticalError;
         boolean ch4 = getY() < objet.getY();
-        boolean ch5 = getY()+getHeight() <= objet.getY() + objet.getHeight()/2;
-        result[0] = ch1 && ch2 && ch3 && ch4 && ch5;
+        boolean ch5 = getY() + getHeight() <= objet.getY() + objet.getHeight()/2;
+        result[0] = segment_vertical_droit && segment_vertical_gauche && ch3 && ch4 && ch5;
 
         //collision à droite
-        boolean cd1 = getY() < objet.getY() + objet.getHeight() - lateralError;
-        boolean cd2 = getY() + getHeight() > objet.getY() + lateralError;
+        //boolean cd1 = getY() < objet.getY() + objet.getHeight() - lateralError;
+        //boolean cd2 = getY() + getHeight() > objet.getY() + lateralError;
         boolean cd3 = getX() + lateralError >= objet.getX() + objet.getWidth()/2;
         boolean cd4 = getX() < objet.getX() + objet.getWidth();
-        result[1] = cd1 && cd2 && cd3 && cd4;
+        result[1] = segment_horizontal_bas && segment_horizontal_haut && cd3 && cd4;
 
         // collision en bas :
         boolean cb1 = getY() <= objet.getY() + objet.getHeight() + verticalError;
         boolean cb2 = getY() >= objet.getY() + objet.getHeight()/2;
-        boolean cb3 = getX() < objet.getX() + objet.getWidth() - lateralError;
-        boolean cb4 = getX() + getWidth() > objet.getX() + lateralError;
-        result[2] = cb1 && cb2 && cb3 && cb4;
+        //boolean cb3 = getX() < objet.getX() + objet.getWidth() - lateralError;
+        //boolean cb4 = getX() + getWidth() > objet.getX() + lateralError;
+        result[2] = cb1 && cb2 && segment_vertical_droit && segment_vertical_gauche;
 
         // collision à gauche :
-        boolean cg1 = getY() < objet.getY() + objet.getHeight() - lateralError;
-        boolean cg2 = getY() + getHeight() > objet.getY() + lateralError;
+        //boolean cg1 = getY() < objet.getY() + objet.getHeight() - lateralError;
+        //boolean cg2 = getY() + getHeight() > objet.getY() + lateralError;
         boolean cg3 = getX() + getWidth() >= objet.getX();
         boolean cg4 = getX() + getWidth() +lateralError <= objet.getX() + objet.getWidth()/2;
-        result[3] = cg1 && cg2 && cg3 && cg4;
+        result[3] = segment_horizontal_bas && segment_horizontal_haut && cg3 && cg4;
 
         return result;
     }

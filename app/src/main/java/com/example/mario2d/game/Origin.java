@@ -151,6 +151,14 @@ public class Origin {
         spriteBank.put("goomba_marche_1", R.drawable.goomba_marche_1);
         spriteBank.put("goomba_marche_2", R.drawable.goomba_marche_2);
         spriteBank.put("goomba_mort", R.drawable.goomba_mort);
+        spriteBank.put("greenkoopa_arret_droite", R.drawable.greenkoopa_arret_droite);
+        spriteBank.put("greenkoopa_arret_gauche", R.drawable.greenkoopa_arret_gauche);
+        spriteBank.put("greenkoopa_marche_droite", R.drawable.greenkoopa_marche_droite);
+        spriteBank.put("greenkoopa_marche_gauche", R.drawable.greenkoopa_marche_gauche);
+        spriteBank.put("greenkoopa_carapace_face", R.drawable.greenkoopa_carapace_face);
+        spriteBank.put("greenkoopa_carapace_tourne_1", R.drawable.greenkoopa_carapace_tourne_1);
+        spriteBank.put("greenkoopa_carapace_tourne_2", R.drawable.greenkoopa_carapace_tourne_2);
+        spriteBank.put("greenkoopa_carapace_tourne_3", R.drawable.greenkoopa_carapace_tourne_3);
     }
     public void translateX(int dx){this.setX(this.getX()+dx);}
     public void translateY(int dy){this.setY(this.getY()+dy);}

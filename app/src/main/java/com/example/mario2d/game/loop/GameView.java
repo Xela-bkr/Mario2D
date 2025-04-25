@@ -33,6 +33,7 @@ import com.example.mario2d.game.objet.Piece;
 import com.example.mario2d.game.objet.Pipe;
 import com.example.mario2d.game.objet.YellowBloc;
 import com.example.mario2d.game.personnage.Ennemy;
+import com.example.mario2d.game.personnage.Koopa;
 import com.example.mario2d.game.personnage.Personnage;
 import com.example.mario2d.game.personnage.Player;
 import com.example.mario2d.menu.MainActivity;
@@ -47,27 +48,14 @@ import java.util.HashMap;
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     //----------VARIABLES-----------//
-    public boolean exit, gravity;
-    public DisplayMetrics dm;
-    private GameLoop gameLoop;
+    public boolean exit, gravity, gameOver, win;
     public Joystick joystick;
-    private int compteurMarche;
-    private Bitmap characterBitmap;
-    private int dx;
-    private int joystickPointerId, jumpPointerId, menuPointerId, pausePointerId, retryPointerId, exitPointerId;
-    private int displayWidth, displayHeight, CHARACTER_WIDTH, CHARACTER_HEIGHT, FLOOR_WIDTH, FLOOR_HEIGHT, FLOOR_RATE,
-            CASTLE_WIDTH, CASTLE_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT, PIPE_WIDTH, PIPE_HEIGHT, LEVEL_SELECTED, CHARACTER_SELECTED;
-
-    private Boolean leftHandMode, soundEffect, music, afficherMenuLateral;
-    /**
-     * Ensemble des boutons affichés lorsque le jeu est en pause
-     * @see #setMenuButton()
-     * @see #setpauseButton()
-     * @see #setretryButton()
-     * @see #setExitButton()
-     */
-    private AbstractButton menuButton, pauseButton, retryButton, exitButton;
     public Player player;
+    private GameLoop gameLoop;
+    private int dx, joystickPointerId, jumpPointerId, menuPointerId, pausePointerId, retryPointerId, exitPointerId,
+            displayWidth, displayHeight, LEVEL_SELECTED;
+    private Boolean leftHandMode, soundEffect, music, afficherMenuLateral;
+    private AbstractButton menuButton, pauseButton, retryButton, exitButton;
     private ArrayList<Objet> objets;
     private ArrayList<Floor> floor = new ArrayList<Floor>();
     private ArrayList<Castle> castles = new ArrayList<Castle>();
@@ -104,7 +92,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         this.dx = 6;
         this.displayHeight = displayHeight;
         this.displayWidth = displayWidth;
-        this.compteurMarche = 1;
         this.leftHandMode = leftHandMode;
         this.LEVEL_SELECTED = LEVEL_SELECTED;
         this.afficherMenuLateral = false;
@@ -125,6 +112,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         this.exit = false;
         this.gravity = true;
+
+        System.out.println("nombre de persos : "+ persos.size());
+        System.out.println("nombre d'ennemis : " + ennemies.size());
 
         /**
          * valeurs par défaut des dimentions du joystick
@@ -165,9 +155,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         joystickPointerId = -1; jumpPointerId = -1; menuPointerId = -1; pausePointerId = -1;
         retryPointerId = -1; exitPointerId = -1;
-        System.out.printf("floor height : %d, floor width : %d", FLOOR_HEIGHT, FLOOR_WIDTH);
     }
-
     /**
      * Listener pour gérer les évènements tacliles
      * TODO implémenter un Listener multitouch
@@ -304,13 +292,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         gameLoop = new GameLoop(this);
         gameLoop.start();
     }
-
     @Override
     public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {}
-
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder holder) {}
-
     /**
      * Fonction essentielle pour faire varier la position de tous les éléments du jeu.
      * Permet aussi d'avoir un sol infiniment grand
@@ -351,7 +336,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         catch (Exception e) { e.printStackTrace(); }
         finally { if(canvas != null) getHolder().unlockCanvasAndPost(canvas); }
     }
-
     /**
      * Fonction de mise à jour logique du jeu
      * Appelé par le gameLoop à chaque loop.
@@ -380,15 +364,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
      * @param i
      */
     public void setDx(int i){this.dx = i;}
-    /**
-     * Dessine le fond d'écran du jeu en fonction du niveau de jeu sur le canvas
-     * Appelé dans la méthode render()
-     *
-     * @see #render()
-     *
-     * @param level
-     * @param canvas
-     */
     @SuppressLint("ResourceAsColor")
     public void setBackgroundColor(int level, Canvas canvas){
         switch(level){
@@ -412,15 +387,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 break;
         }
     }
-
-    /**
-     * Menu Latéral devenu le menu central car plus pratique
-     * Dessine les boutons du menu sur le canvas
-     *
-     * @see #render()
-     *
-     * @param canvas
-     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void afficherMenuLateral(Canvas canvas){
         Paint paint = new Paint();
@@ -431,7 +397,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         retryButton.draw(canvas);
         exitButton.draw(canvas);
     }
-
     /**
      * Paramétrage du bouton pause du jeu.
      * Une fois appuyé, ce bouton permet d'afficher le menu central
@@ -456,13 +421,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         menuButton.setTextColor(Color.valueOf(Color.WHITE));
         menuButton.setRectangleRoundRadius(20);
     }
-
-    /**
-     * pauseButton est en réalité le bouton permettant de reprendre le jeu
-     * lorsque le menu latéral est affiché.
-     *
-     * @see #afficherMenuLateral
-     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void setpauseButton(){
         int buttonWidth = (int) (displayWidth*0.2);
@@ -482,13 +440,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         pauseButton.setTextColor(Color.valueOf(Color.WHITE));
         pauseButton.setRectangleRoundRadius(20);
     }
-
-    /**
-     * Fonction permettant de recommencer la partie sans passer par le menu principal.
-     * TODO paramétrer la fonction reset associée
-     *
-     * @see #reset()
-     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void setretryButton(){
         int buttonWidth = (int) (displayWidth*0.2);
@@ -508,10 +459,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         retryButton.setTextColor(Color.valueOf(Color.WHITE));
         retryButton.setRectangleRoundRadius(20);
     }
-
-    /**
-     * Bouton permettant d'abandonner la partie en cours et de revenir au menu principal.
-     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void setExitButton(){
         int buttonWidth = (int) (displayWidth*0.2);
@@ -531,9 +478,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         exitButton.setTextColor(Color.valueOf(Color.WHITE));
         exitButton.setRectangleRoundRadius(20);
     }
-    public void reset(){
-        //TODO reset the level
-    }
+    public void reset(){}
     /**
      * fonction appelée à chaque loop pour vérifier les collisions relatives à chaque objet.
      *
@@ -650,11 +595,32 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     boolean[] tab = player.detectCollision(ennemy, 0, 0);
                     player.setCollisionMatrix("ennemy", tab);
                     if(tab[0]){
-                        System.out.println("ennemy is dead");
-                        ennemy.setAlive(false);
-                        ennemy.dead();
-                        break;}
+                        if(ennemy instanceof Koopa){
+                            if(((Koopa) ennemy).getCarapaceMode()){
+                                ((Koopa) ennemy).launch(100, 8);
+                            }
+                            else if(!((Koopa) ennemy).getCarapaceMode() && !((Koopa) ennemy).getLauchingMode()){
+                                ((Koopa) ennemy).carapaceMode();
+                            }
+                        }
+                        else{
+                            System.out.println("ennemy is dead");
+                            ennemy.setAlive(false);
+                            ennemy.dead();
+                            break;
+                        }
+                    }
                     if(tab[1] || tab[2] || tab[3]){
+                        if(ennemy instanceof Koopa){
+                            if(((Koopa) ennemy).getLauchingMode()){
+                                player.decreaseLife();
+                                player.setInvincibleCompteur(100);
+                                player.setIsInvincible(true);
+                            }
+                            else if(((Koopa) ennemy).getCarapaceMode()){
+                                ((Koopa) ennemy).launch(100, 20);
+                            }
+                        }
                         if(!player.getIsInvincible() ){
                             player.decreaseLife();
                             player.setInvincibleCompteur(100);
@@ -767,8 +733,19 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
     public void updateEnnemyMovement(){
         for(Ennemy en : ennemies){
-            if(!en.getAlive() && en.getActivated()){
-                float time = System.nanoTime();
+            if(en instanceof Koopa){
+                if(!((Koopa) en).getCarapaceMode() && !((Koopa) en).getLauchingMode() && en.getActivated()){
+                    updateCollision(en);
+                    if(en.collisionInLeftWithObject()){en.setDirectionRight(false);}
+                    if(en.collisionInRightWithObject()){en.setDirectionRight(true);}
+                    int dx = en.getRightState() ? 5 : -5;
+                    en.translateX(dx);
+                    en.walk(15);
+                }
+                if(((Koopa) en).getCarapaceMode()){((Koopa) en).carapaceMode();}
+                if(((Koopa) en).getLauchingMode()){((Koopa) en).launch(100, 8);}
+            }
+            else if(!en.getAlive() && en.getActivated()){
                 en.dead();
             }
             else if(en.getAlive() && en.getActivated()){
@@ -796,16 +773,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         int StringY = (int) (displayHeight * 0.05 + textSize*3/2);
 
         paint.setTextSize(textSize);
-        switch (LEVEL_SELECTED){
-            case 1 : paint.setColor(Color.BLACK); break;
-            case 2 : paint.setColor(Color.WHITE); break;
-            case 3 : paint.setColor(Color.WHITE); break;
-            case 4 : paint.setColor(Color.WHITE); break;
-            case 5 : paint.setColor(Color.BLACK); break;
-        }
+
+        if(LEVEL_SELECTED == 1 || LEVEL_SELECTED == 5){paint.setColor(Color.BLACK);}
+        else{paint.setColor(Color.WHITE);}
+
         Typeface font = ResourcesCompat.getFont(this.getContext(), R.font.dogicapixelbold);
         paint.setTypeface(font);
 
         canvas.drawText(life, StringX, StringY, paint);
     }
+
 }

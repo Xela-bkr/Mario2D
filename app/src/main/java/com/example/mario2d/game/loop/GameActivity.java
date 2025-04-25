@@ -15,6 +15,7 @@ import com.example.mario2d.game.objet.Piece;
 import com.example.mario2d.game.objet.Pipe;
 import com.example.mario2d.game.objet.YellowBloc;
 import com.example.mario2d.game.personnage.Goomba;
+import com.example.mario2d.game.personnage.Koopa;
 import com.example.mario2d.game.personnage.Personnage;
 import com.example.mario2d.game.personnage.Player;
 
@@ -53,6 +54,15 @@ public class GameActivity extends AppCompatActivity {
         for(int x : goombaX){
             Goomba g = new Goomba(this, "goomba", x, GOOMBAY, GOOMBA_WIDTH, GOOMBA_HEIGHT);
             persos.add(g);
+        }
+        final int KOOPA_WIDTH = (int) (displayWidth*0.05);
+        final int KOOPA_HEIGHT = (int) (KOOPA_WIDTH*1.7458);
+        final int KOOPAY = displayHeight - FLOOR_HEIGHT - KOOPA_HEIGHT - 30;
+        int[] koopaX = new int[]{4000};
+
+        for(int x : koopaX){
+            Koopa koopa = new Koopa(this, "greenkoopa", x, KOOPAY, KOOPA_WIDTH, KOOPA_HEIGHT);
+            persos.add(koopa);
         }
         System.out.printf("floor height : %d, floor width : %d", FLOOR_HEIGHT, FLOOR_WIDTH);
         //setCharacter(persos);
@@ -128,7 +138,6 @@ public class GameActivity extends AppCompatActivity {
                 floorKey = "nuageplatform";
                 break;
         }
-
         for(int x : castleX){
             Castle c = new Castle(this, castleKey, x, castleY, CASTLE_WIDTH, CASTLE_HEIGHT);
             objets.add(c);
@@ -173,7 +182,7 @@ public class GameActivity extends AppCompatActivity {
     }
     public void setCharacter(ArrayList<Personnage> persos){
 
-        final int GOOMBA_WIDTH = (int) (displayWidth*0.5);
+        final int GOOMBA_WIDTH = (int) (displayWidth*0.05);
         final int GOOMBA_HEIGHT = GOOMBA_WIDTH;
 
         final int GOOMBAY = displayHeight - FLOOR_HEIGHT - GOOMBA_HEIGHT - 30;
@@ -182,6 +191,15 @@ public class GameActivity extends AppCompatActivity {
         for(int x : goombaX){
             Goomba g = new Goomba(this, "goomba", x, GOOMBAY, GOOMBA_WIDTH, GOOMBA_HEIGHT);
             persos.add(g);
+        }
+        final int KOOPA_WIDTH = (int) (displayWidth*0.05);
+        final int KOOPA_HEIGHT = (int) (KOOPA_WIDTH*1.7458);
+        final int KOOPAY = displayHeight - FLOOR_HEIGHT - KOOPA_HEIGHT - 30;
+        int[] koopaX = new int[]{4000};
+
+        for(int x : koopaX){
+            Koopa koopa = new Koopa(this, "greenkoopa", x, KOOPAY, KOOPA_WIDTH, KOOPA_HEIGHT);
+            persos.add(koopa);
         }
     }
 }

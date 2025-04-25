@@ -16,7 +16,6 @@ public class Ennemy extends Personnage{
     protected double deadTimer;
     public Ennemy(Context context, String name, int x, int y, int width, int height) {
         super(context, name, x, y, width, height);
-        setBitmap(name+"_marche_1");
         deadTimer = 0;
     }
     @Override
