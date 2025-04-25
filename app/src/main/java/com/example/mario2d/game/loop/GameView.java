@@ -344,6 +344,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 if(menuButton.getIsPressed()) afficherMenuLateral(canvas);
                 menuButton.draw(canvas);
                 afficherScore(canvas, paint);
+                drawLife(canvas, paint);
             }
         }
         catch (Exception e) { e.printStackTrace(); }
@@ -625,6 +626,39 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                             item.setActivated(false);
                             item.setIsPickabe(false);
                         }
+                        if(item.getName().equals("champignon") && item.getPickabe()){
+                            player.increaseLife();
+                            item.setActivated(false);
+                            item.setIsPickabe(false);
+                        }
+                        if(item.getName().equals("etoile") && item.getPickabe()){
+                            player.setIsInvincible(true);
+                            player.setInvincibleCompteurEtoile(1000);
+                            item.setActivated(false);
+                            item.setIsPickabe(false);
+                        }
+                        break;
+                    }
+                }
+            }
+            for(Ennemy ennemy : ennemies){
+                if(onScreen(ennemy, 0, 0) && ennemy.getActivated() && ennemy.getAlive()){
+                    boolean[] tab = player.detectCollision(ennemy, 0, 0);
+                    player.setCollisionMatrix("ennemy", tab);
+                    if(tab[0]){
+                        System.out.println("ennemy is dead");
+                        ennemy.setAlive(false);
+                        ennemy.dead();
+                        break;}
+                    if(tab[1] || tab[2] || tab[3]){
+                        if(!player.getIsInvincible()){
+                            player.decreaseLife();
+                            player.setInvincibleCompteur(100);
+                        }
+                        else{
+                            ennemy.setAlive(false);
+                            ennemy.dead();
+                        }
                         break;
                     }
                 }
@@ -651,13 +685,18 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         else if(player.getWalkingState()){
             player.walk(10);
         }
+        if(player.getIsInvincible()){
+            if(player.getInvincibleCompteur()>0){player.setInvincibleCompteur(player.getInvincibleCompteur() - 1);}
+            if(player.getInvincibleCompteurEtoile()>0)player.setInvincibleCompteurEtoile(player.getInvincibleCompteurEtoile() - 1);
+
+            if(player.getInvincibleCompteur() == 0 && player.getInvincibleCompteurEtoile() == 0){player.setIsInvincible(false);}
+        }
     }
     public void gravity(){
         for(Ennemy en : ennemies){
             if(!en.collisionOnTopWithObject() && !en.getCollisionMatrix().get("floor")[0]){en.translateY(5);}
         }
         if(gravity){
-            System.out.println("gravity");
             boolean collisionOnTopOfFloor = player.getCollisionMatrix().get("floor")[0];
             if(!player.collisionOnTopWithObject() && !collisionOnTopOfFloor && gravity){player.translateY(5);}
         }
@@ -698,7 +737,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         canvas.drawBitmap(finalPieceBitmap, iconX, iconY, paint);
 
-        paint.setTextSize((float)(displayHeight * 0.05));
+        paint.setTextSize(textSize);
         switch (LEVEL_SELECTED){
             case 1 : paint.setColor(Color.BLACK); break;
             case 2 : paint.setColor(Color.WHITE); break;
@@ -713,17 +752,45 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
     public void updateEnnemyMovement(){
         for(Ennemy en : ennemies){
-            updateCollision(en);
-            if(en.collisionInLeftWithObject()){en.setDirectionRight(false);}
-            if(en.collisionInRightWithObject()){en.setDirectionRight(true);}
-            int dx = en.getRightState() ? 5 : -5;
-            en.translateX(dx);
-            en.walk(15);
+            if(!en.getAlive() && en.getActivated()){
+                float time = System.nanoTime();
+                en.dead();
+            }
+            else if(en.getAlive() && en.getActivated()){
+                updateCollision(en);
+                if(en.collisionInLeftWithObject()){en.setDirectionRight(false);}
+                if(en.collisionInRightWithObject()){en.setDirectionRight(true);}
+                int dx = en.getRightState() ? 5 : -5;
+                en.translateX(dx);
+                en.walk(15);
+            }
         }
     }
     public boolean onScreen(Origin truc, int marginLeft, int marginRight){
         boolean gauche = truc.getX() + truc.getWidth() > -marginLeft;
         boolean droite = truc.getX() < displayWidth + marginRight;
         return gauche && droite;
+    }
+    public void drawLife(Canvas canvas, Paint paint){
+        String life = "Vies : "+player.getLife();
+        if(player.getIsInvincible()) life="Invincible";
+
+        final float textSize = (float) (displayHeight * 0.05);
+
+        int StringX = (int) (displayWidth/2 - textSize*life.length()/2);
+        int StringY = (int) (displayHeight * 0.05 + textSize*3/2);
+
+        paint.setTextSize(textSize);
+        switch (LEVEL_SELECTED){
+            case 1 : paint.setColor(Color.BLACK); break;
+            case 2 : paint.setColor(Color.WHITE); break;
+            case 3 : paint.setColor(Color.WHITE); break;
+            case 4 : paint.setColor(Color.WHITE); break;
+            case 5 : paint.setColor(Color.BLACK); break;
+        }
+        Typeface font = ResourcesCompat.getFont(this.getContext(), R.font.dogicapixelbold);
+        paint.setTypeface(font);
+
+        canvas.drawText(life, StringX, StringY, paint);
     }
 }

@@ -32,11 +32,11 @@ public class Personnage extends Origin{
      * Variable isRight (bool) pour déterminer si le personnage est orienté à droite ou non
      * Variable isWalking (bool) pour déternimer si le personnage est en train de marcher ou non
      */
-    protected Boolean isJumping, isRight, isWalking, isAlive;
+    protected Boolean isJumping, isRight, isWalking, isAlive, isInvincible;
     /**
      * Variable compteurMarche : utile à la fonction de marche du personnage
      */
-    protected int compteurMarche, gravityConstant, jumpImpulse, compteurSaut;
+    protected int compteurMarche, gravityConstant, jumpImpulse, compteurSaut, invincibleCompteurEtoile, invincibleCompteur;
     /**
      * Variable pour contrôler le temps de saut.
      */
@@ -46,6 +46,7 @@ public class Personnage extends Origin{
      */
     protected HashMap<String, boolean[]> collisionMatrix = new HashMap<String, boolean[]>();
     protected int maxY, minY;
+    protected float invincibleTimer;
     protected int[][] positions;
 
     //----CONSTRUCTEUR----//
@@ -70,6 +71,10 @@ public class Personnage extends Origin{
         this.positions = new int[2][2];
         Arrays.fill(positions, new int[]{0, 0});
         this.isAlive = true;
+        this.isInvincible = false;
+
+        this.invincibleCompteurEtoile = 0;
+        this.invincibleCompteur = 0;
     }
     //----SETTERS----//
     public void setCompteurMarche(int i){this.compteurMarche = i;}
@@ -88,8 +93,14 @@ public class Personnage extends Origin{
     public void setJumpImpulse(int jumpImpulse){this.jumpImpulse = jumpImpulse;}
     public void setGravityConstant(int gravityConstant) {this.gravityConstant = gravityConstant;}
     public void setAlive(Boolean alive) {isAlive = alive;}
+    public void setIsInvincible(boolean invincible){this.isInvincible = invincible;}
+    public void setInvincibleCompteur(int timer){this.invincibleCompteur = timer;}
+    public void setInvincibleCompteurEtoile(int timer){this.invincibleCompteurEtoile = timer;}
 
     //----GETTERS----//
+    public int getInvincibleCompteur(){return this.invincibleCompteur;}
+    public int getInvincibleCompteurEtoile(){return this.invincibleCompteurEtoile;}
+    public boolean getIsInvincible(){return this.isInvincible;}
     public Boolean getAlive() {return isAlive;}
     public boolean getWalkState(){return this.isWalking;}
     public Boolean getJumping() {return isJumping;}
@@ -173,7 +184,7 @@ public class Personnage extends Origin{
      * @param objet
      * @return
      */
-    public boolean[] detectCollision(Objet objet, int...error){
+    public boolean[] detectCollision(Origin objet, int...error){
 
         // [haut, droite, bas, gauche] -> en haut de l'objet, à droite de l'objet ...
         boolean[] result = new boolean[4];
@@ -294,4 +305,6 @@ public class Personnage extends Origin{
     public int getSpeedVectorY(){return positions[0][1]-positions[1][1];}
 
     public void increasePieceCount() {}
+    public void increaseLife(){}
+    public void decreaseLife(){}
 }

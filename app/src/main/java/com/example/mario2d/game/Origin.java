@@ -144,6 +144,8 @@ public class Origin {
         spriteBank.put("piece", R.drawable.piece);
         spriteBank.put("redbrick", R.drawable.redbrick);
         spriteBank.put("yellowbrick", R.drawable.yellowbrick);
+        spriteBank.put("champignon", R.drawable.champignon);
+        spriteBank.put("etoile", R.drawable.etoile);
 
         // Ennemies
         spriteBank.put("goomba_marche_1", R.drawable.goomba_marche_1);

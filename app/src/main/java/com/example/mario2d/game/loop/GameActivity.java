@@ -97,8 +97,8 @@ public class GameActivity extends AppCompatActivity {
         final int floorY = displayHeight - FLOOR_HEIGHT;
 
         int[] castleX = {0, 5000};
-        int[] staticBlocX = {600, 600+BLOC_WIDTH*2};
-        int[] mysteryBlocX = {600+BLOC_WIDTH};
+        int[] staticBlocX = {600, 600+BLOC_WIDTH*2, 2500, 2500+BLOC_WIDTH*2};
+        int[] mysteryBlocX = {600+BLOC_WIDTH, 2500 + BLOC_WIDTH};
         int[] pipeX = {2000, 3000};
 
         final int PIECE_WIDTH = (int)(displayWidth*0.04);
@@ -108,7 +108,7 @@ public class GameActivity extends AppCompatActivity {
         final int ITEM_WIDTH = PIECE_WIDTH;
         final int ITEM_HEIGHT = ITEM_WIDTH;
 
-        int[][] pieces = new int[][]{{900, pieceY}, {900+PIECE_WIDTH, pieceY}, {900+PIECE_WIDTH*2, pieceY}};
+        int[][] pieces = new int[][]{{3000, pieceY}, {3000+PIECE_WIDTH, pieceY}, {3000+PIECE_WIDTH*2, pieceY}};
 
         switch (LEVEL_SELECTED){
             case 2 :
@@ -137,22 +137,31 @@ public class GameActivity extends AppCompatActivity {
             BrownBloc b = new BrownBloc(this, staticBlocKey, x, staticBlocY, BLOC_WIDTH, BLOC_HEIGHT);
             objets.add(b);
         }
+        int compteurMB = 0;
         for(int x : mysteryBlocX){
             YellowBloc yb = new YellowBloc(this, mysteryBlocKey, x, mysteryBlocY, BLOC_WIDTH, BLOC_HEIGHT);
             int itemX = (int)(yb.getX() + (yb.getWidth() - ITEM_WIDTH)/2);
             int itemY = (int)(yb.getY() + (yb.getHeight() - ITEM_HEIGHT)/2);
 
-            Item item = new Item(this, "piece", itemX, itemY, ITEM_WIDTH, ITEM_HEIGHT);
+            String itemName = "piece";
+            if(compteurMB == 0){itemName = "champignon";}
+            if(compteurMB == 1){itemName = "etoile";}
+
+            Item item = new Item(this, itemName, itemX, itemY, ITEM_WIDTH, ITEM_HEIGHT);
             item.setActivated(false);
+
             yb.setItem(item);
+
             objets.add(item);
             objets.add(yb);
+
+            compteurMB++;
         }
         for(int x : pipeX){
             Pipe p = new Pipe(this, pipeKey, x, pipeY, PIPE_WIDTH, PIPE_HEIGHT);
             objets.add(p);
         }
-        FLOOR_RATE = (int) (castleX[1]/FLOOR_WIDTH) +1;
+        FLOOR_RATE = (int) ((castleX[1]+CASTLE_WIDTH)/FLOOR_WIDTH) +1;
         for(int i = -1; i<FLOOR_RATE; i++){
             Floor fl = new Floor(this, floorKey, i*FLOOR_WIDTH, floorY, FLOOR_WIDTH, FLOOR_HEIGHT);
             objets.add(fl);
@@ -174,6 +183,5 @@ public class GameActivity extends AppCompatActivity {
             Goomba g = new Goomba(this, "goomba", x, GOOMBAY, GOOMBA_WIDTH, GOOMBA_HEIGHT);
             persos.add(g);
         }
-
     }
 }

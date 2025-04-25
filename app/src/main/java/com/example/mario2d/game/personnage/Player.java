@@ -6,12 +6,15 @@ import android.graphics.Bitmap;
 import com.example.mario2d.game.objet.Item;
 
 public class Player extends Personnage{
+    private float agrCoeff = 1.86f;
     private Item item;
     private int piecesCount;
     private int life;
+    private int initialWidth, initialHeight;
     private Bitmap arret_droite, arret_gauche, marche_droite, marche_gauche;
     public Player(Context context, String name, int x, int y, int width, int height) {
         super(context, name, x, y, width, height);
+        this.initialHeight = height; this.initialWidth = width;
         this.piecesCount = 0;
         this.life = 2;
         if(!name.equals("mario") && !name.equals("luigi")){name="mario";}
@@ -19,24 +22,29 @@ public class Player extends Personnage{
         setBitmap(arret_gauche, name+"_arret_gauche");
         setBitmap(marche_droite, name+"_marche_droite");
         setBitmap(marche_gauche, name+"_marche_gauche");
+
+        collisionMatrix.put("ennemy", new boolean[]{false, false, false, false});
     }
-    /*
     @Override
-    public void walk(int frequence){
-        if(compteurMarche < frequence){
-            if(getRightState()){setBitmap(marche_droite);}
-            else{setBitmap(marche_gauche);}
-            //setBitmap(getRightState() ? marche_droite : marche_gauche) ;
+    public void decreaseLife(){
+        life --;
+        if (life == 1){
+            int newWidth = getWidth() / 2;
+            int newHeight = (int) (agrCoeff*newWidth);
+            setWidth(newWidth);
+            setHeight(newHeight);
         }
-        else if(compteurMarche > frequence && compteurMarche <= 2*frequence) {
-            if (getRightState()) {setBitmap(marche_droite);}
-            else {setBitmap(marche_gauche);}
+        if(life == 0){setAlive(false);}
+    }
+    @Override
+    public void increaseLife(){
+        if(life == 1){
+            life ++;
+            setWidth(initialWidth);
+            setHeight(initialHeight);
+            setY(getY()-getHeight());
         }
-        compteurMarche++;
-        if(compteurMarche > 2*frequence){compteurMarche = 0;}
-    }*/
-    public void increaseLife(int x){this.life ++;}
-    public void decreaseLfe(){this.life --;}
+    }
     public int getLife(){return this.life;}
     public void setLife(int x){this.life = x;}
     public void setPiecesCount(int x){this.piecesCount = x;}
