@@ -2,6 +2,8 @@ package com.example.mario2d.game.personnage;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.example.mario2d.game.objet.Item;
 
@@ -11,17 +13,15 @@ public class Player extends Personnage{
     private int piecesCount;
     private int life;
     private int initialWidth, initialHeight;
-    private Bitmap arret_droite, arret_gauche, marche_droite, marche_gauche;
+    private Bitmap arret_droite, arret_gauche, marche_droite, marche_gauche, mort_droite, mort_gauche;
     public Player(Context context, String name, int x, int y, int width, int height) {
         super(context, name, x, y, width, height);
         this.initialHeight = height; this.initialWidth = width;
         this.piecesCount = 0;
         this.life = 2;
         if(!name.equals("mario") && !name.equals("luigi")){name="mario";}
-        setBitmap(arret_droite, name+"_arret_droite");
-        setBitmap(arret_gauche, name+"_arret_gauche");
-        setBitmap(marche_droite, name+"_marche_droite");
-        setBitmap(marche_gauche, name+"_marche_gauche");
+
+        setBitmaps();
 
         collisionMatrix.put("ennemy", new boolean[]{false, false, false, false});
     }
@@ -33,6 +33,7 @@ public class Player extends Personnage{
             int newHeight = (int) (agrCoeff*newWidth);
             setWidth(newWidth);
             setHeight(newHeight);
+            setBitmaps();
         }
         if(life == 0){setAlive(false);}
     }
@@ -42,8 +43,23 @@ public class Player extends Personnage{
             life ++;
             setWidth(initialWidth);
             setHeight(initialHeight);
+            setBitmaps();
             setY(getY()-getHeight());
         }
+    }
+    @Override
+    public void walk(int frequence){
+        if(compteurMarche < frequence){
+            if(isRight){this.bitmap = marche_droite;}
+            else{this.bitmap = marche_gauche;}
+        }
+        else if(compteurMarche >= frequence && compteurMarche < 2*frequence){
+            if(isRight){this.bitmap = arret_droite;}
+            else{this.bitmap = arret_gauche;}
+        }
+        compteurMarche ++;
+
+        if(compteurMarche >= 2*frequence){compteurMarche = 0;}
     }
     public int getLife(){return this.life;}
     public void setLife(int x){this.life = x;}
@@ -54,4 +70,17 @@ public class Player extends Personnage{
     public int getPiecesCount(){return this.piecesCount;}
     public void setItem(Item item){this.item = item;}
     public Item getItem(){return this.item;}
+    public void setBitmaps(){
+        Bitmap b1 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_arret_droite"));
+        this.arret_droite= Bitmap.createScaledBitmap(b1, getWidth(), getHeight(), true);
+
+        Bitmap b2 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_arret_gauche"));
+        this.arret_gauche= Bitmap.createScaledBitmap(b2, getWidth(), getHeight(), true);
+
+        Bitmap b3 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_marche_droite"));
+        this.marche_droite = Bitmap.createScaledBitmap(b3, getWidth(), getHeight(), true);
+
+        Bitmap b4 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_marche_gauche"));
+        this.marche_gauche = Bitmap.createScaledBitmap(b4, getWidth(), getHeight(), true);
+    }
 }

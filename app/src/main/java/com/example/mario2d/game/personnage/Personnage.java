@@ -66,7 +66,7 @@ public class Personnage extends Origin{
         this.setCollisionMatrixToFalse();
         this.minY = getY();
         this.gravityConstant = 1;
-        this.jumpImpulse = 24;
+        this.jumpImpulse = 25;
         this.compteurSaut = 0;
         this.positions = new int[2][2];
         Arrays.fill(positions, new int[]{0, 0});
@@ -88,7 +88,6 @@ public class Personnage extends Origin{
      * False = character is on the left
      */
     public void setDirectionRight(Boolean b){this.isRight = b;}
-
     public void setCompteurSaut(int compteurSaut){this.compteurSaut = compteurSaut;}
     public void setJumpImpulse(int jumpImpulse){this.jumpImpulse = jumpImpulse;}
     public void setGravityConstant(int gravityConstant) {this.gravityConstant = gravityConstant;}
@@ -307,4 +306,7 @@ public class Personnage extends Origin{
     public void increasePieceCount() {}
     public void increaseLife(){}
     public void decreaseLife(){}
+    public void recalibrerY(Objet objet){
+        this.setY(objet.getY() - getHeight());
+    }
 }

@@ -321,6 +321,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             for(Objet obj : objets){obj.translateX(dx);}
             for(Ennemy en : ennemies){en.translateX(dx);}
         }
+
     }
     /**
      * Fonction de mise à jour graphique du GemeView
@@ -374,7 +375,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         updatePayerMove();
         updateAnimations();
     }
-
     /**
      * Défini la constante de dérivation de tous les éléments du jeu
      * @param i
@@ -548,10 +548,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         boolean play = player == this.player;
 
-        int[] brownBlocOffset = new int[]{play && player.getJumping() ? player.getSpeedVectorY() : 5, play && player.getWalkingState() ? this.dx : 0};
-        int[] yellowBlocOffset = new int[]{play && player.getJumping() ? player.getSpeedVectorY() : 5, play && player.getWalkingState() ? this.dx : 0};
+        int[] brownBlocOffset = new int[]{play && player.getJumping() ? 2 : 5, play && player.getWalkingState() ? this.dx : 0};
+        int[] yellowBlocOffset = new int[]{play && player.getJumping() ? 2 : 5, play && player.getWalkingState() ? this.dx : 0};
         int[] floorOffset = new int[]{play && player.getJumping() ? player.getSpeedVectorY() : 0};
-        int[] pipeOffset = new int[]{play && player.getJumping() ? player.getSpeedVectorY() : 5, play && player.getWalkingState() ? this.dx : 0};
+        int[] pipeOffset = new int[]{play && player.getJumping() ? 2 : 5, play && player.getWalkingState() ? this.dx : 0};
         int[] castleOffset = new int[]{play && player.getJumping() ? player.getSpeedVectorY() : 5, play && player.getWalkingState() ? this.dx : 2};
 
         //Collision avec châteaux;
@@ -564,12 +564,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         // Collision avec le sol -> Particulier
         boolean[] tabl = player.detectCollisionWithFloor(floor.get(0), new int[]{0,0});
         player.setCollisionMatrix("floor", tabl);
+        if(tabl[0]){player.recalibrerY(floor.get(0));}
 
         //Collision avec bocs marrons
         for(BrownBloc bb : brownBlocs){
             boolean[] tab = player.detectCollision(bb, brownBlocOffset);
             player.setCollisionMatrix("brownbloc", tab);
-            if(tab[0] || tab[1] || tab[2] || tab[3]){break;}
+            if(tab[0] && !player.getJumping()){player.recalibrerY(bb); break;}
+            else if(tab[1] || tab[2] || tab[3]){break;}
         }
 
         //collision avec blocs jaunes
@@ -592,14 +594,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 }
                 break;
             }
-            else if(tab[0] || tab[1] || tab[3]){break;}
+            else if(tab[0] && !player.getJumping()){player.recalibrerY(yb);break;}
+            else if(tab[1] || tab[3]){break;}
         }
 
         //collision avec tubes
         for(Pipe pipe : pipes){
             boolean[] tab = player.detectCollision(pipe, pipeOffset);
             player.setCollisionMatrix("pipe", tab);
-            if(tab[0] || tab[1] || tab[2] || tab[3]){break;}
+            if(tab[0]&& !player.getJumping()){player.recalibrerY(pipe); break;}
+            else if(tab[1] || tab[2] || tab[3]){break;}
         }
         if(player == this.player){
             for(Piece piece : pieces){
@@ -651,13 +655,17 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                         ennemy.dead();
                         break;}
                     if(tab[1] || tab[2] || tab[3]){
-                        if(!player.getIsInvincible()){
+                        if(!player.getIsInvincible() ){
                             player.decreaseLife();
                             player.setInvincibleCompteur(100);
+                            player.setIsInvincible(true);
                         }
-                        else{
-                            ennemy.setAlive(false);
-                            ennemy.dead();
+                        else {
+                            if(player.getInvincibleCompteurEtoile() > 0){
+                                ennemy.setAlive(false);
+                                ennemy.dead();
+                            }
+                            else if(player.getInvincibleCompteur() > 0){}
                         }
                         break;
                     }
@@ -689,7 +697,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             if(player.getInvincibleCompteur()>0){player.setInvincibleCompteur(player.getInvincibleCompteur() - 1);}
             if(player.getInvincibleCompteurEtoile()>0)player.setInvincibleCompteurEtoile(player.getInvincibleCompteurEtoile() - 1);
 
-            if(player.getInvincibleCompteur() == 0 && player.getInvincibleCompteurEtoile() == 0){player.setIsInvincible(false);}
+            if(player.getInvincibleCompteur() <= 0 && player.getInvincibleCompteurEtoile() <= 0){player.setIsInvincible(false);}
         }
     }
     public void gravity(){
@@ -698,7 +706,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
         if(gravity){
             boolean collisionOnTopOfFloor = player.getCollisionMatrix().get("floor")[0];
-            if(!player.collisionOnTopWithObject() && !collisionOnTopOfFloor && gravity){player.translateY(5);}
+            if(!player.collisionOnTopWithObject() && !collisionOnTopOfFloor && gravity){
+                int dy = -player.getGravityConstant()*(int)(player.getCompteurSaut()*0.9);
+                player.translateY(dy);
+                player.decreaseCompteurSaut();
+            }
+            else{
+                player.setCompteurSaut(0);
+            }
         }
     }
     public void updateAnimations(){
