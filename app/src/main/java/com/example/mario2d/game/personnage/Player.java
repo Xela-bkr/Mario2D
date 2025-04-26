@@ -34,6 +34,14 @@ public class Player extends Personnage{
             setWidth(newWidth);
             setHeight(newHeight);
             setBitmaps();
+            if(isWalking){
+                if(isRight){this.bitmap = marche_droite;}
+                else{this.bitmap = marche_gauche;}
+            }
+            else{
+                if(isRight){this.bitmap = arret_droite;}
+                else{this.bitmap = arret_gauche;}
+            }
         }
         if(life == 0){setAlive(false);}
     }

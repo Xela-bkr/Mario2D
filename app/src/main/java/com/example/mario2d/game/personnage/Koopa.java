@@ -58,14 +58,16 @@ public class Koopa extends Ennemy {
     @Override
     public void dead() {
         if (!getAlive()) {
+            this.isAlive = false;
+            this.bitmap = carapace_face;
             int height = getHeight();
             setHeight((int) (getHeight()/2));
             setWidth(getWidth()/2);
             setY(getY() + height/2);
-            this.bitmap = carapace_face;
-            setAlive(false);
         }
-        if(compteurMort > 20){setActivated(false);}
+        else if(compteurMort > 200){setActivated(false);}
+        else{this.bitmap = carapace_face;}
+
         compteurMort ++;
     }
     public void carapaceMode(){
@@ -94,6 +96,7 @@ public class Koopa extends Ennemy {
         if(compteurMort < compteur){
             if(carapaceMode){carapaceMode = false;}
             if(!lauchingMode){lauchingMode = true;}
+            if(!isAlive){isAlive = false;}
             if(compteurRotate < frequence){this.bitmap = rotate_1;}
             else if(compteurRotate >= frequence && compteurRotate < 2*frequence){this.bitmap = rotate_2;}
             else if (compteurRotate >= 2*frequence && compteurRotate < 3*frequence){this.bitmap = rotate_3;}
@@ -109,7 +112,6 @@ public class Koopa extends Ennemy {
         }
         else{
             lauchingMode = false;
-            isAlive = false;
             activated = false;
         }
     }
@@ -123,16 +125,25 @@ public class Koopa extends Ennemy {
         if(player.getIsInvincible() && player.getInvincibleCompteurEtoile() > 0){dead();}
 
         else if(collision == 0){
-            if(carapaceMode){launch(100, 10); player.setInvincibleCompteur(30);}
+            if(carapaceMode){launch(100, 10); player.setInvincibleCompteur(70); player.translateY(-10);}
             else{carapaceMode();}
         }
         else{
-            if(lauchingMode && !player.getIsInvincible()){
-                player.decreaseLife();
-                player.setInvincibleCompteur(100);
-                player.setIsInvincible(true);
+            if(lauchingMode && (!player.getIsInvincible())){
+                if(player.getInvincibleCompteur() == 0){
+                    player.decreaseLife();
+                    player.setInvincibleCompteur(100);
+                    player.setIsInvincible(true);
+                }
             }
             if(carapaceMode){launch(100, 10); player.setInvincibleCompteur(30);}
+            if(!lauchingMode && !carapaceMode && isAlive){
+                if(player.getInvincibleCompteur() == 0){
+                    player.decreaseLife();
+                    player.setInvincibleCompteur(100);
+                    player.setIsInvincible(true);
+                }
+            }
         }
     }
 }

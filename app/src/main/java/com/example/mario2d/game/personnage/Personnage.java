@@ -46,7 +46,6 @@ public class Personnage extends Origin{
      */
     protected HashMap<String, boolean[]> collisionMatrix = new HashMap<String, boolean[]>();
     protected int maxY, minY;
-    protected float invincibleTimer;
     protected int[][] positions;
 
     //----CONSTRUCTEUR----//
@@ -158,7 +157,9 @@ public class Personnage extends Origin{
     public HashMap<String, boolean[]> getCollisionMatrix() {return collisionMatrix;}
     /**
      * Detecter s'il y a collision avec un objet.
+     *
      * @param objet
+     * @param error optionnel : error[0] -> vertial error | error[1] -> horizontal error
      * @return
      */
     public boolean[] detectCollision(Origin objet, int...error){

@@ -98,7 +98,7 @@ public class GameActivity extends AppCompatActivity {
         String staticBlocKey = "brownbloc";
         String pipeKey = "greenpipe";
         String floorKey = "redbrick";
-        String pieceKey = "piece";
+        String pieceKey = "piece_jaune";
 
         final int castleY = displayHeight - FLOOR_HEIGHT - CASTLE_HEIGHT;
         final int mysteryBlocY = displayHeight - FLOOR_HEIGHT - CHARACTER_HEIGHT - BLOC_HEIGHT*2;
@@ -112,13 +112,13 @@ public class GameActivity extends AppCompatActivity {
         int[] pipeX = {2000, 3000};
 
         final int PIECE_WIDTH = (int)(displayWidth*0.04);
-        final int PIECE_HEIGHT = (int)(PIECE_WIDTH*1.1378);
+        final int PIECE_HEIGHT = (int)(PIECE_WIDTH*1.1354);
         final int pieceY = displayHeight - FLOOR_HEIGHT - PIECE_HEIGHT;
 
         final int ITEM_WIDTH = PIECE_WIDTH;
         final int ITEM_HEIGHT = ITEM_WIDTH;
 
-        int[][] pieces = new int[][]{{3000, pieceY}, {3000+PIECE_WIDTH, pieceY}, {3000+PIECE_WIDTH*2, pieceY}};
+        int[][] pieces = new int[][]{{3300, pieceY}, {3300+PIECE_WIDTH, pieceY}, {3300+PIECE_WIDTH*2, pieceY}};
 
         switch (LEVEL_SELECTED){
             case 2 :

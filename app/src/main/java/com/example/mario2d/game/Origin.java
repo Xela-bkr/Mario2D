@@ -148,6 +148,15 @@ public class Origin {
         spriteBank.put("yellowbrick", R.drawable.yellowbrick);
         spriteBank.put("champignon", R.drawable.champignon);
         spriteBank.put("etoile", R.drawable.etoile);
+        spriteBank.put("blocvide", R.drawable.blocvide);
+        spriteBank.put("piece_jaune_face", R.drawable.piece_jaune_face);
+        spriteBank.put("piece_jaune_tourne_1", R.drawable.piece_jaune_tourne_1);
+        spriteBank.put("piece_jaune_tourne_2", R.drawable.piece_jaune_tourne_2);
+        spriteBank.put("piece_jaune_tourne_3", R.drawable.piece_jaune_tourne_3);
+        /*spriteBank.put("", R.drawable.);
+        spriteBank.put("", R.drawable.);
+        spriteBank.put("", R.drawable.);
+        spriteBank.put("", R.drawable.);*/
 
         // Ennemies
         spriteBank.put("goomba_marche_1", R.drawable.goomba_marche_1);

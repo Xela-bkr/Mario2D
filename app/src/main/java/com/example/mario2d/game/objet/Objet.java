@@ -6,11 +6,11 @@ import com.example.mario2d.game.personnage.Ennemy;
 import com.example.mario2d.game.personnage.Personnage;
 
 public class Objet extends Origin{
-    protected int timer;
     protected Boolean isPickable, isPicked, inMotion;
     public Objet(Context context, String name, int x, int y, int width, int height) {
         super(context, name, x, y, width, height);
-        this.setBitmap(name);
+        if(spriteBank.containsKey(name)){this.setBitmap(name);}
+        setBitmaps();
         this.isPickable = false;
         this.isPicked = false;
         this.inMotion = false;
@@ -22,4 +22,5 @@ public class Objet extends Origin{
     public Boolean getPicked() {return isPicked;}
     public void setInMotion(boolean m){this.inMotion = m;}
     public boolean getInMotion(){return this.inMotion;}
+    public void setBitmaps(){}
 }

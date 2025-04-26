@@ -322,7 +322,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 Paint paint = new Paint();
                 if(this.player.getBitmap()!=null){canvas.drawBitmap(player.getBitmap(), player.getX(), player.getY(), paint);}
 
-                for(Objet obj : items) if(obj.getActivated() && onScreen(obj, 10, 10)) canvas.drawBitmap(obj.getBitmap(), obj.getX(), obj.getY(), paint);
+                for(Item item : items) {
+                    if (item.getActivated() && onScreen(item, 10, 10)) {
+                        canvas.drawBitmap(item.getBitmap(), item.getX(), item.getY(), paint);
+                    }
+                }
                 for(Objet obj : objets) if(obj.getActivated() && onScreen(obj, 10, 10)) canvas.drawBitmap(obj.getBitmap(), obj.getX(), obj.getY(), paint);
                 for(Ennemy en : ennemies) if(en.getActivated() && onScreen(en, 10, 10)) canvas.drawBitmap(en.getBitmap(), en.getX(), en.getY(), paint);
 
@@ -332,6 +336,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 afficherScore(canvas, paint);
                 drawLife(canvas, paint);
             }
+
         }
         catch (Exception e) { e.printStackTrace(); }
         finally { if(canvas != null) getHolder().unlockCanvasAndPost(canvas); }
@@ -493,11 +498,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         boolean play = player == this.player;
 
-        int[] brownBlocOffset = new int[]{play && player.getJumping() ? 2 : 5, play && player.getWalkingState() ? this.dx : 0};
+        /*int[] brownBlocOffset = new int[]{play && player.getJumping() ? 2 : 5, play && player.getWalkingState() ? this.dx : 0};
         int[] yellowBlocOffset = new int[]{play && player.getJumping() ? 2 : 5, play && player.getWalkingState() ? this.dx : 0};
         int[] floorOffset = new int[]{play && player.getJumping() ? player.getSpeedVectorY() : 0};
         int[] pipeOffset = new int[]{play && player.getJumping() ? 2 : 5, play && player.getWalkingState() ? this.dx : 0};
-        int[] castleOffset = new int[]{play && player.getJumping() ? player.getSpeedVectorY() : 5, play && player.getWalkingState() ? this.dx : 2};
+        int[] castleOffset = new int[]{play && player.getJumping() ? player.getSpeedVectorY() : 5, play && player.getWalkingState() ? this.dx : 2};*/
+
+        int[] brownBlocOffset = new int[]{5, Math.abs(this.dx)+2};
+        int[] yellowBlocOffset = new int[]{5, Math.abs(this.dx)+2};
+        int[] pipeOffset = new int[]{5, Math.abs(this.dx)+2};
+        int[] castleOffset = new int[]{5, Math.abs(this.dx)+2};
 
         //Collision avec châteaux;
         for(Castle castle : castles){
@@ -528,14 +538,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     yb.getItem().setActivated(true);
                     yb.getItem().setInMotion(true);
                     yb.setUsed(true);
-                    String key = "brownbloc";
-                    switch (LEVEL_SELECTED){
-                        case 2 : key = "greenbloc"; break;
-                        case 3 : key = "goldenbloc"; break;
-                        case 4 : key = "darkbloc"; break;
-                        default : key = "brownbloc"; break;
-                    }
-                    yb.setBitmap(key);
+                    yb.setBitmap("blocvide");
                 }
                 break;
             }
@@ -550,78 +553,72 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             if(tab[0]&& !player.getJumping()){player.recalibrerY(pipe); break;}
             else if(tab[1] || tab[2] || tab[3]){break;}
         }
-        if(player == this.player){
-            for(Piece piece : pieces){
-                if(onScreen(piece, 0, 0) && onScreen(player, 0, 0)){
-                    boolean[] tab = player.detectCollision(piece, pipeOffset);
-                    player.setCollisionMatrix("piece", tab);
-                    if(tab[0] || tab[1] || tab[2] || tab[3]){
-                        if(piece.getActivated() && !piece.getIsTaken()){
-                            player.increasePieceCount();
-                            piece.setIsTaken(true);
-                            piece.setTakenTime(System.nanoTime());
-                        }
-                        break;
+        if(player == this.player){ updatePlayerSpecificCollision(); }
+    }
+    public void updatePlayerSpecificCollision(){
+        for(Piece piece : pieces){
+            if(onScreen(piece, 0, 0) && piece.getActivated()){
+                boolean[] tab = player.detectCollision(piece, 0, 0);
+                player.setCollisionMatrix("piece", tab);
+                if(tab[0] || tab[1] || tab[2] || tab[3]){
+                    if(!piece.getIsTaken()){
+                        player.increasePieceCount();
+                        piece.setIsTaken(true);
+                        piece.setCompteurAnimation(0);
                     }
+                    break;
                 }
             }
-            for(Item item : items){
-                if(onScreen(item, 0, 0) && onScreen(player, 0, 0)){
-                    boolean[] tab = player.detectCollision(item, new int[]{0, 0});
-                    player.setCollisionMatrix("item", tab);
-                    if(tab[0] || tab[1] || tab[2] || tab[3]){
-                        if(item.getName().equals("piece") && item.getPickabe()){
-                            player.increasePieceCount();
-                            item.setActivated(false);
-                            item.setIsPickabe(false);
-                        }
-                        if(item.getName().equals("champignon") && item.getPickabe()){
-                            player.increaseLife();
-                            item.setActivated(false);
-                            item.setIsPickabe(false);
-                        }
-                        if(item.getName().equals("etoile") && item.getPickabe()){
-                            player.setIsInvincible(true);
-                            player.setInvincibleCompteurEtoile(1000);
-                            item.setActivated(false);
-                            item.setIsPickabe(false);
-                        }
-                        break;
+        }
+        for(Item item : items){
+            if(onScreen(item, 0, 0) && onScreen(player, 0, 0)){
+                boolean[] tab = player.detectCollision(item, new int[]{0, 0});
+                player.setCollisionMatrix("item", tab);
+                if(tab[0] || tab[1] || tab[2] || tab[3]){
+                    if(item.getName().equals("piece") && item.getPickabe()){player.increasePieceCount();}
+                    if(item.getName().equals("champignon") && item.getPickabe()){player.increaseLife();}
+                    if(item.getName().equals("etoile") && item.getPickabe()){
+                        player.setIsInvincible(true);
+                        player.setInvincibleCompteurEtoile(1000);
                     }
+                    item.setActivated(false);
+                    item.setIsPickabe(false);
+                    break;
                 }
             }
-            for(Ennemy ennemy : ennemies){
-                if(onScreen(ennemy, 0, 0) && ennemy.getActivated()){
-                    boolean[] tab = player.detectCollision(ennemy, 0, 0);
-                    player.setCollisionMatrix("ennemy", tab);
-                    if(tab[0]){
-                        if(ennemy instanceof Koopa){
-                            ((Koopa) ennemy).update(0, this.player);
-                        }
-                        else{
+        }
+        for(Ennemy ennemy : ennemies){
+            if(onScreen(ennemy, 0, 0) && ennemy.getActivated() && ennemy.getAlive()){
+                boolean[] tab = player.detectCollision(ennemy);
+                player.setCollisionMatrix("ennemy", tab);
+                if(tab[0]){
+                    if(ennemy instanceof Koopa){
+                        ((Koopa) ennemy).update(0, this.player);
+                    }
+                    else{
+                        ennemy.setAlive(false);
+                        ennemy.dead();
+                        player.setInvincibleCompteur(10);
+                    }
+                    break;
+                }
+                if(tab[1] || tab[2] || tab[3]){
+                    if(ennemy instanceof Koopa){
+                        ((Koopa) ennemy).update(1, this.player);
+                    }
+                    else if(!player.getIsInvincible() ){
+                        player.decreaseLife();
+                        player.setInvincibleCompteur(100);
+                        player.setIsInvincible(true);
+                    }
+                    else {
+                        if(player.getInvincibleCompteurEtoile() > 0){
                             ennemy.setAlive(false);
                             ennemy.dead();
                         }
-                        break;
+                        else if(player.getInvincibleCompteur() > 0){}
                     }
-                    if(tab[1] || tab[2] || tab[3]){
-                        if(ennemy instanceof Koopa){
-                            ((Koopa) ennemy).update(1, this.player);
-                        }
-                        else if(!player.getIsInvincible() ){
-                            player.decreaseLife();
-                            player.setInvincibleCompteur(100);
-                            player.setIsInvincible(true);
-                        }
-                        else {
-                            if(player.getInvincibleCompteurEtoile() > 0){
-                                ennemy.setAlive(false);
-                                ennemy.dead();
-                            }
-                            else if(player.getInvincibleCompteur() > 0){}
-                        }
-                        break;
-                    }
+                    break;
                 }
             }
         }
@@ -671,14 +668,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
     public void updateAnimations(){
         for(Piece piece : pieces){
-            if(piece.getActivated() && !piece.getIsTaken()){
-                piece.rotate();
-            }
-            else if(piece.getActivated() && piece.getIsTaken()){
-                float time = System.nanoTime();
-                float delta = time - piece.getTakenTime();
-                if(delta > 500_000){piece.setActivated(false);}
-                else{piece.animationTaken();}
+            if(piece.getActivated()){
+                if(piece.getIsTaken()){piece.rotate(4, 50);}
+                else{piece.rotate(16);}
             }
         }
         for(YellowBloc yb : yellowBlocs){
@@ -731,7 +723,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 }
                 if(((Koopa) en).getCarapaceMode()){((Koopa) en).carapaceMode();}
                 if(((Koopa) en).getLauchingMode()){((Koopa) en).launch(100, 8);}
-                if(!en.getAlive() && en.getActivated()){en.dead();}
+                if(!en.getAlive() && en.getActivated() && !((Koopa) en).getLauchingMode()){en.dead();}
             }
             else if(!en.getAlive() && en.getActivated()){
                 en.dead();
