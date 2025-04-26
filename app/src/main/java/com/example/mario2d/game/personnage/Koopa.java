@@ -4,18 +4,33 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import java.util.Arrays;
+
 public class Koopa extends Ennemy {
-    private int compteurMort, compteurRotate, compteurCarapace;
-    private boolean carapaceMode, lauchingMode, isLaunchable;
     private Bitmap arret_droite, arret_gauche, marche_droite, marche_gauche, carapace_face, rotate_1, rotate_2, rotate_3;
+    private int frequenceRotation, compteurRotation;
     public Koopa(Context context, String name, int x, int y, int width, int height) {
         super(context, name, x, y, width, height);
         setBitmaps();
-        compteurMort = 0;
-        compteurCarapace = 0;
-        carapaceMode = false;
-        lauchingMode = false;
-        isLaunchable = false;
+        this.isJumping = false; this.isRight = true; this.isWalking = false;
+        this.gravityConstant = 2;
+        this.jumpImpulse = 16;
+        this.compteurSaut = 0;
+        this.positions = new int[2][2];
+        Arrays.fill(positions, new int[]{0, 0});
+        this.isAlive = true;
+        this.isInvincible = false;
+        this.isResting = false;
+        this.invincibleCompteur = 0;
+        this.restCompteur = 0;
+        this.life = 2;
+        this.deadCompteur = 100;
+        this.frequenceMarche = 20;
+        this.frequenceRotation = 16;
+        this.compteurRotation = 0;
+
+        this.setDeadWidth(width/2);
+        this.setDeadHeight(height/2);
     }
     public void setBitmaps(){
         Bitmap b1 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_arret_droite"));
@@ -45,104 +60,94 @@ public class Koopa extends Ennemy {
     @Override
     public void walk(int frequence){
         if(compteurMarche < frequence){
-            if(isRight){this.bitmap = marche_droite;}
-            else{this.bitmap = marche_gauche;}
+            if(isRight){
+                this.bitmap = marche_droite;
+                this.translateX(5);
+            }
+            else{
+                this.bitmap = marche_gauche;
+                this.translateX(-5);
+            }
         }
         if(compteurMarche >= frequence && compteurMarche < 2*frequence){
-            if(isRight){this.bitmap = arret_droite;}
-            else{this.bitmap = arret_gauche;}
+            if(isRight){
+                this.bitmap = arret_droite;
+                this.translateX(5);
+            }
+            else{
+                this.bitmap = arret_gauche;
+                this.translateX(-5);
+            }
         }
         compteurMarche ++;
         if(compteurMarche >= 2*frequence){compteurMarche = 0;}
     }
     @Override
     public void dead() {
-        if (!getAlive()) {
+        isInvincible = false;
+        isResting = false;
+        if (getAlive()) {
             this.isAlive = false;
             this.bitmap = carapace_face;
-            int height = getHeight();
-            setHeight((int) (getHeight()/2));
-            setWidth(getWidth()/2);
-            setY(getY() + height/2);
         }
-        else if(compteurMort > 200){setActivated(false);}
+        else if(deadCompteur > 100){setActivated(false);}
         else{this.bitmap = carapace_face;}
 
-        compteurMort ++;
+        deadCompteur ++;
     }
-    public void carapaceMode(){
-        if(!carapaceMode){
+    @Override
+    public void rest(){
+        if(!isResting){
             if(! (getHeight() < initHeight) && !(getWidth() < initWidth)){
                 int height = getHeight();
-                setHeight((int) (getHeight()/2));
-                setWidth(getWidth()/2);
-                setY(getY() + height/2);
+                setHeight(getDeadHeight());
+                setWidth(getDeadWidth());
+                setY(getY() + getDeadHeight());
             }
             this.bitmap = carapace_face;
-            carapaceMode = true;
-            compteurCarapace = 0;
+            isResting = true;
+            isInvincible = false;
+            restCompteur = 0;
         }
-        else if(compteurCarapace < 100){lauchingMode = false;}
-        else if(compteurCarapace >= 100){
-            carapaceMode = false;
-            lauchingMode = false;
+        else if(restCompteur >= 100){
+            isResting = false;
             setY(initY);
             setHeight(initHeight);
             setWidth(initWidth);
         }
-        compteurCarapace++;
+        restCompteur++;
     }
-    public void launch(int compteur, int frequence){
-        if(compteurMort < compteur){
-            if(carapaceMode){carapaceMode = false;}
-            if(!lauchingMode){lauchingMode = true;}
-            if(!isAlive){isAlive = false;}
-            if(compteurRotate < frequence){this.bitmap = rotate_1;}
-            else if(compteurRotate >= frequence && compteurRotate < 2*frequence){this.bitmap = rotate_2;}
-            else if (compteurRotate >= 2*frequence && compteurRotate < 3*frequence){this.bitmap = rotate_3;}
-            else if(compteurRotate <= 3*frequence && compteurRotate < 4*frequence){this.bitmap = carapace_face;}
+    @Override
+    public void invincible(){
+        isInvincible = true;
+        isResting = false;
+        if(invincibleCompteur < 300){
+            if(compteurRotation < frequenceRotation) this.bitmap = rotate_1;
+            else if(compteurRotation >= frequenceRotation && compteurRotation < 2*frequenceRotation) this.bitmap = rotate_2;
+            else if(compteurRotation >= 2*frequenceRotation && compteurRotation < 3*frequenceRotation) this.bitmap = rotate_3;
+            else this.bitmap = carapace_face;
 
-            compteurRotate ++;
-            if(compteurRotate >= 4*frequence){compteurRotate = 0;}
+            translateX( isRight ? 5 : -5);
 
-            if(isRight){ translateX(8); }
-            else { translateX(-8); }
-
-            compteurMort ++;
-        }
-        else{
-            lauchingMode = false;
-            activated = false;
-        }
-    }
-    public boolean getCarapaceMode(){return this.carapaceMode;}
-    public boolean getLauchingMode(){return this.lauchingMode;}
-    public void setCompteurMort(int compteurMort){this.compteurMort = compteurMort;}
-    public void setLauchingMode(boolean l){this.lauchingMode = true;}
-    public boolean getIsLaunchable(){return this.isLaunchable;}
-    public void update(int collision, Player player){
-
-        if(player.getIsInvincible() && player.getInvincibleCompteurEtoile() > 0){dead();}
-
-        else if(collision == 0){
-            if(carapaceMode){launch(100, 10); player.setInvincibleCompteur(70); player.translateY(-10);}
-            else{carapaceMode();}
-        }
-        else{
-            if(lauchingMode && (!player.getIsInvincible())){
-                if(player.getInvincibleCompteur() == 0){
-                    player.decreaseLife();
-                    player.setInvincibleCompteur(100);
-                    player.setIsInvincible(true);
-                }
+            invincibleCompteur ++;
+            compteurRotation ++;
+            if(compteurRotation >= 4*frequenceRotation){
+                compteurRotation = 0;
             }
-            if(carapaceMode){launch(100, 10); player.setInvincibleCompteur(30);}
-            if(!lauchingMode && !carapaceMode && isAlive){
-                if(player.getInvincibleCompteur() == 0){
-                    player.decreaseLife();
-                    player.setInvincibleCompteur(100);
-                    player.setIsInvincible(true);
-                }
+        }
+        else{
+            setInvincibleCompteur(0);
+            dead();
+        }
+    }
+    @Override
+    public void update(){
+        if(activated){
+            if(isResting){rest();}
+            else if(isInvincible){invincible();}
+            else if(isAlive){walk(frequenceMarche);}
+            else{
+                dead();
             }
         }
     }

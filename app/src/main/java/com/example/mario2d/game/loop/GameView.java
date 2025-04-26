@@ -83,7 +83,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
      * @param player
      * @param objets
      */
-    private Bitmap pieceBitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.piece);
+    private Bitmap pieceBitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.piece_jaune_face);
     @RequiresApi(api = Build.VERSION_CODES.O)
     public GameView(Context context, int displayWidth, int displayHeight, boolean leftHandMode, int LEVEL_SELECTED, Player player, ArrayList<Objet> objets, ArrayList<Personnage> persos){
         super(context);
@@ -217,8 +217,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                         !insidePauseButton && !insideRetryButton){
                     jumpPointerId = pointerId;
                     if(!player.getJumping()){
-                        player.setJumpingState(true);
-                        player.setWalkingSate(false);
+                        player.setJumping(true);
+                        player.setWalking(false);
                         gravity = false;
                         player.setJumpTime(System.nanoTime());
                     }
@@ -336,7 +336,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 afficherScore(canvas, paint);
                 drawLife(canvas, paint);
             }
-
         }
         catch (Exception e) { e.printStackTrace(); }
         finally { if(canvas != null) getHolder().unlockCanvasAndPost(canvas); }
@@ -349,19 +348,20 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         joystick.update();
         player.pushPositions(new int[]{player.getX(), player.getY()});
         updateCollision(this.player);
-        updateEnnemyMovement();
-        gravity();
-        player.setWalkingSate(false);
+        updateEnnemy();
+        updatePlayerSpecificCollision();
+        player.setWalking(false);
         if(joystick.getIsPressed()){
             boolean move = false;
-            player.setDirectionRight(joystick.orientedInRight());
-            if(player.getRightState() && !player.collisionInLeftWithObject()){move = true;}
-            if(!player.getRightState() && !player.collisionInRightWithObject()){move = true;}
+            player.setRight(joystick.orientedInRight());
+            if(player.getRight() && !player.collisionWithObject(3)){move = true;}
+            if(!player.getRight() && !player.collisionWithObject(1)){move = true;}
 
-            player.setWalkingSate(move);
-            if(player.getWalkingState()){moveWorld();}
+            player.setWalking(move);
+            if(player.getWalking()){moveWorld();}
         }
-        updatePayerMove();
+        gravity();
+        player.update();
         updateAnimations();
     }
     /**
@@ -496,14 +496,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
      */
     public void updateCollision(Personnage player){
 
-        boolean play = player == this.player;
-
-        /*int[] brownBlocOffset = new int[]{play && player.getJumping() ? 2 : 5, play && player.getWalkingState() ? this.dx : 0};
-        int[] yellowBlocOffset = new int[]{play && player.getJumping() ? 2 : 5, play && player.getWalkingState() ? this.dx : 0};
-        int[] floorOffset = new int[]{play && player.getJumping() ? player.getSpeedVectorY() : 0};
-        int[] pipeOffset = new int[]{play && player.getJumping() ? 2 : 5, play && player.getWalkingState() ? this.dx : 0};
-        int[] castleOffset = new int[]{play && player.getJumping() ? player.getSpeedVectorY() : 5, play && player.getWalkingState() ? this.dx : 2};*/
-
         int[] brownBlocOffset = new int[]{5, Math.abs(this.dx)+2};
         int[] yellowBlocOffset = new int[]{5, Math.abs(this.dx)+2};
         int[] pipeOffset = new int[]{5, Math.abs(this.dx)+2};
@@ -534,7 +526,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             boolean[] tab = player.detectCollision(yb, yellowBlocOffset);
             player.setCollisionMatrix("yellowbloc", tab);
             if(tab[2]){
-                if(!yb.getUsedState() && play){
+                if(!yb.getUsedState() && player == this.player){
                     yb.getItem().setActivated(true);
                     yb.getItem().setInMotion(true);
                     yb.setUsed(true);
@@ -553,7 +545,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             if(tab[0]&& !player.getJumping()){player.recalibrerY(pipe); break;}
             else if(tab[1] || tab[2] || tab[3]){break;}
         }
-        if(player == this.player){ updatePlayerSpecificCollision(); }
     }
     public void updatePlayerSpecificCollision(){
         for(Piece piece : pieces){
@@ -578,8 +569,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     if(item.getName().equals("piece") && item.getPickabe()){player.increasePieceCount();}
                     if(item.getName().equals("champignon") && item.getPickabe()){player.increaseLife();}
                     if(item.getName().equals("etoile") && item.getPickabe()){
-                        player.setIsInvincible(true);
-                        player.setInvincibleCompteurEtoile(1000);
+                        player.setInvincible(true);
+                        player.setInvincibleCompteur(1000);
                     }
                     item.setActivated(false);
                     item.setIsPickabe(false);
@@ -589,77 +580,67 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
         for(Ennemy ennemy : ennemies){
             if(onScreen(ennemy, 0, 0) && ennemy.getActivated() && ennemy.getAlive()){
-                boolean[] tab = player.detectCollision(ennemy);
+                boolean[] tab = player.detectCollision(ennemy, 3, 3);
                 player.setCollisionMatrix("ennemy", tab);
                 if(tab[0]){
-                    if(ennemy instanceof Koopa){
-                        ((Koopa) ennemy).update(0, this.player);
-                    }
-                    else{
-                        ennemy.setAlive(false);
-                        ennemy.dead();
-                        player.setInvincibleCompteur(10);
-                    }
-                    break;
-                }
-                if(tab[1] || tab[2] || tab[3]){
-                    if(ennemy instanceof Koopa){
-                        ((Koopa) ennemy).update(1, this.player);
-                    }
-                    else if(!player.getIsInvincible() ){
-                        player.decreaseLife();
-                        player.setInvincibleCompteur(100);
-                        player.setIsInvincible(true);
+                    if(!ennemy.getResting()){
+                        if(!ennemy.getInvincible()){
+                            ennemy.rest();
+                            player.rest();
+                        }
+                        else {
+                            ennemy.rest();
+                        }
                     }
                     else {
-                        if(player.getInvincibleCompteurEtoile() > 0){
-                            ennemy.setAlive(false);
-                            ennemy.dead();
+                        if(!ennemy.getInvincible()) ennemy.invincible();
+                    }
+                    player.rest();
+                    player.setJumping(true);
+                    player.jump();
+                    break;
+                }
+                if (tab[1] || tab[2] || tab[3]) {
+                    if (!ennemy.getResting()) {
+                        if (!ennemy.getInvincible()) {
+                            if (!player.getInvincible() && !player.getResting()) {
+                                player.decreaseLife();
+                                System.out.println("Vies : "+player.getLife());
+                                player.rest();
+                            } else if(player.getInvincible()){ // Joueur invincible
+                                ennemy.dead();
+                            }
                         }
-                        else if(player.getInvincibleCompteur() > 0){}
+                        else { // Ennemi invincible
+                            if (!player.getInvincible() && !player.getResting()) {
+                                player.decreaseLife();
+                                System.out.println("Vies : "+player.getLife());
+                                player.rest();
+                            } else if(player.getInvincible()){
+                                ennemy.dead();
+                            }
+                        }
+                    }
+                    else {
+                        if(!ennemy.getInvincible()) ennemy.invincible();
                     }
                     break;
                 }
-            }
-        }
-    }
-    public void updatePayerMove(){
-        long ascentTime = 1_000_000_000/3;
-        if(player.getJumping()){
-            long currentTime = System.nanoTime();
-            long deltaTime = currentTime - player.getJumpTime();
-            player.jump();
-            if(deltaTime <= ascentTime && !player.collisionOnBottomWithObject()){
-                int dy = -(player.getJumpImpulse() - player.getGravityConstant()*player.getCompteurSaut());
-                player.translateY(dy);
-                player.increaseCompteurSaut();
-            }
-            else{
-                player.setJumpingState(false);
-                player.setCompteurSaut(0);
-                gravity = true;
-            }
-        }
-        else if(player.getWalkingState()){
-            player.walk(10);
-        }
-        if(player.getIsInvincible()){
-            if(player.getInvincibleCompteur()>0){player.setInvincibleCompteur(player.getInvincibleCompteur() - 1);}
-            if(player.getInvincibleCompteurEtoile()>0)player.setInvincibleCompteurEtoile(player.getInvincibleCompteurEtoile() - 1);
 
-            if(player.getInvincibleCompteur() <= 0 && player.getInvincibleCompteurEtoile() <= 0){player.setIsInvincible(false);}
+            }
         }
     }
     public void gravity(){
         for(Ennemy en : ennemies){
-            if(!en.collisionOnTopWithObject() && !en.getCollisionMatrix().get("floor")[0]){en.translateY(5);}
+            if(!en.collisionWithObject(0) && !en.getCollisionMatrix().get("floor")[0]){en.translateY(5);}
         }
-        if(gravity){
+        if(player.getGravity()){
             boolean collisionOnTopOfFloor = player.getCollisionMatrix().get("floor")[0];
-            if(!player.collisionOnTopWithObject() && !collisionOnTopOfFloor && gravity){
+            if(!player.collisionWithObject(0) && !collisionOnTopOfFloor){
                 int dy = -player.getGravityConstant()*(int)(player.getCompteurSaut()*0.9);
                 player.translateY(dy);
                 player.decreaseCompteurSaut();
+
             }
             else{
                 player.setCompteurSaut(0);
@@ -710,32 +691,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         canvas.drawText(toDraw, stringX, stringY, paint);
     }
-    public void updateEnnemyMovement(){
+    public void updateEnnemy(){
         for(Ennemy en : ennemies){
-            if(en instanceof Koopa){
-                if(!((Koopa) en).getCarapaceMode() && !((Koopa) en).getLauchingMode() && en.getActivated()){
-                    updateCollision(en);
-                    if(en.collisionInLeftWithObject()){en.setDirectionRight(false);}
-                    if(en.collisionInRightWithObject()){en.setDirectionRight(true);}
-                    int dx = en.getRightState() ? 5 : -5;
-                    en.translateX(dx);
-                    en.walk(15);
-                }
-                if(((Koopa) en).getCarapaceMode()){((Koopa) en).carapaceMode();}
-                if(((Koopa) en).getLauchingMode()){((Koopa) en).launch(100, 8);}
-                if(!en.getAlive() && en.getActivated() && !((Koopa) en).getLauchingMode()){en.dead();}
-            }
-            else if(!en.getAlive() && en.getActivated()){
-                en.dead();
-            }
-            else if(en.getAlive() && en.getActivated()){
-                updateCollision(en);
-                if(en.collisionInLeftWithObject()){en.setDirectionRight(false);}
-                if(en.collisionInRightWithObject()){en.setDirectionRight(true);}
-                int dx = en.getRightState() ? 5 : -5;
-                en.translateX(dx);
-                en.walk(15);
-            }
+            updateCollision(en);
+            if(en.collisionWithObject(1)){en.setRight(true);}
+            if (en.collisionWithObject(3)){en.setRight(false);}
+            en.update();
         }
     }
     public boolean onScreen(Origin truc, int marginLeft, int marginRight){
@@ -744,8 +705,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         return gauche && droite;
     }
     public void drawLife(Canvas canvas, Paint paint){
-        String life = "Vies : "+player.getLife();
-        if(player.getIsInvincible()) life="Invincible";
+
+        String life = " ";
+        if (player.getResting()) {
+            life = "Resting";
+        } else if (player.getInvincible()) {
+            life = "Invincible";
+        } else {
+            life = "Vies : " + player.getLife();
+        }
 
         final float textSize = (float) (displayHeight * 0.05);
 

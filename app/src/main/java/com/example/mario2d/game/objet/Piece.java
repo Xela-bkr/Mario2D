@@ -6,16 +6,14 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 
 public class Piece extends Objet{
-    private boolean isTaken, shrinkMode, animationTaken;
-    private int compteurAnimation, compteurRotation, initX;
+    private boolean isTaken;
+    private int compteurAnimation, compteurRotation;
     private float takenTime;
     private Bitmap face, rotate1, rotate2, rotate3;
     public Piece(Context context, String name, int x, int y, int width, int height) {
         super(context, name, x, y, width, height);
         this.initX = x;
         this.isTaken = false;
-        this.shrinkMode = true;
-        this.animationTaken = false;
         this.compteurAnimation = 0;
         this.initWidth = width;
         this.compteurRotation = 0;
@@ -26,22 +24,42 @@ public class Piece extends Objet{
         int width2 = (int) (initHeight*0.3716);
 
         if(compteurRotation < frequence){
-            this.bitmap = rotate1;
-            setWidth(width1_3);
-            setX(initX + getWidth()/2 - width1_3/2);
+            if(this.bitmap != rotate1){
+                this.bitmap = rotate1;
+                translateX((initWidth - width1_3)/2);
+                System.out.println("Rotate1 -> piece");
+                setWidth(width1_3);
+                //translateX(width1_3/2);
+            }
         }
         else if(compteurRotation >= frequence && compteurRotation < 2*frequence){
-            this.bitmap = rotate2;
-            setWidth(width2);
+           if(this.bitmap != rotate2){
+               this.bitmap = rotate2;
+               translateX((width1_3 - width2)/2);
+               System.out.println("Rotate2 -> piece");
+               setWidth(width2);
+               //translateX(width2/2);
+           }
 
         }
         else if(compteurRotation >= 2*frequence && compteurRotation < 3*frequence){
-            this.bitmap = rotate3;
-            setWidth(width1_3);
+            if(this.bitmap != rotate3){
+                this.bitmap = rotate3;
+                translateX(-(width1_3 - width2)/2);
+                System.out.println("Rotate3 -> piece");
+                setWidth(width1_3);
+                //translateX(width1_3/2);
+            }
         }
         else{
-            this.bitmap = face;
-            setWidth(initWidth);
+            if(this.bitmap!=face){
+                //setX(initX);
+                this.bitmap = face;
+                System.out.println("Rotate4 -> piece");
+                translateX(-(initWidth - width1_3)/2 );
+                setWidth(initWidth);
+                //translateX(initWidth/2);
+            }
         }
         compteurRotation ++;
         if(compteurRotation >= 4*frequence){compteurRotation = 0;}
@@ -52,19 +70,10 @@ public class Piece extends Objet{
         }
         compteurAnimation ++;
     }
-    public void animationTaken(){
-        if(shrinkMode){shrinkWidth(50);}
-        else{increaseWidth(50);}
-        shrinkMode = getWidth()<10 ? false : true;
-        if(getWidth()>initWidth){setWidth(initWidth);shrinkMode = true;}
-        translateY(-5);
-    }
     public void setCompteurAnimation(int i){this.compteurAnimation = i;}
-    public void setAnimationTaken(boolean b){this.animationTaken = b;}
     public void setIsTaken(boolean taken){this.isTaken = taken;}
     public void setTakenTime(float takenTime){this.takenTime = takenTime;}
     public int getCompteurAnimation(){return this.compteurAnimation;}
-    public boolean getAnimationTaken(){return this.animationTaken;}
     public boolean getIsTaken(){return this.isTaken;}
     public float getTakenTime(){return this.takenTime;}
     @Override

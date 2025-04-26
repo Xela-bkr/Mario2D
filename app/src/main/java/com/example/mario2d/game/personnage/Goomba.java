@@ -15,11 +15,35 @@ public class Goomba extends Ennemy{
      * @param width
      * @param height
      */
-    private int compteurMort;
     Bitmap marche1, marche2, dead;
     public Goomba(Context context, String name, int x, int y, int width, int height) {
         super(context, name, x, y, width, height);
         setActivated(true);
+        deadCompteur = 0;
+    }
+    @Override
+    public void walk(int frequence){
+        setBitmap(compteurMarche<frequence ? marche1 : marche2);
+
+        if(isRight){translateX(5);}
+        else{translateX(-5);}
+
+        if(compteurMarche >= 2*frequence){compteurMarche = 0;}
+        compteurMarche ++;
+    }
+    @Override
+    public void dead() {
+        isInvincible = false;
+        isResting = false;
+        isAlive = false;
+        if(deadCompteur < 40){
+            if(this.bitmap != dead) this.bitmap = dead;
+        }
+        else setActivated(false);
+        deadCompteur ++;
+    }
+    @Override
+    public void setBitmaps(){
         Bitmap b1 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_marche_1"));
         marche1 = Bitmap.createScaledBitmap(b1, getWidth(), getHeight(), true);
 
@@ -28,23 +52,20 @@ public class Goomba extends Ennemy{
 
         Bitmap b3 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_mort"));
         dead = Bitmap.createScaledBitmap(b3, getWidth(), getHeight(), true);
-
-        compteurMort = 0;
     }
     @Override
-    public void walk(int frequence){
-        setBitmap(compteurMarche<frequence ? marche1 : marche2);
-        if(compteurMarche >= 2*frequence){compteurMarche = 0;}
-        compteurMarche ++;
+    public void rest(){
+        dead();
     }
     @Override
-    public void dead() {
-        if (!getAlive()) {setAlive(false);}
-        if(compteurMort < 20){setBitmap(dead);}
-        else{setActivated(false);}
-        compteurMort ++;
+    public void update(){
+        if(activated){
+            if(isResting){rest();}
+            else if(isInvincible){invincible();}
+            else if(isAlive){walk(frequenceMarche);}
+            else{dead();}
+        }
     }
-
     @Override
-    public void decreaseLife() {dead();}
+    public void invincible(){ dead(); }
 }

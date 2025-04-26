@@ -2,7 +2,7 @@ package com.example.mario2d.game.personnage;
 
 import android.content.Context;
 
-public class Ennemy extends Personnage{
+public class Ennemy extends Personnage {
     /**
      * Constructor
      *
@@ -13,23 +13,24 @@ public class Ennemy extends Personnage{
      * @param width
      * @param height
      */
-    protected double deadTimer;
+    private int deadWidth, deadHeight;
     public Ennemy(Context context, String name, int x, int y, int width, int height) {
         super(context, name, x, y, width, height);
-        deadTimer = 0;
     }
-    @Override
-    public void walk(int frequence){}
-    public void dead(){
-        double deltaTime = 0;
-        if(deadTimer == 0){this.deadTimer = deadTimer;}
-        else{deltaTime = deadTimer - this.deadTimer;}
-        if(!getAlive()){setAlive(false);}
 
-        if(deltaTime > 500_000){setActivated(false);}
-        //setBitmap(dead);
+    public int getDeadWidth() {
+        return deadWidth;
     }
-    public boolean collisionOnTopOfFloor(int floorY, int margin){
-        return getY()+getHeight() >= floorY - margin;
+
+    public void setDeadWidth(int deadWidth) {
+        this.deadWidth = deadWidth;
+    }
+
+    public int getDeadHeight() {
+        return deadHeight;
+    }
+
+    public void setDeadHeight(int deadHeight) {
+        this.deadHeight = deadHeight;
     }
 }

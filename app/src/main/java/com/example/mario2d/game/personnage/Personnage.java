@@ -24,7 +24,7 @@ import kotlin.RequiresOptIn;
  */
 
 //TODO Implement character's Skin
-public class Personnage extends Origin{
+public abstract class Personnage extends Origin{
 
     //----VARIABLES----//
     /**
@@ -32,11 +32,11 @@ public class Personnage extends Origin{
      * Variable isRight (bool) pour déterminer si le personnage est orienté à droite ou non
      * Variable isWalking (bool) pour déternimer si le personnage est en train de marcher ou non
      */
-    protected Boolean isJumping, isRight, isWalking, isAlive, isInvincible;
+    protected Boolean isJumping, isRight, isWalking, isAlive, isInvincible, isResting, isEnnemy, gravity;
     /**
      * Variable compteurMarche : utile à la fonction de marche du personnage
      */
-    protected int compteurMarche, gravityConstant, jumpImpulse, compteurSaut, invincibleCompteurEtoile, invincibleCompteur;
+    protected int compteurMarche, gravityConstant, jumpImpulse, compteurSaut, invincibleCompteur, restCompteur, life, frequenceMarche, deadCompteur;
     /**
      * Variable pour contrôler le temps de saut.
      */
@@ -45,7 +45,6 @@ public class Personnage extends Origin{
      * Dictionnaire recensant des tableaux d'état de collision pour chaque type d'objet.
      */
     protected HashMap<String, boolean[]> collisionMatrix = new HashMap<String, boolean[]>();
-    protected int maxY, minY;
     protected int[][] positions;
 
     //----CONSTRUCTEUR----//
@@ -61,9 +60,6 @@ public class Personnage extends Origin{
     public Personnage(Context context, String name, int x, int y, int width, int height){
         super(context, name, x, y, width, height);
         this.isJumping = false; this.isRight = true; this.isWalking = false;
-        if(name.equals("mario") || name.equals("luigi")){this.setBitmap(name+"_arret_droite");}
-        this.setCollisionMatrixToFalse();
-        this.minY = getY();
         this.gravityConstant = 1;
         this.jumpImpulse = 25;
         this.compteurSaut = 0;
@@ -71,44 +67,177 @@ public class Personnage extends Origin{
         Arrays.fill(positions, new int[]{0, 0});
         this.isAlive = true;
         this.isInvincible = false;
-
-        this.invincibleCompteurEtoile = 0;
+        this.isResting = false;
         this.invincibleCompteur = 0;
-    }
-    //----SETTERS----//
-    public void setCompteurMarche(int i){this.compteurMarche = i;}
-    public void setWalkingSate(Boolean walkingState){this.isWalking = walkingState;}
-    public void setJumpingState(Boolean jumpingState){this.isJumping = jumpingState;}
-    public void setJumpTime(long jumpTime){this.jumpTime = jumpTime;}
-    /**
-     *  setDirection
-     * @param b -> Boolean
-     * True = character is on the right
-     * False = character is on the left
-     */
-    public void setDirectionRight(Boolean b){this.isRight = b;}
-    public void setCompteurSaut(int compteurSaut){this.compteurSaut = compteurSaut;}
-    public void setJumpImpulse(int jumpImpulse){this.jumpImpulse = jumpImpulse;}
-    public void setGravityConstant(int gravityConstant) {this.gravityConstant = gravityConstant;}
-    public void setAlive(Boolean alive) {isAlive = alive;}
-    public void setIsInvincible(boolean invincible){this.isInvincible = invincible;}
-    public void setInvincibleCompteur(int timer){this.invincibleCompteur = timer;}
-    public void setInvincibleCompteurEtoile(int timer){this.invincibleCompteurEtoile = timer;}
+        this.restCompteur = 0;
+        this.life = 2;
+        this.deadCompteur = 50;
+        this.gravity = true;
+        this.jumpTime = 0;
 
-    //----GETTERS----//
-    public int getInvincibleCompteur(){return this.invincibleCompteur;}
-    public int getInvincibleCompteurEtoile(){return this.invincibleCompteurEtoile;}
-    public boolean getIsInvincible(){return this.isInvincible;}
-    public Boolean getAlive() {return isAlive;}
-    public boolean getWalkState(){return this.isWalking;}
-    public Boolean getJumping() {return isJumping;}
-    public Boolean getRightState() {return isRight;}
-    public Boolean getWalkingState() {return isWalking;}
-    public int getCompteurMarche() {return compteurMarche;}
-    public long getJumpTime(){return this.jumpTime;}
-    public int getCompteurSaut() {return compteurSaut;}
-    public int getJumpImpulse() {return jumpImpulse;}
-    public int getGravityConstant() {return gravityConstant;}
+        this.frequenceMarche = 20;
+        setCollisionMatrixToFalse();
+    }
+
+    public Boolean getJumping() {
+        return isJumping;
+    }
+
+    public void setJumping(Boolean jumping) {
+        isJumping = jumping;
+    }
+
+    public Boolean getRight() {
+        return isRight;
+    }
+
+    public void setRight(Boolean right) {
+        isRight = right;
+    }
+
+    public Boolean getWalking() {
+        return isWalking;
+    }
+
+    public void setWalking(Boolean walking) {
+        isWalking = walking;
+    }
+
+    public Boolean getAlive() {
+        return isAlive;
+    }
+
+    public void setAlive(Boolean alive) {
+        isAlive = alive;
+    }
+
+    public Boolean getInvincible() {
+        return isInvincible;
+    }
+
+    public void setInvincible(Boolean invincible) {
+        isInvincible = invincible;
+    }
+
+    public Boolean getResting() {
+        return isResting;
+    }
+
+    public void setResting(Boolean resting) {
+        isResting = resting;
+    }
+
+    public int getCompteurMarche() {
+        return compteurMarche;
+    }
+
+    public void setCompteurMarche(int compteurMarche) {
+        this.compteurMarche = compteurMarche;
+    }
+
+    public int getGravityConstant() {
+        return gravityConstant;
+    }
+
+    public void setGravityConstant(int gravityConstant) {
+        this.gravityConstant = gravityConstant;
+    }
+
+    public int getJumpImpulse() {
+        return jumpImpulse;
+    }
+
+    public void setJumpImpulse(int jumpImpulse) {
+        this.jumpImpulse = jumpImpulse;
+    }
+
+    public int getCompteurSaut() {
+        return compteurSaut;
+    }
+
+    public void setCompteurSaut(int compteurSaut) {
+        this.compteurSaut = compteurSaut;
+    }
+
+    public int getInvincibleCompteur() {
+        return invincibleCompteur;
+    }
+
+    public void setInvincibleCompteur(int invincibleCompteur) {
+        this.invincibleCompteur = invincibleCompteur;
+    }
+
+    public int getRestCompteur() {
+        return restCompteur;
+    }
+
+    public void setRestCompteur(int restCompteur) {
+        this.restCompteur = restCompteur;
+    }
+
+    public long getJumpTime() {
+        return jumpTime;
+    }
+
+    public void setJumpTime(long jumpTime) {
+        this.jumpTime = jumpTime;
+    }
+
+    public HashMap<String, boolean[]> getCollisionMatrix() {
+        return collisionMatrix;
+    }
+
+    public void setCollisionMatrix(HashMap<String, boolean[]> collisionMatrix) {
+        this.collisionMatrix = collisionMatrix;
+    }
+
+    public int[][] getPositions() {
+        return positions;
+    }
+
+    public void setPositions(int[][] positions) {
+        this.positions = positions;
+    }
+
+    public int getLife() {
+        return life;
+    }
+
+    public void setLife(int life) {
+        this.life = life;
+    }
+
+    public int getFrequenceMarche() {
+        return frequenceMarche;
+    }
+
+    public void setFrequenceMarche(int frequenceMarche) {
+        this.frequenceMarche = frequenceMarche;
+    }
+
+    public Boolean getEnnemy() {
+        return isEnnemy;
+    }
+
+    public void setEnnemy(Boolean ennemy) {
+        isEnnemy = ennemy;
+    }
+
+    public int getDeadCompteur() {
+        return deadCompteur;
+    }
+
+    public void setDeadCompteur(int deadCompteur) {
+        this.deadCompteur = deadCompteur;
+    }
+
+    public Boolean getGravity() {
+        return gravity;
+    }
+
+    public void setGravity(Boolean gravity) {
+        this.gravity = gravity;
+    }
     //----METHODES----//
     /**
      * Fonction walk() permet de faire marcher le personage en modifiant son image (attribut)
@@ -127,10 +256,6 @@ public class Personnage extends Origin{
         else{key+="_gauche";}
         setBitmap(key);
     }
-    /**
-     * Initialise et/ou réinitialise la matrice de collision.
-     * Tout deviens false
-     */
     public void setCollisionMatrixToFalse(){
         boolean[] tab = new boolean[4];
         Arrays.fill(tab, false);
@@ -147,14 +272,7 @@ public class Personnage extends Origin{
             for(String key : collisionMatrix.keySet()){collisionMatrix.put(key, tab);}
         }
     }
-    /**
-     * Ajouter ou modifier une paire clef/valeur dans la matrice de collision
-     * @param key
-     * @param tab
-     */
     public void setCollisionMatrix(String key, boolean[]tab){collisionMatrix.put(key, tab);}
-
-    public HashMap<String, boolean[]> getCollisionMatrix() {return collisionMatrix;}
     /**
      * Detecter s'il y a collision avec un objet.
      *
@@ -181,16 +299,12 @@ public class Personnage extends Origin{
         boolean segment_horizontal_haut = getY() + getHeight() > objet.getY() + lateralError;
         boolean segment_horizontal_bas = getY() < objet.getY() + objet.getHeight() - lateralError;
         // collision en haut :
-        //boolean ch1 = getX() < objet.getX() + objet.getWidth() - lateralError;
-        //boolean ch2 = getX() + getWidth() > objet.getX() + lateralError;
         boolean ch3 = getY() + getHeight() >= objet.getY() - verticalError;
         boolean ch4 = getY() < objet.getY();
         boolean ch5 = getY() + getHeight() <= objet.getY() + objet.getHeight()/2;
         result[0] = segment_vertical_droit && segment_vertical_gauche && ch3 && ch4 && ch5;
 
         //collision à droite
-        //boolean cd1 = getY() < objet.getY() + objet.getHeight() - lateralError;
-        //boolean cd2 = getY() + getHeight() > objet.getY() + lateralError;
         boolean cd3 = getX() + lateralError >= objet.getX() + objet.getWidth()/2;
         boolean cd4 = getX() < objet.getX() + objet.getWidth();
         result[1] = segment_horizontal_bas && segment_horizontal_haut && cd3 && cd4;
@@ -198,13 +312,9 @@ public class Personnage extends Origin{
         // collision en bas :
         boolean cb1 = getY() <= objet.getY() + objet.getHeight() + verticalError;
         boolean cb2 = getY() >= objet.getY() + objet.getHeight()/2;
-        //boolean cb3 = getX() < objet.getX() + objet.getWidth() - lateralError;
-        //boolean cb4 = getX() + getWidth() > objet.getX() + lateralError;
         result[2] = cb1 && cb2 && segment_vertical_droit && segment_vertical_gauche;
 
         // collision à gauche :
-        //boolean cg1 = getY() < objet.getY() + objet.getHeight() - lateralError;
-        //boolean cg2 = getY() + getHeight() > objet.getY() + lateralError;
         boolean cg3 = getX() + getWidth() >= objet.getX();
         boolean cg4 = getX() + getWidth() +lateralError <= objet.getX() + objet.getWidth()/2;
         result[3] = segment_horizontal_bas && segment_horizontal_haut && cg3 && cg4;
@@ -216,6 +326,7 @@ public class Personnage extends Origin{
      * Detecter si le personnage a une collision à la droite de n'importe quel objet
      * @return
      */
+    @Deprecated
     public boolean collisionInRightWithObject(){
         String[] keys = {"castle", "yellowbloc", "brownbloc", "pipe"};
         boolean b = false;
@@ -231,6 +342,7 @@ public class Personnage extends Origin{
      * Detecter si le personnage a une collision à la gauche de n'importe quel objet
      * @return
      */
+    @Deprecated
     public boolean collisionInLeftWithObject(){
         String[] keys = {"castle", "yellowbloc", "brownbloc", "pipe"};
         boolean b = false;
@@ -246,6 +358,7 @@ public class Personnage extends Origin{
      * Detecter si le personnage a une collision en haut de n'importe quel objet
      * @return
      */
+    @Deprecated
     public boolean collisionOnTopWithObject(){
         String[] keys = {"castle", "yellowbloc", "brownbloc", "pipe"};
         boolean b = false;
@@ -260,6 +373,7 @@ public class Personnage extends Origin{
      * Detecter si le personnage a une collision en bas de n'importe que objet.
      * @return
      */
+    @Deprecated
     public boolean collisionOnBottomWithObject(){
         String[] keys = {"castle", "yellowbloc", "brownbloc", "pipe"};
         boolean b = false;
@@ -270,6 +384,16 @@ public class Personnage extends Origin{
             }
         return b;
     }
+    public boolean collisionWithObject(int direction){
+        String[] keys = {"castle", "yellowbloc", "brownbloc", "pipe"};
+        boolean b = false;
+        for(String key : keys){
+            if(collisionMatrix.get(key)[direction]){
+                b = true;
+            }
+        }
+        return b;
+    }
     public boolean[] detectCollisionWithFloor(Floor floor, int...margin){
         boolean[] result = new boolean[4];
         Arrays.fill(result, false);
@@ -277,10 +401,6 @@ public class Personnage extends Origin{
         result[0] = getY() + getHeight() + marge >= floor.getY();
         return result;
     }
-    public int getMaxY(){return this.maxY;}
-    public void setMaxY(int m){this.maxY = maxY;}
-    public int getMinY(){return this.minY;}
-    public void setMinY(int m){this.minY = m;}
     public void increaseCompteurSaut(){this.compteurSaut ++;}
     public void decreaseCompteurSaut(){this.compteurSaut --;}
     public void pushPositions(int[] pos){
@@ -292,9 +412,23 @@ public class Personnage extends Origin{
     public int getSpeedVectorY(){return positions[0][1]-positions[1][1];}
 
     public void increasePieceCount() {}
-    public void increaseLife(){}
-    public void decreaseLife(){}
+    public void increaseLife(){this.life ++;}
+    public void decreaseLife(){
+        this.life --;
+        if(life <= 0){dead();}
+    }
     public void recalibrerY(Objet objet){
         this.setY(objet.getY() - getHeight());
     }
+    public void update(){
+        if(activated){
+            if(isResting){rest();}
+            else if(isInvincible){invincible();}
+            else if(isAlive){walk(frequenceMarche);}
+            else{dead();}
+        }
+    }
+    public void dead(){}
+    public void rest(){}
+    public void invincible(){}
 }

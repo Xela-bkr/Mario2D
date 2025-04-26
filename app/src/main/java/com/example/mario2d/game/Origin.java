@@ -12,7 +12,7 @@ import java.util.HashMap;
  * Classe contenant les attributs communs à tous les composants du jeu :
  * coordonnées, dimentions, contexte, nom, image (bitmap) et la spriteBank
  */
-public class Origin {
+public abstract class Origin {
     /**
      * SpriteBank : permet d'associer chaque nom d'image (string) à sa resource R.drawable.*
      */
@@ -40,6 +40,7 @@ public class Origin {
         this.initSpriteBank();
         this.initX = x; this.initY = y;
         this.initWidth = width; this.initHeight = height;
+        setBitmaps();
     }
     /**
      * @param x
@@ -175,4 +176,5 @@ public class Origin {
     public void translateY(int dy){this.setY(this.getY()+dy);}
     public void shrinkWidth(int i){setWidth(getWidth() - i);}
     public void increaseWidth(int i){setWidth(getWidth() + i);}
+    public void setBitmaps(){}
 }
