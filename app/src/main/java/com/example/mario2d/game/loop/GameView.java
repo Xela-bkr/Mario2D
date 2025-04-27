@@ -530,7 +530,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     yb.getItem().setActivated(true);
                     yb.getItem().setInMotion(true);
                     yb.setUsed(true);
-                    yb.setBitmap("blocvide");
                 }
                 break;
             }
@@ -654,11 +653,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 else{piece.rotate(16);}
             }
         }
-        for(YellowBloc yb : yellowBlocs){
-            if(yb.getItem().getInMotion() && yb.getItem().getY() > yb.getY() - yb.getWidth()){yb.getItem().translateY(-2);}
-            else if(!yb.getItem().getIsCollected() && yb.getItem().getActivated()){yb.getItem().setIsPickabe(true);}
-            if(yb.getItem().getPickabe() && !yb.getItem().getPicked()){yb.getItem().animer();}
-        }
+        for(YellowBloc yb : yellowBlocs){yb.update();}
     }
     public void afficherScore(Canvas canvas, Paint paint){
 

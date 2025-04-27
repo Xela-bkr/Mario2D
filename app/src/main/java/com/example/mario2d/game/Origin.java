@@ -144,7 +144,6 @@ public abstract class Origin {
         spriteBank.put("greenpipe", R.drawable.greenpipe);
         spriteBank.put("nuage", R.drawable.nuage);
         spriteBank.put("nuageplatform", R.drawable.nuageplatform);
-        spriteBank.put("piece", R.drawable.piece);
         spriteBank.put("redbrick", R.drawable.redbrick);
         spriteBank.put("yellowbrick", R.drawable.yellowbrick);
         spriteBank.put("champignon", R.drawable.champignon);
@@ -154,6 +153,9 @@ public abstract class Origin {
         spriteBank.put("piece_jaune_tourne_1", R.drawable.piece_jaune_tourne_1);
         spriteBank.put("piece_jaune_tourne_2", R.drawable.piece_jaune_tourne_2);
         spriteBank.put("piece_jaune_tourne_3", R.drawable.piece_jaune_tourne_3);
+        spriteBank.put("bloc1", R.drawable.bloc1);
+        spriteBank.put("bloc2", R.drawable.bloc2);
+        spriteBank.put("hardbloc", R.drawable.hardbloc);
         /*spriteBank.put("", R.drawable.);
         spriteBank.put("", R.drawable.);
         spriteBank.put("", R.drawable.);
@@ -177,4 +179,5 @@ public abstract class Origin {
     public void shrinkWidth(int i){setWidth(getWidth() - i);}
     public void increaseWidth(int i){setWidth(getWidth() + i);}
     public void setBitmaps(){}
+    public void update(){}
 }

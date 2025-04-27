@@ -20,7 +20,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/piece"
+            android:src="@drawable/piece_jaune_face"
             android:maxHeight="100dp"
             android:maxWidth="100dp"/>
     </LinearLayout>
@@ -97,7 +97,7 @@
         <ImageButton
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/piece"
+            android:src="@drawable/piece_jaune_face"
             android:scaleType="fitCenter"/>
     </LinearLayout>
     <Button
