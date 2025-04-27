@@ -431,4 +431,9 @@ public abstract class Personnage extends Origin{
     public void dead(){}
     public void rest(){}
     public void invincible(){}
+    public void addCollisionValue(String key, int index, boolean b){
+        boolean[] tab = collisionMatrix.get(key);
+        tab[index] = b;
+        collisionMatrix.put(key, tab);
+    }
 }

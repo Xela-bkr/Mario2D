@@ -312,14 +312,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             if (canvas != null) {
                 setBackgroundColor(LEVEL_SELECTED, canvas);
                 Paint paint = new Paint();
-                if(this.player.getBitmap()!=null){canvas.drawBitmap(player.getBitmap(), player.getX(), player.getY(), paint);}
-
                 for(Item item : items) {
                     if (item.getActivated() && onScreen(item, 10, 10)) {
                         canvas.drawBitmap(item.getBitmap(), item.getX(), item.getY(), paint);
                     }
                 }
                 for(Objet obj : objets) if(obj.getActivated() && onScreen(obj, 10, 10)) canvas.drawBitmap(obj.getBitmap(), obj.getX(), obj.getY(), paint);
+                if(this.player.getBitmap()!=null){canvas.drawBitmap(player.getBitmap(), player.getX(), player.getY(), paint);}
                 for(Ennemy en : ennemies) if(en.getActivated() && onScreen(en, 10, 10)) canvas.drawBitmap(en.getBitmap(), en.getX(), en.getY(), paint);
 
                 joystick.draw(canvas);
@@ -488,6 +487,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
      */
     public void updateCollision(Personnage player){
 
+        player.setCollisionMatrixToFalse();
+
         int[] brownBlocOffset = new int[]{5, Math.abs(this.dx)+2};
         int[] yellowBlocOffset = new int[]{5, Math.abs(this.dx)+2};
         int[] pipeOffset = new int[]{5, Math.abs(this.dx)+2};
@@ -496,8 +497,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         //Collision avec châteaux;
         for(Castle castle : castles){
             boolean[] tab = player.detectCollision(castle, castleOffset);
-            player.setCollisionMatrix("castle", tab);
-            if (tab[0] || tab[1] || tab[2] || tab[3]) {break;}
+            if(tab[0] && !player.getJumping()){
+                player.recalibrerY(castle);
+                player.addCollisionValue("castle", 0, true);
+            }
+            if(tab[1]){player.addCollisionValue("castle", 1, true);}
+            if(tab[2]){player.addCollisionValue("castle", 2, true);}
+            if(tab[3]){player.addCollisionValue("castle", 3, true);}
         }
 
         // Collision avec le sol -> Particulier
@@ -508,33 +514,42 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         //Collision avec bocs marrons
         for(BrownBloc bb : brownBlocs){
             boolean[] tab = player.detectCollision(bb, brownBlocOffset);
-            player.setCollisionMatrix("brownbloc", tab);
-            if(tab[0] && !player.getJumping()){player.recalibrerY(bb); break;}
-            else if(tab[1] || tab[2] || tab[3]){break;}
+            if(tab[0] && !player.getJumping()){
+                player.recalibrerY(bb);
+                player.addCollisionValue("brownbloc", 0, true);
+            }
+            if(tab[1]){player.addCollisionValue("brownbloc", 1, true);}
+            if(tab[2]){player.addCollisionValue("brownbloc", 2, true);}
+            if(tab[3]){player.addCollisionValue("brownbloc", 3, true);}
+
         }
 
         //collision avec blocs jaunes
         for(YellowBloc yb : yellowBlocs){
             boolean[] tab = player.detectCollision(yb, yellowBlocOffset);
-            player.setCollisionMatrix("yellowbloc", tab);
             if(tab[2]){
+                player.addCollisionValue("yellowbloc", 2, true);
                 if(!yb.getUsedState() && player == this.player){
                     yb.getItem().setActivated(true);
                     yb.getItem().setInMotion(true);
                     yb.setUsed(true);
                 }
-                break;
             }
-            else if(tab[0] && !player.getJumping()){player.recalibrerY(yb);break;}
-            else if(tab[1] || tab[3]){break;}
+            if(tab[0] && !player.getJumping()){player.addCollisionValue("yellowbloc", 0, true);}
+            if(tab[1]){player.addCollisionValue("yellowbloc", 1, true);}
+            if(tab[3]){player.addCollisionValue("yellowbloc", 3, true);}
         }
 
         //collision avec tubes
         for(Pipe pipe : pipes){
             boolean[] tab = player.detectCollision(pipe, pipeOffset);
-            player.setCollisionMatrix("pipe", tab);
-            if(tab[0]&& !player.getJumping()){player.recalibrerY(pipe); break;}
-            else if(tab[1] || tab[2] || tab[3]){break;}
+            if(tab[0] && !player.getJumping()){
+                player.recalibrerY(pipe);
+                player.addCollisionValue("pipe", 0, true);
+            }
+            if(tab[1]){player.addCollisionValue("pipe", 1, true);}
+            if(tab[2]){player.addCollisionValue("pipe", 2, true);}
+            if(tab[3]){player.addCollisionValue("pipe", 3, true);}
         }
     }
     public void updatePlayerSpecificCollision(){

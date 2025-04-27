@@ -18,7 +18,7 @@ public class Player extends Personnage{
         this.initialHeight = height; this.initialWidth = width;
         this.piecesCount = 0;
         this.life = 2;
-        this.frequenceMarche = 20;
+        this.frequenceMarche = 10;
         this.gravityConstant = 1;
         this.jumpImpulse = 18;
         this.compteurSaut = 0;

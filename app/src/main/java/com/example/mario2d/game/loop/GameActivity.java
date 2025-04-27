@@ -105,11 +105,6 @@ public class GameActivity extends AppCompatActivity {
         final int pipeY = displayHeight - FLOOR_HEIGHT - PIPE_HEIGHT;
         final int floorY = displayHeight - FLOOR_HEIGHT;
 
-        int[] castleX = {0, 5000};
-        int[] staticBlocX = {600, 600+BLOC_WIDTH*2, 2500, 2500+BLOC_WIDTH*2};
-        int[] mysteryBlocX = {600+BLOC_WIDTH, 2500 + BLOC_WIDTH};
-        int[] pipeX = {2000, 3000};
-
         final int PIECE_WIDTH = (int)(displayWidth*0.03);
         final int PIECE_HEIGHT = (int)(PIECE_WIDTH*1.1354);
         final int pieceY = displayHeight - FLOOR_HEIGHT - PIECE_HEIGHT;
@@ -117,11 +112,66 @@ public class GameActivity extends AppCompatActivity {
         final int ITEM_WIDTH = (int) (BLOC_WIDTH*2/3);
         final int ITEM_HEIGHT = ITEM_WIDTH;
 
-        System.out.printf("Item width and height : %d & %d \n", ITEM_WIDTH, ITEM_HEIGHT);
+        final int nuageSimpeWidth = (int) (displayWidth*0.076);
+        final int nuageSimpleHeight = (int) (0.9465*nuageSimpeWidth);
 
+        final int petiteCollineWidth = (int) (displayWidth*0.06);
+        final int petiteCollineHeight = (int) (petiteCollineWidth*0.398);
+        final int petiteCollineY = displayHeight - FLOOR_HEIGHT - petiteCollineHeight;
+
+        final int grandeCollineWidth = (int) (displayWidth * 0.15);
+        final int grandeCollineHeight = (int) (grandeCollineWidth*0.4424);
+        final int grandeCollineY = displayHeight - FLOOR_HEIGHT - grandeCollineHeight;
+
+        int[] castleX = {0, 7000};
+        int[] staticBlocX = {600, 600+BLOC_WIDTH*2, 2500, 2500+BLOC_WIDTH*2};
+        int[] mysteryBlocX = {600+BLOC_WIDTH, 2500 + BLOC_WIDTH};
+        int[] pipeX = {2000, 3000};
         int[][] pieces = new int[][]{{3300, pieceY}, {3300+PIECE_WIDTH, pieceY}, {3300+PIECE_WIDTH*2, pieceY}};
 
         switch (LEVEL_SELECTED){
+            case 1 :
+                final int platformChampiFooterWidth = (int) (displayWidth*0.06);
+                final int platformChampiFooterHeight = (int) (platformChampiFooterWidth*4.3882);
+                final int platformChampiFooterY = displayHeight - FLOOR_HEIGHT - platformChampiFooterHeight;
+
+                final int platformChampiHeaderWidth = (int) (displayWidth * 0.2);
+                final int platformChampiHeaderHeight = (int) (platformChampiHeaderWidth*0.1941);
+                final int platformChampiHeaderY = platformChampiFooterY - platformChampiHeaderHeight;
+
+                final int hardSquareY = displayHeight - FLOOR_HEIGHT - BLOC_HEIGHT;
+
+                staticBlocX = new int[]{900, 900+BLOC_WIDTH*2, 2700, 2700+BLOC_WIDTH*2};
+                mysteryBlocX = new int[]{900+BLOC_WIDTH, 2700+BLOC_WIDTH};
+                pipeX = new int[]{};
+                int[] platformChampiFooterX = new int[]{1700, 1700+platformChampiHeaderWidth+1000};
+                int[] hardSquare = new int[]{3500, 3500+BLOC_WIDTH, 3500+BLOC_WIDTH*2, 3500+BLOC_WIDTH*3, 3500+BLOC_WIDTH*4};
+                int[][] nuageSimpleCoord = new int[][]{{100, 100}, {300, 200}, {469, 356}, {999, 372}, {2782, 20},
+                        {1033, 255}, {1477, 122}, {2000, 222}, {2400, 80}, {2888, 75}, {3468, 160}, {4024, 280}, {3700, 230},
+                        {4280, 163}};
+                int[] petiteCollineX = new int[]{800, 2800, 3400, 5000};
+                int[] grandeCollineX = new int[]{1900, 4000};
+
+                for(int x : petiteCollineX){
+                    objets.add(new Objet(this, "colline_petite", x, petiteCollineY, petiteCollineWidth, petiteCollineHeight));
+                }
+                for(int x : grandeCollineX){
+                    objets.add(new Objet(this, "colline_grande", x, grandeCollineY, grandeCollineWidth, grandeCollineHeight));
+                }
+                for(int i = 0; i<nuageSimpleCoord.length; i++){
+                    objets.add(new Objet(this, "nuage", nuageSimpleCoord[i][0], nuageSimpleCoord[i][1], nuageSimpeWidth, nuageSimpleHeight));
+                }
+                for(int x : platformChampiFooterX){
+                    BrownBloc footer = new BrownBloc(this, "pillier_champi_platforme", x, platformChampiFooterY, platformChampiFooterWidth, platformChampiFooterHeight);
+                    BrownBloc header = new BrownBloc(this, "champi_platforme", x-platformChampiHeaderWidth/2 + platformChampiFooterWidth/2, platformChampiHeaderY, platformChampiHeaderWidth, platformChampiHeaderHeight);
+                    objets.add(footer);
+                    objets.add(header);
+                }
+                for(int x : hardSquare){
+                    BrownBloc hs = new BrownBloc(this, "hardbloc", x, hardSquareY, BLOC_WIDTH, BLOC_HEIGHT);
+                    objets.add(hs);
+                }
+                break;
             case 2 :
                 castleKey = "greencastle";
                 staticBlocKey = "greenbloc";
