@@ -8,6 +8,10 @@ public class Item extends Objet{
         super(context, name, x, y, width, height);
         this.isCollected = false;
         this.isUsing = false;
+        this.minWidth = 20;
+        this.minHeight = 20;
+        System.out.printf("Width and height : %d & %d\n", width, height);
+        //if(spriteBank.containsKey(name)){this.setBitmap(name);}
         this.isPerimed = false;
     }
     public boolean getIsCollected() {return isCollected;}

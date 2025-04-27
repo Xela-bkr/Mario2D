@@ -17,7 +17,7 @@ public abstract class Origin {
      * SpriteBank : permet d'associer chaque nom d'image (string) à sa resource R.drawable.*
      */
     protected HashMap<String, Integer> spriteBank = new HashMap<String, Integer>();
-    protected int x, y, width, height, initWidth, initHeight, initY, initX;
+    protected int x, y, width, height, initWidth, initHeight, initY, initX, minWidth, minHeight;
     protected Bitmap bitmap;
     protected String name;
     protected Context context;
@@ -35,6 +35,8 @@ public abstract class Origin {
     public Origin(Context context, String name, int x, int y, int width, int height){
         this.name = name; this.x = x; this.y = y;
         this.width = width; this.height = height;
+        this.minHeight = 1;
+        this.minWidth = 1;
         this.context = context;
         this.activated = true;
         this.initSpriteBank();
@@ -68,7 +70,7 @@ public abstract class Origin {
     public void setBitmap(String key){
         if(spriteBank.get(key)!=null){
             Bitmap bit = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(key));
-            this.bitmap = Bitmap.createScaledBitmap(bit, getWidth(), getHeight(), true);
+            this.bitmap = Bitmap.createScaledBitmap(bit, Math.max(1, getWidth()), Math.max(1, getHeight()), true);
         }
         else{
             Bitmap bit = BitmapFactory.decodeResource(context.getResources(), spriteBank.get("bloc"));
@@ -173,6 +175,11 @@ public abstract class Origin {
         spriteBank.put("greenkoopa_carapace_tourne_1", R.drawable.greenkoopa_carapace_tourne_1);
         spriteBank.put("greenkoopa_carapace_tourne_2", R.drawable.greenkoopa_carapace_tourne_2);
         spriteBank.put("greenkoopa_carapace_tourne_3", R.drawable.greenkoopa_carapace_tourne_3);
+        spriteBank.put("greenparakoopa_down_droite", R.drawable.greenparakoopa_down_droite);
+        spriteBank.put("greenparakoopa_down_gauche", R.drawable.greenparakoopa_down_gauche);
+        spriteBank.put("greenparakoopa_up_droite", R.drawable.greenparakoopa_up_droite);
+        spriteBank.put("greenparakoopa_up_gauche", R.drawable.greenparakoopa_up_gauche);
+
     }
     public void translateX(int dx){this.setX(this.getX()+dx);}
     public void translateY(int dy){this.setY(this.getY()+dy);}

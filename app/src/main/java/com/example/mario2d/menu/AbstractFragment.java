@@ -101,20 +101,22 @@ public class AbstractFragment extends Fragment {
         displayWidth = dm.widthPixels;
         displayHeight = dm.heightPixels;
 
-        CHARACTER_WIDTH = (int)(0.05*displayWidth);
+        CHARACTER_WIDTH = (int)(0.035*displayWidth);
         CHARACTER_HEIGHT = (int)(MAIN_CHAR_AGR_COEFF*CHARACTER_WIDTH);
 
-        FLOOR_WIDTH = (int)(0.10*displayWidth);
+        FLOOR_WIDTH = (int)(0.06*displayWidth);
         FLOOR_HEIGHT = FLOOR_WIDTH;
         FLOOR_RATE = (int)displayWidth/FLOOR_WIDTH + 1;
 
-        CASTLE_WIDTH = (int)(0.18*displayWidth);
+        CASTLE_WIDTH = (int)(0.25*displayWidth);
         CASTLE_HEIGHT = CASTLE_WIDTH;
 
-        BLOC_WIDTH = (int)(0.06*displayWidth);
+        BLOC_WIDTH = (int)(0.04*displayWidth);
         BLOC_HEIGHT = BLOC_WIDTH;
 
-        PIPE_WIDTH = (int)(0.07*displayWidth);
+        System.out.printf("Bloc width : %d \n", BLOC_WIDTH);
+
+        PIPE_WIDTH = (int)(0.06*displayWidth);
         PIPE_HEIGHT = (int)(PIPE_AGR_COEFF*PIPE_WIDTH);
     }
 

@@ -16,11 +16,11 @@ import com.example.mario2d.game.objet.Pipe;
 import com.example.mario2d.game.objet.YellowBloc;
 import com.example.mario2d.game.personnage.Goomba;
 import com.example.mario2d.game.personnage.Koopa;
+import com.example.mario2d.game.personnage.Parakoopa;
 import com.example.mario2d.game.personnage.Personnage;
 import com.example.mario2d.game.personnage.Player;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -45,7 +45,7 @@ public class GameActivity extends AppCompatActivity {
         setObjets(objets);
 
         ArrayList<Personnage> persos = new ArrayList<Personnage>();
-        final int GOOMBA_WIDTH = (int) (displayWidth*0.05);
+        final int GOOMBA_WIDTH = (int) (displayWidth*0.03);
         final int GOOMBA_HEIGHT = GOOMBA_WIDTH;
 
         final int GOOMBAY = displayHeight - FLOOR_HEIGHT - GOOMBA_HEIGHT - 30;
@@ -55,7 +55,7 @@ public class GameActivity extends AppCompatActivity {
             Goomba g = new Goomba(this, "goomba", x, GOOMBAY, GOOMBA_WIDTH, GOOMBA_HEIGHT);
             persos.add(g);
         }
-        final int KOOPA_WIDTH = (int) (displayWidth*0.05);
+        final int KOOPA_WIDTH = (int) (displayWidth*0.03);
         final int KOOPA_HEIGHT = (int) (KOOPA_WIDTH*1.7458);
         final int KOOPAY = displayHeight - FLOOR_HEIGHT - KOOPA_HEIGHT - 30;
         int[] koopaX = new int[]{4000};
@@ -64,10 +64,9 @@ public class GameActivity extends AppCompatActivity {
             Koopa koopa = new Koopa(this, "greenkoopa", x, KOOPAY, KOOPA_WIDTH, KOOPA_HEIGHT);
             persos.add(koopa);
         }
-        System.out.printf("floor height : %d, floor width : %d", FLOOR_HEIGHT, FLOOR_WIDTH);
-        //setCharacter(persos);
 
-        //TODO add extra extractions for user's history data
+        Parakoopa pk = new Parakoopa(this, "greenpatrakoopa", 500, 100, KOOPA_WIDTH + 30, KOOPA_HEIGHT);
+        persos.add(pk);
         setContentView(new GameView(this, displayWidth, displayHeight,leftHandMode, LEVEL_SELECTED,
                 player, objets, persos));
     }
@@ -111,12 +110,14 @@ public class GameActivity extends AppCompatActivity {
         int[] mysteryBlocX = {600+BLOC_WIDTH, 2500 + BLOC_WIDTH};
         int[] pipeX = {2000, 3000};
 
-        final int PIECE_WIDTH = (int)(displayWidth*0.04);
+        final int PIECE_WIDTH = (int)(displayWidth*0.03);
         final int PIECE_HEIGHT = (int)(PIECE_WIDTH*1.1354);
         final int pieceY = displayHeight - FLOOR_HEIGHT - PIECE_HEIGHT;
 
-        final int ITEM_WIDTH = PIECE_WIDTH;
+        final int ITEM_WIDTH = (int) (BLOC_WIDTH*2/3);
         final int ITEM_HEIGHT = ITEM_WIDTH;
+
+        System.out.printf("Item width and height : %d & %d \n", ITEM_WIDTH, ITEM_HEIGHT);
 
         int[][] pieces = new int[][]{{3300, pieceY}, {3300+PIECE_WIDTH, pieceY}, {3300+PIECE_WIDTH*2, pieceY}};
 

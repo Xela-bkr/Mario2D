@@ -119,28 +119,20 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         /**
          * valeurs par défaut des dimentions du joystick
          */
-        float joystickExternalRadius = 200;
-        float joystickInternalRadius = 100;
+        float joystickExternalRadius = (float) ((displayWidth*0.045));
+        float joystickInternalRadius = (float)(0.7*joystickExternalRadius);
         float joystickCenterX = 300;
-        float joystickCenterY = 300;
+        float joystickCenterY = displayHeight - joystickExternalRadius*2;
 
         /**
          * Paramétrage du joystick en fonction du sol et du leftHandMode
          * @see #leftHandMode
          */
-        if(this.floor!=null){
-            if(leftHandMode){
-                joystickExternalRadius = (floor.get(1).getWidth()/3) + 10 ;
-                joystickInternalRadius = (float)(0.7*joystickExternalRadius);
-                joystickCenterX = (float) (displayWidth * 4) /5;
-                joystickCenterY = displayHeight - floor.get(1).getHeight()/2;
-            }
-            else{
-                joystickExternalRadius = (floor.get(1).getWidth()/3) + 10 ;
-                joystickInternalRadius = (float)(0.7*joystickExternalRadius);
-                joystickCenterX = floor.get(1).getX() + floor.get(1).getWidth();
-                joystickCenterY = floor.get(1).getY() + (floor.get(1).getHeight() / 2);
-            }
+        if(leftHandMode){
+            joystickCenterX = (float) ( displayWidth - joystickExternalRadius - displayWidth*0.05);
+        }
+        else{
+            joystickCenterX = (float) (joystickExternalRadius + displayWidth*0.05);
         }
         this.joystick = new Joystick(joystickCenterX, joystickCenterY, joystickInternalRadius, joystickExternalRadius);
         setFocusable(true);
@@ -631,7 +623,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
     public void gravity(){
         for(Ennemy en : ennemies){
-            if(!en.collisionWithObject(0) && !en.getCollisionMatrix().get("floor")[0]){en.translateY(5);}
+            if(!en.collisionWithObject(0) && !en.getCollisionMatrix().get("floor")[0] && en.getGravity()){
+                en.translateY(5);
+            }
         }
         if(player.getGravity()){
             boolean collisionOnTopOfFloor = player.getCollisionMatrix().get("floor")[0];

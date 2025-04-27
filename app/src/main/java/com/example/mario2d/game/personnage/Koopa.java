@@ -7,8 +7,8 @@ import android.graphics.BitmapFactory;
 import java.util.Arrays;
 
 public class Koopa extends Ennemy {
-    private Bitmap arret_droite, arret_gauche, marche_droite, marche_gauche, carapace_face, rotate_1, rotate_2, rotate_3;
-    private int frequenceRotation, compteurRotation;
+    protected Bitmap arret_droite, arret_gauche, marche_droite, marche_gauche, carapace_face, rotate_1, rotate_2, rotate_3;
+    protected int frequenceRotation, compteurRotation;
     public Koopa(Context context, String name, int x, int y, int width, int height) {
         super(context, name, x, y, width, height);
         setBitmaps();

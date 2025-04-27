@@ -231,8 +231,8 @@ public abstract class Personnage extends Origin{
         this.deadCompteur = deadCompteur;
     }
 
-    public Boolean getGravity() {
-        return gravity;
+    public boolean getGravity() {
+        return this.gravity;
     }
 
     public void setGravity(Boolean gravity) {
