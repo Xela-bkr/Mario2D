@@ -137,9 +137,8 @@ public class Parakoopa extends Koopa {
         }
         else if(restCompteur >= 100){
             isResting = false;
-            setY(initY);
             setHeight(initHeight);
-            setWidth(initWidth);
+            setWidth(initWidth - 30);
         }
         restCompteur++;
     }

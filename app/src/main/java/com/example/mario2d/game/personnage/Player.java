@@ -55,7 +55,7 @@ public class Player extends Personnage{
         setWidth(initialWidth);
         setHeight(initialHeight);
         setBitmaps();
-        setY(getY()-getHeight()/2);
+        //setY(getY()-getHeight()/2);
     }
     @Override
     public void walk(int frequence){

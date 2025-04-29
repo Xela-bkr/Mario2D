@@ -516,9 +516,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             if(tab[1]){player.addCollisionValue("brownbloc", 1, true);}
             if(tab[2]){player.addCollisionValue("brownbloc", 2, true);}
             if(tab[3]){player.addCollisionValue("brownbloc", 3, true);}
-
         }
-
         //collision avec blocs jaunes
         for(YellowBloc yb : yellowBlocs){
             boolean[] tab = player.detectCollision(yb, yellowBlocOffset);
@@ -530,7 +528,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     yb.setUsed(true);
                 }
             }
-            if(tab[0] && !player.getJumping()){player.addCollisionValue("yellowbloc", 0, true);}
+            if(tab[0] && !player.getJumping()){player.addCollisionValue("yellowbloc", 0, true);player.recalibrerY(yb);}
             if(tab[1]){player.addCollisionValue("yellowbloc", 1, true);}
             if(tab[3]){player.addCollisionValue("yellowbloc", 3, true);}
         }
@@ -545,6 +543,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             if(tab[1]){player.addCollisionValue("pipe", 1, true);}
             if(tab[2]){player.addCollisionValue("pipe", 2, true);}
             if(tab[3]){player.addCollisionValue("pipe", 3, true);}
+        }
+        if(player != this.player){
+            for(Ennemy en : ennemies){
+                if(en.getActivated() && en.getAlive() && en != player){
+                    boolean[] tab = player.detectCollision(en, 3, 3);
+                    if(tab[0] || tab[1] || tab[2] || tab[3]){
+                        if(en.getInvincible() && !player.getInvincible()){player.dead();}
+                    }
+                }
+            }
         }
     }
     public void updatePlayerSpecificCollision(){
@@ -588,9 +596,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                             ennemy.rest();
                             player.rest();
                         }
-                        else {
-                            ennemy.rest();
-                        }
                     }
                     else {
                         if(!ennemy.getInvincible()) ennemy.invincible();
@@ -630,6 +635,62 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
     }
+    public void updateCollition(Item item){
+
+        item.getCollisionMatrix().put("objet", new boolean[]{false, false, false, false});
+
+        int[] brownBlocOffset = new int[]{5, Math.abs(this.dx)+2};
+        int[] yellowBlocOffset = new int[]{5, Math.abs(this.dx)+2};
+        int[] pipeOffset = new int[]{5, Math.abs(this.dx)+2};
+        int[] castleOffset = new int[]{5, Math.abs(this.dx)+2};
+
+        //Collision avec châteaux;
+        for(Castle castle : castles){
+            boolean[] tab = item.detectCollision(castle, castleOffset);
+            if(tab[0]){
+                item.recalibrerY(castle);
+                item.addCollisionValue("objet", 0, true);
+            }
+            if(tab[1]){item.addCollisionValue("objet", 1, true);}
+            if(tab[2]){item.addCollisionValue("objet", 2, true);}
+            if(tab[3]){item.addCollisionValue("objet", 3, true);}
+        }
+        //Collision avec le sol -> Particulier
+        boolean[] tabl = item.detectCollisionWithFloor(floor.get(0), new int[]{0,0});
+        if(tabl[0]){item.addCollisionValue("objet", 0, true);item.recalibrerY(floor.get(0));}
+
+        //Collision avec bocs marrons
+        for(BrownBloc bb : brownBlocs){
+            boolean[] tab = item.detectCollision(bb, brownBlocOffset);
+            if(tab[0]){
+                item.recalibrerY(bb);
+                item.addCollisionValue("objet", 0, true);
+            }
+            if(tab[1]){item.addCollisionValue("objet", 1, true);}
+            if(tab[2]){item.addCollisionValue("objet", 2, true);}
+            if(tab[3]){item.addCollisionValue("objet", 3, true);}
+        }
+        //collision avec blocs jaunes
+        for(YellowBloc yb : yellowBlocs){
+            boolean[] tab = item.detectCollision(yb, yellowBlocOffset);
+            if(tab[2]){item.addCollisionValue("objet", 2, true);}
+            if(tab[0]){item.addCollisionValue("objet", 0, true);item.recalibrerY(yb);}
+            if(tab[1]){item.addCollisionValue("objet", 1, true);}
+            if(tab[3]){item.addCollisionValue("objet", 3, true);}
+        }
+
+        //collision avec tubes
+        for(Pipe pipe : pipes){
+            boolean[] tab = item.detectCollision(pipe, pipeOffset);
+            if(tab[0] && !player.getJumping()){
+                item.recalibrerY(pipe);
+                item.addCollisionValue("objet", 0, true);
+            }
+            if(tab[1]){item.addCollisionValue("objet", 1, true);}
+            if(tab[2]){item.addCollisionValue("objet", 2, true);}
+            if(tab[3]){item.addCollisionValue("objet", 3, true);}
+        }
+    }
     public void gravity(){
         for(Ennemy en : ennemies){
             if(!en.collisionWithObject(0) && !en.getCollisionMatrix().get("floor")[0] && en.getGravity()){
@@ -648,6 +709,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 player.setCompteurSaut(0);
             }
         }
+        for(Item item : items){
+            if(item.getActivated() && item.getPickabe() && !item.getCollisionMatrix().get("objet")[0]){
+                item.translateY(6);
+            }
+        }
     }
     public void updateAnimations(){
         for(Piece piece : pieces){
@@ -657,6 +723,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
         for(YellowBloc yb : yellowBlocs){yb.update();}
+        for(Item item : items){
+            if(item.getActivated() && item.getPickabe()){
+                updateCollition(item);
+                if(item.getCollisionMatrix().get("objet")[1]){item.setRight(true);}
+                else if(item.getCollisionMatrix().get("objet")[3]){item.setRight(false);}
+                item.animer();
+            }
+        }
     }
     public void afficherScore(Canvas canvas, Paint paint){
 
