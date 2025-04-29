@@ -108,13 +108,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             if(objet instanceof Piece){pieces.add((Piece) objet);}
             if(objet instanceof Item){items.add((Item) objet);}
         }
+        System.out.printf("BrownBloc length %d\n", brownBlocs.size());
         for(Personnage perso : persos){if(perso instanceof Ennemy){ennemies.add((Ennemy)perso);}}
 
         this.exit = false;
         this.gravity = true;
-
-        System.out.println("nombre de persos : "+ persos.size());
-        System.out.println("nombre d'ennemis : " + ennemies.size());
 
         /**
          * valeurs par défaut des dimentions du joystick
@@ -281,6 +279,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
      */
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder holder) {
+        //TODO Add animation le temps que les données chargent
         gameLoop = new GameLoop(this);
         gameLoop.start();
     }
@@ -312,12 +311,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             if (canvas != null) {
                 setBackgroundColor(LEVEL_SELECTED, canvas);
                 Paint paint = new Paint();
-                for(Item item : items) {
-                    if (item.getActivated() && onScreen(item, 10, 10)) {
-                        canvas.drawBitmap(item.getBitmap(), item.getX(), item.getY(), paint);
-                    }
-                }
-                for(Objet obj : objets) if(obj.getActivated() && onScreen(obj, 10, 10)) canvas.drawBitmap(obj.getBitmap(), obj.getX(), obj.getY(), paint);
+                for(Item item : items) {if (item.getActivated() && onScreen(item, 10, 10) && item.getBitmap()!=null) {canvas.drawBitmap(item.getBitmap(), item.getX(), item.getY(), paint);}}
+                for(Objet obj : objets) {if (obj.getActivated() && onScreen(obj, 10, 10) && obj.getBitmap() != null) {canvas.drawBitmap(obj.getBitmap(), obj.getX(), obj.getY(), paint);}}
                 if(this.player.getBitmap()!=null){canvas.drawBitmap(player.getBitmap(), player.getX(), player.getY(), paint);}
                 for(Ennemy en : ennemies) if(en.getActivated() && onScreen(en, 10, 10)) canvas.drawBitmap(en.getBitmap(), en.getX(), en.getY(), paint);
 
@@ -506,7 +501,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             if(tab[3]){player.addCollisionValue("castle", 3, true);}
         }
 
-        // Collision avec le sol -> Particulier
+        //Collision avec le sol -> Particulier
         boolean[] tabl = player.detectCollisionWithFloor(floor.get(0), new int[]{0,0});
         player.setCollisionMatrix("floor", tabl);
         if(tabl[0]){player.recalibrerY(floor.get(0));}
@@ -563,7 +558,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                         piece.setIsTaken(true);
                         piece.setCompteurAnimation(0);
                     }
-                    break;
                 }
             }
         }

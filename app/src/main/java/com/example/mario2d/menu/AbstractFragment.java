@@ -101,6 +101,8 @@ public class AbstractFragment extends Fragment {
         displayWidth = dm.widthPixels;
         displayHeight = dm.heightPixels;
 
+        System.out.println("tiles try : " + displayWidth*0.1 + " " + displayWidth*0.01);
+
         CHARACTER_WIDTH = (int)(0.035*displayWidth);
         CHARACTER_HEIGHT = (int)(MAIN_CHAR_AGR_COEFF*CHARACTER_WIDTH);
 

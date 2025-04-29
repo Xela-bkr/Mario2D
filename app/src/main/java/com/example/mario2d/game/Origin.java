@@ -164,6 +164,8 @@ public abstract class Origin {
         spriteBank.put("pillier_terre", R.drawable.pillier_terre);
         spriteBank.put("pillier_champi_platforme", R.drawable.pillier_champi_platforme);
         spriteBank.put("herbe_platforme", R.drawable.herbe_platforme);
+        spriteBank.put("hill2", R.drawable.hill2);
+        spriteBank.put("hills1", R.drawable.hills1);
         /*
         spriteBank.put("", R.drawable.);
         spriteBank.put("", R.drawable.);

@@ -70,7 +70,6 @@ public class Parakoopa extends Koopa {
         this.up_gauche = Bitmap.createScaledBitmap(b12, getWidth(), getHeight(), true);
     }
     public void fly() {
-        System.out.println("Parakoopa -> fly()");
         if(gravity){
             gravity = false;
         }
@@ -102,20 +101,15 @@ public class Parakoopa extends Koopa {
     }
     @Override public void update() {
         if (!koopaMode) {
-            System.out.println("Parakoopa -> update() -> !koopamode => fly()");
             fly();
         } else {
             if (isResting) {
-                System.out.println("Parakoopa -> update() -> isResting => rest()");
                 rest();
             } else if (isInvincible) {
-                System.out.println("Parakoopa -> update() -> isInvincible => invincibe()");
                 invincible();
             } else if (isAlive) {
-                System.out.println("Parakoopa -> update() -> isAlive => Walk()");
                 walk(frequenceMarche);
             } else {
-                System.out.println("Parakoopa -> update() -> dead()");
                 dead();
             }
         }
@@ -123,7 +117,6 @@ public class Parakoopa extends Koopa {
     @Override public void rest(){
         if(!isResting){
             if(!koopaMode){
-                System.out.println("Parakoopa -> rest() -> !koopaMode");
                 translateY(5);
                 koopaMode = true;
                 gravity =  true;

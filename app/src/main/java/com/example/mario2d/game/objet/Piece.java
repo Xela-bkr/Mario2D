@@ -27,7 +27,6 @@ public class Piece extends Objet{
             if(this.bitmap != rotate1){
                 this.bitmap = rotate1;
                 translateX((initWidth - width1_3)/2);
-                System.out.println("Rotate1 -> piece");
                 setWidth(width1_3);
                 //translateX(width1_3/2);
             }
@@ -36,7 +35,6 @@ public class Piece extends Objet{
            if(this.bitmap != rotate2){
                this.bitmap = rotate2;
                translateX((width1_3 - width2)/2);
-               System.out.println("Rotate2 -> piece");
                setWidth(width2);
                //translateX(width2/2);
            }
@@ -46,7 +44,6 @@ public class Piece extends Objet{
             if(this.bitmap != rotate3){
                 this.bitmap = rotate3;
                 translateX(-(width1_3 - width2)/2);
-                System.out.println("Rotate3 -> piece");
                 setWidth(width1_3);
                 //translateX(width1_3/2);
             }
@@ -55,7 +52,6 @@ public class Piece extends Objet{
             if(this.bitmap!=face){
                 //setX(initX);
                 this.bitmap = face;
-                System.out.println("Rotate4 -> piece");
                 translateX(-(initWidth - width1_3)/2 );
                 setWidth(initWidth);
                 //translateX(initWidth/2);

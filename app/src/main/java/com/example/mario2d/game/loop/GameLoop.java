@@ -6,7 +6,7 @@ import androidx.annotation.RequiresApi;
 
 public class GameLoop implements Runnable{
     private Boolean running;
-    private Thread thread;
+    private Thread thread, collision, animation;
     private GameView gameView;
 
     public GameLoop(GameView gView){
@@ -17,7 +17,7 @@ public class GameLoop implements Runnable{
     @Override
     public void run() {
 
-        final int RESOLUTION = 120; // FPS - frame per second
+        final int RESOLUTION = 60; // FPS - frame per second
         final double FREQUENCY = ((double) 1 /RESOLUTION)*1_000_000_000; // NsPF - nanosecond per frame
 
         double delay = 0.0; // init delay to 0 nanoseconds
@@ -64,6 +64,8 @@ public class GameLoop implements Runnable{
         this.running = true;
         thread = new Thread(this);
         thread.start();
+
+        collision = new Thread(this);
     }
     public void stop(){this.running = false;}
 
