@@ -14,6 +14,7 @@ import com.example.mario2d.game.objet.Objet;
 import com.example.mario2d.game.objet.Piece;
 import com.example.mario2d.game.objet.Pipe;
 import com.example.mario2d.game.objet.YellowBloc;
+import com.example.mario2d.game.personnage.Boo;
 import com.example.mario2d.game.personnage.Goomba;
 import com.example.mario2d.game.personnage.Koopa;
 import com.example.mario2d.game.personnage.Parakoopa;
@@ -79,6 +80,13 @@ public class GameActivity extends AppCompatActivity {
         Parakoopa pk = new Parakoopa(this, "greenpatrakoopa", 500, 100, KOOPA_WIDTH + 30, KOOPA_HEIGHT);
         persos.add(pk);
 
+        final int greyBrickDim = 3*dx;
+        //Boo boo = new Boo(this, "boo", 70*dx, displayHeight - FLOOR_HEIGHT - greyBrickDim, greyBrickDim, greyBrickDim);
+        //persos.add(boo);
+
+        Boo boo2 = new Boo(this, "boo", 170*dx, displayHeight - FLOOR_HEIGHT - greyBrickDim, greyBrickDim, greyBrickDim);
+        persos.add(boo2);
+
         setContentView(new GameView(this, displayWidth, displayHeight,leftHandMode, LEVEL_SELECTED,
                 player, objets, persos));
     }
@@ -119,9 +127,6 @@ public class GameActivity extends AppCompatActivity {
         final int ITEM_WIDTH = (int) (BLOC_WIDTH*2/3);
         final int ITEM_HEIGHT = ITEM_WIDTH;
 
-        final int nuageSimpeWidth = (int) (displayWidth*0.076);
-        final int nuageSimpleHeight = (int) (0.9465*nuageSimpeWidth);
-
         final int petiteCollineWidth = (int) (displayWidth*0.06);
         final int petiteCollineHeight = (int) (petiteCollineWidth*0.398);
         final int petiteCollineY = displayHeight - FLOOR_HEIGHT - petiteCollineHeight;
@@ -146,171 +151,44 @@ public class GameActivity extends AppCompatActivity {
         final int platformChampiHeaderHeightMedium = (int) (platformChampiHeaderWidthMedium*0.1941);
         final int platformChampiHeaderYMedium = platformChampiFooterMediumY - platformChampiHeaderHeightMedium;
 
-        final int hardsquareWidth = (int) (BLOC_WIDTH*0.8);
-        final int hardSquareHeight = hardsquareWidth;
-        final int hardSquareY = displayHeight - FLOOR_HEIGHT - hardSquareHeight;
-
         switch (LEVEL_SELECTED){
             case 1 :
-                drawStaticPlatform("pillier_champi_platforme", "champi_platforme", 300*dx, 4*dx, 8*dx, 8*dx, 4*dx, 1 );
 
-                String[][] objetResource = {
-                        {"Objet", "24", "0", "colline_petite"},
-                        {"Objet", "80", "0", "colline_grande"},
-                        {"Objet", "1", "2", "nuage"},
-                        {"Objet", "1", "7", "nuage"},
-                        {"Objet", "120", "0", "colline_grande"},
-                        {"Objet", "100", "0", "hills1"},
-                        {"BrownBloc","30", "4", "brownbloc", "piece_jaune"},
-                        {"YellowBloc","34", "4", "bloc", "champignon"},
-                        {"BrownBloc","38", "4", "brownbloc", "piece_jaune"},
-                        {"BrownBloc", "74", "0", "pillier_champi_platforme"},
-                        {"BrownBloc", "69", "0", "champi_platforme", "piece_jaune"},
-                        {"Castle", "0", "0", "castle"},
-                        {"Castle", "400", "0", "castle"},
-                        {"Piece", "50", "0", "piece_jaune"},
-                        {"BrownBloc", "100", "1", "pillier_champi_platforme"},
-                        {"BrownBloc", "92", "1", "champi_platforme", "piece_jaune"},
-                        {"BrownBloc", "125", "0", "pillier_champi_platforme"},
-                        {"BrownBloc", "120", "0", "champi_platforme", "piece_jaune"},
-                        {"BrownBloc","130", "1", "hardbloc", "piece_jaune"},
-                        {"YellowBloc","160", "4", "bloc", "champignon"}};
+                final int nuageSimpeWidth = (int) (displayWidth*0.076);
+                final int nuageSimpleHeight = (int) (0.9465*nuageSimpeWidth);
 
-                for(String[] info : objetResource){
-                    int x = Integer.valueOf(info[1])*dx;
-                    int y = Integer.valueOf(info[2]);
-                    String name = info[3];
-                    if(info[0].equals("BrownBloc")){
-                        int width = BLOC_WIDTH;
-                        int height = BLOC_HEIGHT;
-                        if(name.equals("brownbloc")){
-                            y = displayHeight - FLOOR_HEIGHT - y*BLOC_HEIGHT;
-                        }
-                        else if(name.equals("hardbloc")){
-                            y = displayHeight - FLOOR_HEIGHT - y*hardSquareHeight;
-                            width = hardsquareWidth;
-                            height = hardSquareHeight;
-                        }
-                        else if(name.equals("pillier_champi_platforme")){
-                            if(y==0){
-                                y = platformChampiFooterMediumY;
-                                width = platformChampiFooterWidthMedium;
-                                height = platformChampiFooterHeightMedium;
-                            }
-                            else if(y == 1){
-                                y = platformChampiFooterY;
-                                width = platformChampiFooterWidth;
-                                height = platformChampiFooterHeight;
-                            }
-                        }
-                        else if(name.equals("champi_platforme")){
-                            if(y==0){
-                                y = platformChampiHeaderYMedium;
-                                width = platformChampiHeaderWidthMedium;
-                                height = platformChampiHeaderHeightMedium;
-                            }
-                            else if(y == 1){
-                                y = platformChampiHeaderY;
-                                width = platformChampiHeaderWidth;
-                                height = platformChampiHeaderHeight;
-                            }
-                        }
-                        BrownBloc bb = new BrownBloc(this, name, x, y, width, height);
-                        if(info.length>4){
-                            String itemName = info[4];
-                            if(name.equals("brownbloc") || name.equals("hardbloc")){
-                                int itemWidth = PIECE_WIDTH;
-                                int itemHeight = itemWidth;
-                                int itemX = x + (width - itemWidth)/2;
-                                int itemY = y - itemHeight - dx;
+                final int hardsquareWidth = (int) (BLOC_WIDTH*0.8);
+                final int hardSquareHeight = hardsquareWidth;
+                final int hardSquareY = displayHeight - FLOOR_HEIGHT - hardSquareHeight;
 
-                                Piece item = new Piece(this, itemName, itemX, itemY, itemWidth, itemHeight);
-                                objets.add(item);
-                            }
-                            else if(name.equals("champi_platforme")){
-                                int itemWidth = PIECE_WIDTH;
-                                int itemHeight = itemWidth;
-                                int itemRate = width/itemWidth;
-                                int itemY = y - itemHeight - dx;
-                                drawPieceLine(itemName, x, x+width, itemY, PIECE_WIDTH, PIECE_HEIGHT, objets);
+                drawCastle("castle", 0);
+                drawCastle("castle", 400*dx, "redbrick");
 
-                            }
-                        }
-                        objets.add(bb);
-                    }
-                    else if(info[0].equals("YellowBloc")){
+                drawDecoration("colline_petite", 40*dx,15*dx, 7*dx);
+                drawDecoration("colline_grande", 80*dx, 20*dx, 10*dx);
+                drawDecoration("hill2", 124*dx, 30*dx, 30*dx);
+                drawDecoration("hill2", 138*dx, 20*dx, 20*dx);
+                drawDecoration("hill2", 125*dx, 15*dx, 15*dx);
+                drawDecoration("nuage", 10*dx, 2*dx, nuageSimpeWidth, nuageSimpleHeight);
+                drawDecoration("nuage", 27*dx, 3*dx, nuageSimpeWidth, nuageSimpleHeight);
+                drawDecoration("nuage", 44*dx, 1*dx, nuageSimpeWidth, nuageSimpleHeight);
+                drawDecoration("nuage", 78*dx, 5*dx, nuageSimpeWidth, nuageSimpleHeight);
+                drawDecoration("nuage", 100*dx, 1*dx, nuageSimpeWidth, nuageSimpleHeight);
+                drawDecoration("nuage", 137*dx, 4*dx, nuageSimpeWidth, nuageSimpleHeight);
+                drawDecoration("nuage", 145*dx, 3*dx, nuageSimpeWidth, nuageSimpleHeight);
+                drawDecoration("nuage", 163*dx, 4*dx, nuageSimpeWidth, nuageSimpleHeight);
+                drawDecoration("nuage", 175*dx, 1*dx, nuageSimpeWidth, nuageSimpleHeight);
 
-                        int width = BLOC_WIDTH;
-                        int height = BLOC_HEIGHT;
-                        y = displayHeight - FLOOR_HEIGHT - y*BLOC_HEIGHT;
 
-                        YellowBloc yb = new YellowBloc(this, name, x, y, BLOC_WIDTH, BLOC_HEIGHT);
-                        if(info.length>4){
-                            String item = info[4];
-                            int itemWidth = width*2/3;
-                            int itemHeight = itemWidth;
-                            int itemX = x + (width - itemWidth)/2;
-                            int itemY = y + (height - itemHeight)/2;
-
-                            Item ite = new Item(this, item, itemX, itemY, itemWidth, itemHeight );
-                            ite.setActivated(false);
-                            yb.setItem(ite);
-                            objets.add(ite);
-                        }
-                        objets.add(yb);
-                    }
-                    else if(info[0].equals("Castle")){
-                        Castle castle = new Castle(this, name, x, castleY, CASTLE_WIDTH, CASTLE_HEIGHT);
-                        objets.add(castle);
-                        if (x > 0) {
-                            int floorRate = (x+CASTLE_WIDTH)/FLOOR_WIDTH +1;
-                            for(int i = 0; i<floorRate; i++){
-
-                                Floor floor = new Floor(this, "redbrick", i*FLOOR_WIDTH, floorY, FLOOR_WIDTH, FLOOR_HEIGHT);
-                                objets.add(floor);
-                            }
-                        }
-                    }
-                    else if(info[0].equals("Pipe")){
-                        Pipe pipe = new Pipe(this, name, x, pipeY, PIPE_WIDTH, PIPE_HEIGHT);
-                        objets.add(pipe);
-                    }
-                    else if(info[0].equals("Piece")){
-                        if(y == 0){y = displayHeight - FLOOR_HEIGHT - PIECE_HEIGHT - dx;}
-                        Piece piece = new Piece(this, name, x, y, PIECE_WIDTH, PIECE_HEIGHT);
-                        objets.add(piece);
-                    }
-                    else if(info[0].equals("Objet")){
-                        int width = 0;
-                        int height = 0;
-                        if(name.equals("nuage")){
-                            y = y*dx;
-                            width = nuageSimpeWidth;
-                            height = nuageSimpleHeight;
-                        }
-                        else if(name.equals("colline_petite")){
-                            width = petiteCollineWidth;
-                            height = petiteCollineHeight;
-                            y = petiteCollineY;
-                        }
-                        else if(name.equals("colline_grande")){
-                            width = grandeCollineWidth;
-                            height = grandeCollineHeight;
-                            y = grandeCollineY;
-                        }
-                        else if(name.equals("hills1")){
-                            width = (int) (displayWidth*0.3);
-                            height = width;
-                            y = displayHeight - FLOOR_HEIGHT - height;
-                        }
-                        Objet objet = new Objet(this, name, x, y, width, height);
-                        objets.add(objet);
-                    }
-                }
-                drawLine("BrownBloc", "hardbloc", 130*dx, 190*dx, hardSquareY, hardsquareWidth, hardSquareHeight, false);
-                drawScale("BrownBloc", "hardbloc", 187*dx, 7, hardSquareY, hardsquareWidth, hardSquareHeight);
-                drawLine("BrownBloc", "hardbloc", 209*dx, 250*dx, floorY-7*hardSquareHeight, hardsquareWidth, hardSquareHeight, false);
-                drawPieceSquare(212*dx, pieceY, 5);
+                drawAlternatesBloc("brownbloc", "bloc", 30*dx, displayHeight-FLOOR_HEIGHT-BLOC_HEIGHT*4, 3, 2, 4);
+                drawStaticPlatform("pillier_champi_platforme", "champi_platforme", 80*dx, 4*dx, 10*dx, 12*dx, 4*dx, 2);
+                drawStaticPlatform("pillier_champi_platforme", "champi_platforme", 120*dx, 4*dx, 15*dx, 15*dx, 4*dx, 2);
+                drawStaticPlatform("pillier_champi_platforme", "champi_platforme", 160*dx, 4*dx, 10*dx, 12*dx, 4*dx, 2);
+                drawLine("BrownBloc", "hardbloc", 164*dx, 200*dx, displayHeight-FLOOR_HEIGHT-hardSquareHeight, hardsquareWidth, hardSquareHeight, false);
+                drawScale("BrownBloc", "hardbloc", 199*dx, 7, displayHeight-FLOOR_HEIGHT-hardSquareHeight, hardsquareWidth, hardSquareHeight);
+                drawLine("BrownBloc", "hardbloc", 199*dx+7*hardsquareWidth,199*dx+7*hardsquareWidth+10*hardsquareWidth ,displayHeight-FLOOR_HEIGHT-7*hardSquareHeight, hardsquareWidth, hardSquareHeight, false);
+                drawPieceSquare(199*dx+7*hardsquareWidth+dx, displayHeight-FLOOR_HEIGHT-PIECE_HEIGHT-dx, 5);
+                drawBloc("bloc", 178*dx, displayHeight-FLOOR_HEIGHT-hardSquareHeight-4*BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT, 4);
                 return;
             case 2 :
                 drawCastle("greencastle", 0);
@@ -320,8 +198,15 @@ public class GameActivity extends AppCompatActivity {
                 final int greyBrickDim = 3*dx;
                 drawBloc("greybrick", 30*dx, displayHeight-FLOOR_HEIGHT-greyBrickDim, greyBrickDim, greyBrickDim, 1 );
                 drawScale("BrownBloc", "greybrick", 80*dx, 6, displayHeight-FLOOR_HEIGHT-greyBrickDim, greyBrickDim, greyBrickDim);
+
+                //Boo boo = new Boo(this, "boo", 50*dx, displayHeight - FLOOR_HEIGHT - greyBrickDim, greyBrickDim, greyBrickDim);
+                //persos.add(boo);
+
                 break;
             case 3 :
+                drawCastle("castle", 0);
+                drawCastle("castle", 400*dx);
+                drawPyramid("BrownBloc", "goldenbloc", 100*dx, 10, displayHeight-FLOOR_HEIGHT-BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT);
                 break;
             case 4 :
                 break;
@@ -330,6 +215,12 @@ public class GameActivity extends AppCompatActivity {
         }
 
     }
+    /**
+     * DrawCastle dessine un château
+     * @param key
+     * @param x
+     * @param floorKey
+     */
     public void drawCastle(String key, int x, String...floorKey){
         int castleY = displayHeight - FLOOR_HEIGHT - CASTLE_HEIGHT;
         Castle castle = new Castle(this, key, x, castleY, CASTLE_WIDTH, CASTLE_HEIGHT);
@@ -360,6 +251,12 @@ public class GameActivity extends AppCompatActivity {
             persos.add(koopa);
         }
     }
+
+    /**
+     * Dessine le sol
+     * @param x
+     * @param key
+     */
     public void setFloor(int x, String key){
         int floorRate = x/FLOOR_WIDTH;
         int floorY = displayHeight - FLOOR_HEIGHT;
@@ -369,12 +266,34 @@ public class GameActivity extends AppCompatActivity {
             objets.add(floor);
         }
     }
+
+    /**
+     * Dessine une ligne de piece en fonction d'un X de départ et d'un X d'arrêt.
+     * @param name
+     * @param initX
+     * @param endX
+     * @param y
+     * @param width
+     * @param height
+     * @param objets
+     */
     public void drawPieceLine(String name, int initX, int endX, int y, int width, int height, ArrayList<Objet> objets){
         for(int i = initX; i<endX; i+=width){
             Piece piece = new Piece(this, name, i, y, width, height);
             objets.add(piece);
         }
     }
+    /**
+     * Dessine une ligne d'objets entre deux X parmi les BrownBlocs, YellowBlocs
+     * @param objetType
+     * @param name
+     * @param initX
+     * @param endX
+     * @param y
+     * @param width
+     * @param height
+     * @param piece
+     */
     public void drawLine(String objetType, String name, int initX, int endX, int y, int width, int height, boolean piece){
         int rate = (endX - initX)/width;
         switch (objetType){
@@ -396,7 +315,6 @@ public class GameActivity extends AppCompatActivity {
                     objets.add(p);
                 }
         }
-
         if(piece){
             for(int i = 0; i<rate; i++){
                 int pieceX = initX + (width - PIECE_WIDTH)/2 + i*width;
@@ -407,6 +325,13 @@ public class GameActivity extends AppCompatActivity {
             }
         }
     }
+
+    /**
+     * Dessine une ligne de piece
+     * @param startX
+     * @param y
+     * @param number
+     */
     public void drawPieceLine(int startX, int y, int number){
         for(int i = 0; i<number; i++){
             Piece p = new Piece(this, "piece_jaune", startX + i*PIECE_WIDTH, y, PIECE_WIDTH, PIECE_HEIGHT);
@@ -480,19 +405,19 @@ public class GameActivity extends AppCompatActivity {
 
             case 1 :
                 drawBloc(headName, headX, headY, headWidth, headHeight, 1);
-                break;
+                return;
             case 2 :
                 drawBloc(headName, headX, headY, headWidth, headHeight, 2);
-                break;
+                return;
             case 3 :
                 int quantity = headWidth/PIECE_WIDTH;
                 drawBloc(headName, headX, headY, headWidth, headHeight, 1);
-                drawPieceLine(headX, headY, quantity, 1);
-                break;
+                drawPieceLine(headX, headY - PIECE_HEIGHT-dx, quantity, 1);
+                return;
             case 4 :
                 int quantite = headWidth/PIECE_WIDTH;
                 drawBloc(headName, headX, headY, headWidth, headHeight, 1);
-                drawPieceLine(headX, headY, quantite, 2);
+                drawPieceLine(headX, headY-PIECE_HEIGHT-dx, quantite, 2);
                 break;
             default :
                 return;
@@ -517,6 +442,11 @@ public class GameActivity extends AppCompatActivity {
     public void drawDecoration(String key, int x, int width, int height){
         int decoY = displayHeight - FLOOR_HEIGHT - height;
         Objet objet = new Objet(this, key, x, decoY, width, height);
+        objets.add(objet);
+    }
+    public void drawDecoration(String key, int x, int y, int width, int height){
+        Objet objet = new Objet(this, key, x, y, width, height);
+        objets.add(objet);
     }
     public void drawAlternatesBloc(String staticKey, String mysteryKey, int startX, int y, int numberOfBloc, int code1, int code2){
         for(int i = 0; i<numberOfBloc; i++){

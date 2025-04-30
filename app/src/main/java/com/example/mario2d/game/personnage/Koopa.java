@@ -66,7 +66,7 @@ public class Koopa extends Ennemy {
                     if(!collisionWithObject(0) && !collisionMatrix.get("floor")[0]){
                         this.isRight = false;
                         this.bitmap = marche_gauche;
-                        this.translateX(-7);
+                        this.translateX(-5);
                     }
                     else{
                         this.bitmap = marche_droite;
@@ -83,7 +83,7 @@ public class Koopa extends Ennemy {
                     if(!collisionWithObject(0) && !collisionMatrix.get("floor")[0]) {
                         this.isRight = true;
                         this.bitmap = marche_droite;
-                        this.translateX(7);
+                        this.translateX(5);
                     }
                     else{
                         this.bitmap = marche_gauche;
@@ -102,7 +102,7 @@ public class Koopa extends Ennemy {
                     if(!collisionWithObject(0) && !collisionMatrix.get("floor")[0]) {
                         this.isRight = false;
                         this.bitmap = arret_gauche;
-                        this.translateX(-7);
+                        this.translateX(-5);
                     }
                     else{
                         this.bitmap = arret_droite;
@@ -119,7 +119,7 @@ public class Koopa extends Ennemy {
                     if(!collisionWithObject(0) && !collisionMatrix.get("floor")[0]) {
                         this.isRight = false;
                         this.bitmap = arret_gauche;
-                        this.translateX(7);
+                        this.translateX(5);
                     }
                     else{
                         this.bitmap = arret_gauche;

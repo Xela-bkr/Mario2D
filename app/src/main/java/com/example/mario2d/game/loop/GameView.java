@@ -1,6 +1,7 @@
 package com.example.mario2d.game.loop;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -50,7 +51,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     //----------VARIABLES-----------//
     public boolean exit, gravity, gameOver, win;
     public Joystick joystick;
-    public Player player;
+    public static Player player;
     private GameLoop gameLoop;
     private int dx, joystickPointerId, jumpPointerId, menuPointerId, pausePointerId, retryPointerId, exitPointerId,
             displayWidth, displayHeight, LEVEL_SELECTED;
@@ -265,7 +266,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 if(pointerId == exitPointerId){
                     if(exitButton.getIsPressed()){
                         Intent intent = new Intent(getContext(), MainActivity.class);
+                        kill();
                         getContext().startActivity(intent);
+                        ((Activity) getContext()).finish();
                     }
                     exitPointerId = -1;
                 }
@@ -802,5 +805,18 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         canvas.drawText(life, StringX, StringY, paint);
     }
-
+    private void kill(){
+        gameLoop.stop();
+        gameLoop = null;
+        player = null;
+        objets = null;
+        floor = null;
+        castles = null;
+        brownBlocs = null;
+        yellowBlocs = null;
+        pipes = null;
+        pieces = null;
+        items = null;
+        ennemies = null;
+    }
 }

@@ -192,6 +192,8 @@ public abstract class Origin {
         spriteBank.put("boo_arret_gauche", R.drawable.boo_arret_gauche);
         spriteBank.put("boo_demi_brick_droite", R.drawable.boo_demi_brick_droite);
         spriteBank.put("boo_demi_brick_gauche", R.drawable.boo_demi_brick_gauche);
+        spriteBank.put("boo_cache_gauche", R.drawable.boo_cache_gauche);
+        spriteBank.put("boo_cache_droite", R.drawable.boo_cache_droite);
 
     }
     public void translateX(int dx){this.setX(this.getX()+dx);}

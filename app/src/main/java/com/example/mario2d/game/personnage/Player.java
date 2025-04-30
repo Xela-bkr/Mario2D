@@ -10,6 +10,7 @@ import com.example.mario2d.game.objet.Item;
 public class Player extends Personnage{
     private float agrCoeff = 1.86f;
     private Item item;
+    public static boolean Right;
     private int piecesCount;
     private int initialWidth, initialHeight;
     private Bitmap arret_droite, arret_gauche, marche_droite, marche_gauche, saute_droite, saute_gauche, mort_droite, mort_gauche;
@@ -123,6 +124,7 @@ public class Player extends Personnage{
     }
     @Override
     public void update(){
+        this.Right = isRight;
         if(isWalking){walk(frequenceMarche);}
         if(isJumping){
             if(jumpTime == 0){jumpTime = System.nanoTime();}

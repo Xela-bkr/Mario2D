@@ -209,6 +209,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("selectedCharacter", currentSelectedCharacter);
                 // TODO passer l'historique du joueur si implémentation d'historique
                 startActivity(intent);
+                finish();
             }
         });
 
