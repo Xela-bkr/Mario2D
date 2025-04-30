@@ -28,6 +28,7 @@ public class Koopa extends Ennemy {
         this.frequenceMarche = 20;
         this.frequenceRotation = 16;
         this.compteurRotation = 0;
+        this.gravityFall = true;
 
         this.setDeadWidth(width/2);
         this.setDeadHeight(height/2);
@@ -61,22 +62,74 @@ public class Koopa extends Ennemy {
     public void walk(int frequence){
         if(compteurMarche < frequence){
             if(isRight){
-                this.bitmap = marche_droite;
-                this.translateX(5);
+                if(!gravityFall){
+                    if(!collisionWithObject(0) && !collisionMatrix.get("floor")[0]){
+                        this.isRight = false;
+                        this.bitmap = marche_gauche;
+                        this.translateX(-7);
+                    }
+                    else{
+                        this.bitmap = marche_droite;
+                        this.translateX(5);
+                    }
+                }
+                else{
+                    this.bitmap = marche_droite;
+                    this.translateX(5);
+                }
             }
             else{
-                this.bitmap = marche_gauche;
-                this.translateX(-5);
+                if(!gravityFall){
+                    if(!collisionWithObject(0) && !collisionMatrix.get("floor")[0]) {
+                        this.isRight = true;
+                        this.bitmap = marche_droite;
+                        this.translateX(7);
+                    }
+                    else{
+                        this.bitmap = marche_gauche;
+                        this.translateX(-5);
+                    }
+                }
+                else{
+                    this.bitmap = marche_gauche;
+                    this.translateX(-5);
+                }
             }
         }
         if(compteurMarche >= frequence && compteurMarche < 2*frequence){
             if(isRight){
-                this.bitmap = arret_droite;
-                this.translateX(5);
+                if(!gravityFall){
+                    if(!collisionWithObject(0) && !collisionMatrix.get("floor")[0]) {
+                        this.isRight = false;
+                        this.bitmap = arret_gauche;
+                        this.translateX(-7);
+                    }
+                    else{
+                        this.bitmap = arret_droite;
+                        this.translateX(5);
+                    }
+                }
+                else{
+                    this.bitmap = arret_droite;
+                    this.translateX(5);
+                }
             }
             else{
-                this.bitmap = arret_gauche;
-                this.translateX(-5);
+                if(!gravityFall){
+                    if(!collisionWithObject(0) && !collisionMatrix.get("floor")[0]) {
+                        this.isRight = false;
+                        this.bitmap = arret_gauche;
+                        this.translateX(7);
+                    }
+                    else{
+                        this.bitmap = arret_gauche;
+                        this.translateX(-5);
+                    }
+                }
+                else{
+                    this.bitmap = arret_gauche;
+                    this.translateX(-5);
+                }
             }
         }
         compteurMarche ++;

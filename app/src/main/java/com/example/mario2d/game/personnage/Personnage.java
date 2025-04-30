@@ -32,11 +32,20 @@ public abstract class Personnage extends Origin{
      * Variable isRight (bool) pour déterminer si le personnage est orienté à droite ou non
      * Variable isWalking (bool) pour déternimer si le personnage est en train de marcher ou non
      */
-    protected Boolean isJumping, isRight, isWalking, isAlive, isInvincible, isResting, isEnnemy, gravity;
+    protected Boolean isJumping, isRight, isWalking, isAlive, isInvincible, isResting, isEnnemy, gravity, gravityFall;
     /**
      * Variable compteurMarche : utile à la fonction de marche du personnage
      */
     protected int compteurMarche, gravityConstant, jumpImpulse, compteurSaut, invincibleCompteur, restCompteur, life, frequenceMarche, deadCompteur;
+
+    public Boolean getGravityFall() {
+        return gravityFall;
+    }
+
+    public void setGravityFall(Boolean gravityFall) {
+        this.gravityFall = gravityFall;
+    }
+
     /**
      * Variable pour contrôler le temps de saut.
      */
@@ -74,7 +83,7 @@ public abstract class Personnage extends Origin{
         this.deadCompteur = 50;
         this.gravity = true;
         this.jumpTime = 0;
-
+        this.gravityFall = true;
         this.frequenceMarche = 20;
         setCollisionMatrixToFalse();
     }

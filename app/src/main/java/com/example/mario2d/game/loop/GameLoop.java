@@ -6,7 +6,7 @@ import androidx.annotation.RequiresApi;
 
 public class GameLoop implements Runnable{
     private Boolean running;
-    private Thread thread, collision, animation;
+    private Thread thread;
     private GameView gameView;
 
     public GameLoop(GameView gView){
@@ -64,8 +64,6 @@ public class GameLoop implements Runnable{
         this.running = true;
         thread = new Thread(this);
         thread.start();
-
-        collision = new Thread(this);
     }
     public void stop(){this.running = false;}
 

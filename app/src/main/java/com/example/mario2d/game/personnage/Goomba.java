@@ -25,8 +25,34 @@ public class Goomba extends Ennemy{
     public void walk(int frequence){
         setBitmap(compteurMarche<frequence ? marche1 : marche2);
 
-        if(isRight){translateX(5);}
-        else{translateX(-5);}
+        if(isRight){
+            if(!gravityFall){
+                if(!collisionWithObject(0) && !collisionMatrix.get("floor")[0]){
+                    isRight = false;
+                    translateX(-5);
+                }
+                else{
+                    translateX(5);
+                }
+            }
+            else{
+                translateX(5);
+            }
+        }
+        else{
+            if(!gravityFall){
+                if(!collisionWithObject(0) && !collisionMatrix.get("floor")[0]){
+                    isRight = true;
+                    translateX(5);
+                }
+                else{
+                    translateX(-5);
+                }
+            }
+            else{
+                translateX(-5);
+            }
+        }
 
         if(compteurMarche >= 2*frequence){compteurMarche = 0;}
         compteurMarche ++;

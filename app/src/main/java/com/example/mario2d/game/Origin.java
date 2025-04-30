@@ -144,6 +144,7 @@ public abstract class Origin {
         spriteBank.put("darkbrick", R.drawable.darkbrick);
         spriteBank.put("greenbrick", R.drawable.greenbrick);
         spriteBank.put("greenpipe", R.drawable.greenpipe);
+        spriteBank.put("greybrick", R.drawable.greybrick);
         spriteBank.put("nuage", R.drawable.nuage);
         spriteBank.put("nuageplatform", R.drawable.nuageplatform);
         spriteBank.put("redbrick", R.drawable.redbrick);
@@ -187,6 +188,10 @@ public abstract class Origin {
         spriteBank.put("greenparakoopa_down_gauche", R.drawable.greenparakoopa_down_gauche);
         spriteBank.put("greenparakoopa_up_droite", R.drawable.greenparakoopa_up_droite);
         spriteBank.put("greenparakoopa_up_gauche", R.drawable.greenparakoopa_up_gauche);
+        spriteBank.put("boo_arret_droite", R.drawable.boo_arret_droite);
+        spriteBank.put("boo_arret_gauche", R.drawable.boo_arret_gauche);
+        spriteBank.put("boo_demi_brick_droite", R.drawable.boo_demi_brick_droite);
+        spriteBank.put("boo_demi_brick_gauche", R.drawable.boo_demi_brick_gauche);
 
     }
     public void translateX(int dx){this.setX(this.getX()+dx);}
