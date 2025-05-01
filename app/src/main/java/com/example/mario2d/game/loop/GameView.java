@@ -512,7 +512,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         //Collision avec bocs marrons
         for(BrownBloc bb : brownBlocs){
             boolean[] tab = player.detectCollision(bb, brownBlocOffset);
-            if(tab[0] && !player.getJumping()){
+            if(tab[0] && !player.getJumping() && player.getGravity()){
                 player.recalibrerY(bb);
                 player.addCollisionValue("brownbloc", 0, true);
             }
@@ -531,7 +531,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     yb.setUsed(true);
                 }
             }
-            if(tab[0] && !player.getJumping()){player.addCollisionValue("yellowbloc", 0, true);player.recalibrerY(yb);}
+            if(tab[0] && !player.getJumping()){
+                player.addCollisionValue("yellowbloc", 0, true);
+                if(player.getGravity()){player.recalibrerY(yb);}
+            }
             if(tab[1]){player.addCollisionValue("yellowbloc", 1, true);}
             if(tab[3]){player.addCollisionValue("yellowbloc", 3, true);}
         }
@@ -698,7 +701,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
     public void gravity(){
         for(Ennemy en : ennemies){
-            if(!en.collisionWithObject(0) && !en.getCollisionMatrix().get("floor")[0] && en.getGravity()){
+            if(!en.collisionWithObject(0) && !en.getCollisionMatrix().get("floor")[0] && en.getGravity() && en.getGravity()){
                 en.translateY(5);
             }
         }

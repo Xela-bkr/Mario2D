@@ -30,7 +30,7 @@ public class Parakoopa extends Koopa {
     @Override
     public void setBitmaps() {
 
-        String key = name.replace("patra", "");
+        String key = name.replace("para", "");
         System.out.println(key);
 
         Bitmap b1 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(key+"_arret_droite"));
