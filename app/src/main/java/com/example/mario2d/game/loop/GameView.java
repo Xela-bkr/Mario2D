@@ -51,7 +51,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     //----------VARIABLES-----------//
     public boolean exit, gravity, gameOver, win;
     public Joystick joystick;
-    public static Player player;
+    public  Player player;
     private GameLoop gameLoop;
     private int dx, joystickPointerId, jumpPointerId, menuPointerId, pausePointerId, retryPointerId, exitPointerId,
             displayWidth, displayHeight, LEVEL_SELECTED;
@@ -86,7 +86,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
      */
     private Bitmap pieceBitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.piece_jaune_face);
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public GameView(Context context, int displayWidth, int displayHeight, boolean leftHandMode, int LEVEL_SELECTED, Player player, ArrayList<Objet> objets, ArrayList<Personnage> persos){
+    public GameView(Context context, int displayWidth, int displayHeight, boolean leftHandMode, int LEVEL_SELECTED, ArrayList<Objet> objets, ArrayList<Personnage> persos){
         super(context);
         getHolder().addCallback(this);
 
@@ -97,7 +97,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         this.LEVEL_SELECTED = LEVEL_SELECTED;
         this.afficherMenuLateral = false;
 
-        this.player = player;
+        this.player = GameActivity.player;
         this.objets = objets;
 
         for(Objet objet : objets){
@@ -266,7 +266,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 if(pointerId == exitPointerId){
                     if(exitButton.getIsPressed()){
                         Intent intent = new Intent(getContext(), MainActivity.class);
-                        kill();
                         getContext().startActivity(intent);
                     }
                     exitPointerId = -1;
@@ -495,7 +494,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         for(Castle castle : castles){
             boolean[] tab = player.detectCollision(castle, castleOffset);
             if(tab[0] && !player.getJumping()){
-                player.recalibrerY(castle);
                 player.addCollisionValue("castle", 0, true);
             }
             if(tab[1]){player.addCollisionValue("castle", 1, true);}

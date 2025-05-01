@@ -188,6 +188,20 @@ public abstract class Origin {
         spriteBank.put("greenparakoopa_down_gauche", R.drawable.greenparakoopa_down_gauche);
         spriteBank.put("greenparakoopa_up_droite", R.drawable.greenparakoopa_up_droite);
         spriteBank.put("greenparakoopa_up_gauche", R.drawable.greenparakoopa_up_gauche);
+
+        spriteBank.put("redkoopa_arret_droite", R.drawable.redkoopa_arret_droite);
+        spriteBank.put("redkoopa_arret_gauche", R.drawable.redkoopa_arret_gauche);
+        spriteBank.put("redkoopa_marche_droite", R.drawable.redkoopa_marche_droite);
+        spriteBank.put("redkoopa_marche_gauche", R.drawable.redkoopa_marche_gauche);
+        spriteBank.put("redkoopa_carapace_face", R.drawable.redkoopa_carapace_face);
+        spriteBank.put("redkoopa_carapace_tourne_1", R.drawable.redkoopa_carapace_tourne_1);
+        spriteBank.put("redkoopa_carapace_tourne_2", R.drawable.redkoopa_carapace_tourne_2);
+        spriteBank.put("redkoopa_carapace_tourne_3", R.drawable.redkoopa_carapace_tourne_3);
+        spriteBank.put("redparakoopa_down_droite", R.drawable.redparakoopa_down_droite);
+        spriteBank.put("redparakoopa_down_gauche", R.drawable.redparakoopa_down_gauche);
+        spriteBank.put("redparakoopa_up_droite", R.drawable.redparakoopa_up_droite);
+        spriteBank.put("redparakoopa_up_gauche", R.drawable.redparakoopa_up_gauche);
+
         spriteBank.put("boo_arret_droite", R.drawable.boo_arret_droite);
         spriteBank.put("boo_arret_gauche", R.drawable.boo_arret_gauche);
         spriteBank.put("boo_cache_gauche", R.drawable.boo_cache_gauche);

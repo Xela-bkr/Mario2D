@@ -1,7 +1,5 @@
 package com.example.mario2d.game.personnage;
 
-import static com.example.mario2d.game.loop.GameView.player;
-
 import android.content.Context;
 
 import com.example.mario2d.game.loop.GameView;

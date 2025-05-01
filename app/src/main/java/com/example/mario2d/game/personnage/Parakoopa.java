@@ -57,16 +57,16 @@ public class Parakoopa extends Koopa {
         Bitmap b8 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(key+"_carapace_tourne_3"));
         this.rotate_3 = Bitmap.createScaledBitmap(b8, getWidth()/2, getHeight()/2, true);
 
-        Bitmap b9 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get("greenparakoopa_down_droite"));
+        Bitmap b9 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_down_droite"));
         this.down_droite = Bitmap.createScaledBitmap(b9, getWidth(), getHeight(), true);
 
-        Bitmap b10 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get("greenparakoopa_down_gauche"));
+        Bitmap b10 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_down_gauche"));
         this.down_gauche = Bitmap.createScaledBitmap(b10, getWidth(), getHeight(), true);
 
-        Bitmap b11 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get("greenparakoopa_up_droite"));
+        Bitmap b11 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_up_droite"));
         this.up_droite = Bitmap.createScaledBitmap(b11, getWidth(), getHeight(), true);
 
-        Bitmap b12 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get("greenparakoopa_up_gauche"));
+        Bitmap b12 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_up_gauche"));
         this.up_gauche = Bitmap.createScaledBitmap(b12, getWidth(), getHeight(), true);
     }
     public void fly() {

@@ -1,6 +1,6 @@
 package com.example.mario2d.game.personnage;
 
-import static com.example.mario2d.game.loop.GameView.player;
+import static com.example.mario2d.game.loop.GameActivity.player;
 
 import android.content.Context;
 import android.graphics.Bitmap;

@@ -34,6 +34,7 @@ public class GameActivity extends AppCompatActivity {
     private Boolean leftHandMode, soundEffect, music;
     private ArrayList<Objet> objets = new ArrayList<Objet>();
     private ArrayList<Personnage> persos = new ArrayList<Personnage>();
+    public static Player player;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -47,10 +48,9 @@ public class GameActivity extends AppCompatActivity {
         int playerX = (int)(displayWidth/2 - CHARACTER_WIDTH/2);
         int playerY = displayHeight - FLOOR_HEIGHT - CHARACTER_HEIGHT - 1;
         Player player = new Player(this, name, playerX, playerY, CHARACTER_WIDTH, CHARACTER_HEIGHT);
-
+        this.player = player;
         setObjets();
-        setContentView(new GameView(this, displayWidth, displayHeight,leftHandMode, LEVEL_SELECTED,
-                player, objets, persos));
+        setContentView(new GameView(this, displayWidth, displayHeight,leftHandMode, LEVEL_SELECTED, objets, persos));
     }
     public void setExtraData(Bundle extras){
         displayWidth = extras.getInt("displayWidth");
@@ -150,15 +150,23 @@ public class GameActivity extends AppCompatActivity {
                 drawPiece(161*dx, surface-greyBrickDim-PIECE_HEIGHT-dx);
                 drawLine("BrownBloc", "greybrick", 164*dx, 194*dx, surface-greyBrickDim, greyBrickDim, greyBrickDim, true);
                 drawThwomp(186*dx, (int) (-8*dx*1.2513));
+
+
                 break;
             case 3 :
                 drawCastle("castle", 0);
-                drawCastle("castle", 400*dx);
-                drawPyramid("BrownBloc", "goldenbloc", 100*dx, 10, displayHeight-FLOOR_HEIGHT-BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT);
+                drawCastle("castle", 400*dx, "yellowbrick");
+                //drawPyramid("BrownBloc", "goldenbloc", 100*dx, 10, displayHeight-FLOOR_HEIGHT-BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT);
+                drawKoopa("redkoopa", 40*dx, (int) (surface-(displayWidth*0.03 - 1.7458) - dx), true);
+                drawParakoopa("redparakoopa", 50*dx, (int) (surface-(displayWidth*0.03 - 1.7458) - dx), true);
                 break;
             case 4 :
+                drawCastle("castle", 0);
+                drawCastle("castle", 400*dx, "darkbrick");
                 break;
             case 5 :
+                drawCastle("castle", 0);
+                drawCastle("castle", 400*dx, "nuageplatform");
                 break;
         }
 
@@ -174,7 +182,7 @@ public class GameActivity extends AppCompatActivity {
         Castle castle = new Castle(this, key, x, castleY, CASTLE_WIDTH, CASTLE_HEIGHT);
         objets.add(castle);
         if(x>0){
-            setFloor(x, floorKey[0]);
+            setFloor(x + CASTLE_WIDTH, floorKey[0]);
         }
     }
     public void setCharacters(){

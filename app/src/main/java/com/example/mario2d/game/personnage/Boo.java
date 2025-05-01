@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.example.mario2d.game.loop.GameActivity;
 import com.example.mario2d.game.loop.GameView;
 
 public class Boo extends Ennemy{
@@ -46,14 +47,14 @@ public class Boo extends Ennemy{
     }
     public void fly(){
 
-        if(GameView.player.getRight()){
-            if(getX()<GameView.player.getX()){
+        if(GameActivity.player.getRight()){
+            if(getX()<GameActivity.player.getX()){
                 if(this.bitmap!=arret_droite){this.bitmap = arret_droite;}
                 translateX(4);
-                if(getY() + getHeight()/2 < GameView.player.getY() + GameView.player.getHeight()/2 + 4){
+                if(getY() + getHeight()/2 < GameActivity.player.getY() + GameActivity.player.getHeight()/2 + 4){
                     translateY(4);
                 }
-                else if(getY() + getHeight()/2 > GameView.player.getY() + GameView.player.getHeight()/2 - 4){
+                else if(getY() + getHeight()/2 > GameActivity.player.getY() + GameActivity.player.getHeight()/2 - 4){
                     translateY(-4);
                 }
             }
@@ -62,7 +63,7 @@ public class Boo extends Ennemy{
             }
         }
         else {
-            if (getX() < GameView.player.getX()) {
+            if (getX() < GameActivity.player.getX()) {
                 if (this.bitmap != cache_droite) {
                     this.bitmap = cache_droite;
                 }
@@ -70,10 +71,10 @@ public class Boo extends Ennemy{
             else {
                 if (this.bitmap != arret_gauche) {this.bitmap = arret_gauche;}
                 translateX(-4);
-                if(getY() + getHeight()/2 < GameView.player.getY() + GameView.player.getHeight()/2 + 4){
+                if(getY() + getHeight()/2 < GameActivity.player.getY() + GameActivity.player.getHeight()/2 + 4){
                     translateY(4);
                 }
-                else if(getY() + getHeight()/2 > GameView.player.getY() + GameView.player.getHeight()/2 - 4){
+                else if(getY() + getHeight()/2 > GameActivity.player.getY() + GameActivity.player.getHeight()/2 - 4){
                     translateY(-4);
                 }
             }
