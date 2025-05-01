@@ -12,24 +12,19 @@ public class Koopa extends Ennemy {
     public Koopa(Context context, String name, int x, int y, int width, int height) {
         super(context, name, x, y, width, height);
         setBitmaps();
-        this.isJumping = false; this.isRight = true; this.isWalking = false;
-        this.gravityConstant = 2;
-        this.jumpImpulse = 16;
-        this.compteurSaut = 0;
-        this.positions = new int[2][2];
-        Arrays.fill(positions, new int[]{0, 0});
+        this.isJumping = false;
+        this.isRight = false;
+        this.isWalking = true;
         this.isAlive = true;
         this.isInvincible = false;
         this.isResting = false;
         this.invincibleCompteur = 0;
         this.restCompteur = 0;
-        this.life = 2;
         this.deadCompteur = 100;
         this.frequenceMarche = 20;
         this.frequenceRotation = 16;
         this.compteurRotation = 0;
         this.gravityFall = true;
-
         this.setDeadWidth(width/2);
         this.setDeadHeight(height/2);
     }
@@ -139,14 +134,8 @@ public class Koopa extends Ennemy {
     public void dead() {
         isInvincible = false;
         isResting = false;
-        if (getAlive()) {
-            this.isAlive = false;
-            this.bitmap = carapace_face;
-        }
-        else if(deadCompteur > 100){setActivated(false);}
-        else{this.bitmap = carapace_face;}
-
-        deadCompteur ++;
+        isAlive = false;
+        activated = false;
     }
     @Override
     public void rest(){
@@ -198,10 +187,8 @@ public class Koopa extends Ennemy {
         if(activated){
             if(isResting){rest();}
             else if(isInvincible){invincible();}
-            else if(isAlive){walk(frequenceMarche);}
-            else{
-                dead();
-            }
+            else if(isWalking){walk(frequenceMarche);}
+            else{dead();}
         }
     }
 }

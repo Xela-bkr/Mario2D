@@ -20,6 +20,7 @@ import com.example.mario2d.game.personnage.Koopa;
 import com.example.mario2d.game.personnage.Parakoopa;
 import com.example.mario2d.game.personnage.Personnage;
 import com.example.mario2d.game.personnage.Player;
+import com.example.mario2d.game.personnage.Skelerex;
 
 import java.util.ArrayList;
 
@@ -86,6 +87,9 @@ public class GameActivity extends AppCompatActivity {
 
         Boo boo2 = new Boo(this, "boo", 170*dx, displayHeight - FLOOR_HEIGHT - greyBrickDim, greyBrickDim, greyBrickDim);
         persos.add(boo2);
+
+        Skelerex skel = new Skelerex(this, "skelerex", 140*dx, displayHeight-FLOOR_HEIGHT-KOOPA_HEIGHT-dx, KOOPA_WIDTH, KOOPA_HEIGHT);
+        persos.add(skel);
 
         setContentView(new GameView(this, displayWidth, displayHeight,leftHandMode, LEVEL_SELECTED,
                 player, objets, persos));

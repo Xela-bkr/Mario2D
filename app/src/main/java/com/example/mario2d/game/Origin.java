@@ -190,10 +190,16 @@ public abstract class Origin {
         spriteBank.put("greenparakoopa_up_gauche", R.drawable.greenparakoopa_up_gauche);
         spriteBank.put("boo_arret_droite", R.drawable.boo_arret_droite);
         spriteBank.put("boo_arret_gauche", R.drawable.boo_arret_gauche);
-        spriteBank.put("boo_demi_brick_droite", R.drawable.boo_demi_brick_droite);
-        spriteBank.put("boo_demi_brick_gauche", R.drawable.boo_demi_brick_gauche);
         spriteBank.put("boo_cache_gauche", R.drawable.boo_cache_gauche);
         spriteBank.put("boo_cache_droite", R.drawable.boo_cache_droite);
+        spriteBank.put("skelerex_arret_droite", R.drawable.skelerex_arret_droite);
+        spriteBank.put("skelerex_arret_gauche", R.drawable.skelerex_arret_gauche);
+        spriteBank.put("skelerex_marche_droite", R.drawable.skelerex_marche_droite);
+        spriteBank.put("skelerex_marche_gauche", R.drawable.skelerex_marche_gauche);
+        spriteBank.put("skelerex_demi_mort_droite", R.drawable.skelerex_demi_mort_droite);
+        spriteBank.put("skelerex_demi_mort_gauche", R.drawable.skelerex_demi_mort_gauche);
+        spriteBank.put("skelerex_mort_droite", R.drawable.skelerex_mort_droite);
+        spriteBank.put("skelerex_mort_gauche", R.drawable.skelerex_mort_gauche);
 
     }
     public void translateX(int dx){this.setX(this.getX()+dx);}

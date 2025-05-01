@@ -109,7 +109,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             if(objet instanceof Piece){pieces.add((Piece) objet);}
             if(objet instanceof Item){items.add((Item) objet);}
         }
-        System.out.printf("BrownBloc length %d\n", brownBlocs.size());
+
         for(Personnage perso : persos){if(perso instanceof Ennemy){ennemies.add((Ennemy)perso);}}
 
         this.exit = false;
