@@ -276,6 +276,7 @@ public abstract class Personnage extends Origin{
             collisionMatrix.put("pipe", tab);
             collisionMatrix.put("piece", tab);
             collisionMatrix.put("item", tab);
+            collisionMatrix.put("ennemy", tab);
         }
         else{
             for(String key : collisionMatrix.keySet()){collisionMatrix.put(key, tab);}
@@ -445,4 +446,5 @@ public abstract class Personnage extends Origin{
         tab[index] = b;
         collisionMatrix.put(key, tab);
     }
+    public void recalibrerY(Personnage personnage){setY(personnage.getY()-getHeight());}
 }

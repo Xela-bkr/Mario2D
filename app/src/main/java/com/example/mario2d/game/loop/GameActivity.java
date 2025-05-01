@@ -21,6 +21,7 @@ import com.example.mario2d.game.personnage.Parakoopa;
 import com.example.mario2d.game.personnage.Personnage;
 import com.example.mario2d.game.personnage.Player;
 import com.example.mario2d.game.personnage.Skelerex;
+import com.example.mario2d.game.personnage.Thwomp;
 
 import java.util.ArrayList;
 
@@ -90,6 +91,11 @@ public class GameActivity extends AppCompatActivity {
 
         Skelerex skel = new Skelerex(this, "skelerex", 140*dx, displayHeight-FLOOR_HEIGHT-KOOPA_HEIGHT-dx, KOOPA_WIDTH, KOOPA_HEIGHT);
         persos.add(skel);
+
+        int thwompWidth = 8*dx;
+        int thwompHeight = (int) (thwompWidth*1.2513);
+        Thwomp thwomp = new Thwomp(this, "thwomp", 130*dx, displayHeight-FLOOR_HEIGHT-thwompHeight, thwompWidth, thwompHeight);
+        persos.add(thwomp);
 
         setContentView(new GameView(this, displayWidth, displayHeight,leftHandMode, LEVEL_SELECTED,
                 player, objets, persos));

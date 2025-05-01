@@ -92,14 +92,14 @@ public class Boo extends Ennemy{
             translateY(-2);
             demiBrickMode = true;
         }
-        if(restCompteur >= 1 && restCompteur < 30){
+        if(restCompteur >= 1 && restCompteur < 40){
             if(this.bitmap!=brick){this.bitmap = brick;}
-            translateY(-2);
+            translateY(-3);
             restCompteur++;
         }
-        else if(restCompteur >= 30 && restCompteur < 60){
+        else if(restCompteur >= 40 && restCompteur < 60){
             if(this.bitmap!= arret_droite){this.bitmap = arret_droite;}
-            translateY(-2);
+            translateY(-3);
             restCompteur++;
         }
         else if(restCompteur >=60){

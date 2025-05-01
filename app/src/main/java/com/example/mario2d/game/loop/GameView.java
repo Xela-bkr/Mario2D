@@ -602,11 +602,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     }
                     else {
                         if(!ennemy.getInvincible()) ennemy.invincible();
+                        else{player.recalibrerY(ennemy);}
                     }
-                    player.rest();
+                    //player.rest();
+                    player.recalibrerY(ennemy);
                     player.setJumping(true);
                     player.jump();
-                    break;
+                    player.addCollisionValue("ennemy", 0, true);
                 }
                 if (tab[1] || tab[2] || tab[3]) {
                     if (!ennemy.getResting()) {
@@ -638,7 +640,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
     }
-    public void updateCollition(Item item){
+    public void updateCollision(Item item){
 
         item.getCollisionMatrix().put("objet", new boolean[]{false, false, false, false});
 
@@ -702,7 +704,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
         if(player.getGravity()){
             boolean collisionOnTopOfFloor = player.getCollisionMatrix().get("floor")[0];
-            if(!player.collisionWithObject(0) && !collisionOnTopOfFloor){
+            if(!player.collisionWithObject(0) && !collisionOnTopOfFloor && !player.getCollisionMatrix().get("ennemy")[0]){
                 int dy = -player.getGravityConstant()*(int)(player.getCompteurSaut()*0.9);
                 player.translateY(dy);
                 player.decreaseCompteurSaut();
@@ -728,7 +730,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         for(YellowBloc yb : yellowBlocs){yb.update();}
         for(Item item : items){
             if(item.getActivated() && item.getPickabe()){
-                updateCollition(item);
+                updateCollision(item);
                 if(item.getCollisionMatrix().get("objet")[1]){item.setRight(true);}
                 else if(item.getCollisionMatrix().get("objet")[3]){item.setRight(false);}
                 item.animer();
