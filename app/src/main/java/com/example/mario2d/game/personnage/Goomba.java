@@ -20,6 +20,8 @@ public class Goomba extends Ennemy{
         super(context, name, x, y, width, height);
         setActivated(true);
         deadCompteur = 0;
+        graviteCompteur = 1;
+        gravityConstant = 15;
     }
     @Override
     public void walk(int frequence){

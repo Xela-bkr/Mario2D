@@ -36,7 +36,7 @@ public abstract class Personnage extends Origin{
     /**
      * Variable compteurMarche : utile à la fonction de marche du personnage
      */
-    protected int compteurMarche, gravityConstant, jumpImpulse, compteurSaut, invincibleCompteur, restCompteur, life, frequenceMarche, deadCompteur;
+    protected int compteurMarche, gravityConstant, jumpImpulse, compteurSaut, invincibleCompteur, restCompteur, life, frequenceMarche, deadCompteur, graviteCompteur;
 
     public Boolean getGravityFall() {
         return gravityFall;
@@ -69,6 +69,7 @@ public abstract class Personnage extends Origin{
     public Personnage(Context context, String name, int x, int y, int width, int height){
         super(context, name, x, y, width, height);
         this.isJumping = false; this.isRight = true; this.isWalking = false;
+        this.graviteCompteur = 0;
         this.gravityConstant = 1;
         this.jumpImpulse = 25;
         this.compteurSaut = 0;
@@ -244,6 +245,14 @@ public abstract class Personnage extends Origin{
         return this.gravity;
     }
 
+    public int getGraviteCompteur() {
+        return graviteCompteur;
+    }
+
+    public void setGraviteCompteur(int graviteCompteur) {
+        this.graviteCompteur = graviteCompteur;
+    }
+    public void increaseGravityCompteur(){this.graviteCompteur++;}
     public void setGravity(Boolean gravity) {
         this.gravity = gravity;
     }
@@ -276,7 +285,6 @@ public abstract class Personnage extends Origin{
             collisionMatrix.put("pipe", tab);
             collisionMatrix.put("piece", tab);
             collisionMatrix.put("item", tab);
-            collisionMatrix.put("ennemy", tab);
         }
         else{
             for(String key : collisionMatrix.keySet()){collisionMatrix.put(key, tab);}
@@ -446,5 +454,7 @@ public abstract class Personnage extends Origin{
         tab[index] = b;
         collisionMatrix.put(key, tab);
     }
-    public void recalibrerY(Personnage personnage){setY(personnage.getY()-getHeight());}
+    public void recalibrerY(Personnage personnage){
+        setY(personnage.getY() - getHeight());
+    }
 }

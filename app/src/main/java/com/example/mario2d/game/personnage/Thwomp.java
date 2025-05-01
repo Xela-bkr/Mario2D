@@ -1,5 +1,7 @@
 package com.example.mario2d.game.personnage;
 
+import static com.example.mario2d.game.loop.GameView.player;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,19 +9,23 @@ import android.graphics.BitmapFactory;
 import com.example.mario2d.R;
 
 public class Thwomp extends Ennemy{
-    private boolean isUp, upAuthor;
+    private boolean isUp, upAuthor, isDown;
     private Bitmap up, down;
     private int deltaY;
     public Thwomp(Context context, String name, int x, int y, int width, int height) {
         super(context, name, x, y, width, height);
-        isUp = true;
+        isUp = false;
+        isDown = true;
         deltaY = 0;
         isInvincible = true;
         isResting = false;
         isWalking = false;
         gravity = false;
         compteurSaut = 0;
+        gravityConstant=15;
         upAuthor = true;
+        activated = false;
+        setCollisionMatrixToFalse();
     }
     @Override
     public void setBitmaps() {
@@ -34,34 +40,67 @@ public class Thwomp extends Ennemy{
         if(!isInvincible){isInvincible = true;}
         if(isUp){
             if(this.bitmap != up){this.bitmap = up;}
-            if(upAuthor) translateY(-7);
+            translateY(-7);
         }
-        else {
+        else if(isDown){
             if(this.bitmap != down){this.bitmap = down;}
             if(!gravity){gravity = true;}
         }
-        if(getY()+getHeight() >= initY+getHeight()){
-            if(compteurSaut > 100){
+        if(collisionWithObject(0)){
+            if(compteurSaut < 40){
+                compteurSaut ++;
+            }
+            else{
+                compteurSaut = 0;
                 isUp = true;
-                upAuthor = true;
+                isDown = false;
+                gravity = false;
+            }
+        }
+        if(getY() <= 0){
+            isUp = false;
+            if(compteurSaut < 60){
+                compteurSaut ++;
+            }
+            else{
+                compteurSaut = 0;
+                isDown = true;
+                isUp = false;
+                gravity = true;
+            }
+        }
+        /*if(collisionWithObject(0)){
+            if(compteurSaut<100){
+                isDown = false;
+                isUp = false;
+                compteurSaut++;
+            }
+            else{
+                isUp = true;
+                translateY(-7);
                 gravity = false;
                 compteurSaut = 0;
             }
-            else{
-                compteurSaut ++;
-            }
         }
-        if(getY() < 0){
-            if(compteurSaut > 100){
+        if(getY() <= 0){
+            if(compteurSaut<100){
+                compteurSaut++;
                 isUp = false;
-                gravity = true;
-                upAuthor = true;
+                isDown = false;
+            }
+            else{
+                isDown = true;
                 compteurSaut = 0;
             }
-            else{
-                upAuthor = false;
-                compteurSaut ++;
-            }
-        }
+        }*/
     }
+    public boolean getUp(){return this.isUp;}
+    public void setIsUp(boolean isUp){this.isUp = isUp;}
+    public void setUpAuthor(boolean upAuthor){this.upAuthor = upAuthor;}
+    @Override
+    public void update(){
+        if(activated){invincible();}
+        else {if(getX() <= player.getX()){setActivated(true);}}
+    }
+
 }

@@ -268,7 +268,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                         Intent intent = new Intent(getContext(), MainActivity.class);
                         kill();
                         getContext().startActivity(intent);
-                        ((Activity) getContext()).finish();
                     }
                     exitPointerId = -1;
                 }
@@ -512,9 +511,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         //Collision avec bocs marrons
         for(BrownBloc bb : brownBlocs){
             boolean[] tab = player.detectCollision(bb, brownBlocOffset);
-            if(tab[0] && !player.getJumping() && player.getGravity()){
-                player.recalibrerY(bb);
+            if(tab[0] && !player.getJumping()){
                 player.addCollisionValue("brownbloc", 0, true);
+                if(player.getGravity()){player.recalibrerY(bb);}
             }
             if(tab[1]){player.addCollisionValue("brownbloc", 1, true);}
             if(tab[2]){player.addCollisionValue("brownbloc", 2, true);}
@@ -543,7 +542,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         for(Pipe pipe : pipes){
             boolean[] tab = player.detectCollision(pipe, pipeOffset);
             if(tab[0] && !player.getJumping()){
-                player.recalibrerY(pipe);
+                if(player.getGravity()){player.recalibrerY(pipe);}
                 player.addCollisionValue("pipe", 0, true);
             }
             if(tab[1]){player.addCollisionValue("pipe", 1, true);}
@@ -701,9 +700,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
     public void gravity(){
         for(Ennemy en : ennemies){
-            if(!en.collisionWithObject(0) && !en.getCollisionMatrix().get("floor")[0] && en.getGravity() && en.getGravity()){
-                en.translateY(5);
+            if(!en.collisionWithObject(0) && !en.getCollisionMatrix().get("floor")[0] && en.getGravity()){
+                en.translateY(en.getGravityConstant()*en.getGraviteCompteur()/ en.getJumpImpulse());
+                en.increaseGravityCompteur();
             }
+            else{en.setGraviteCompteur(1);}
         }
         if(player.getGravity()){
             boolean collisionOnTopOfFloor = player.getCollisionMatrix().get("floor")[0];
@@ -711,7 +712,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 int dy = -player.getGravityConstant()*(int)(player.getCompteurSaut()*0.9);
                 player.translateY(dy);
                 player.decreaseCompteurSaut();
-
             }
             else{
                 player.setCompteurSaut(0);

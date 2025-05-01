@@ -25,6 +25,8 @@ public class Koopa extends Ennemy {
         this.frequenceRotation = 16;
         this.compteurRotation = 0;
         this.gravityFall = true;
+        graviteCompteur = 1;
+        gravityConstant = 15;
         this.setDeadWidth(width/2);
         this.setDeadHeight(height/2);
     }

@@ -145,6 +145,11 @@ public class GameActivity extends AppCompatActivity {
                 drawLine("Objet", "greybrick", 98*dx,98*dx+30*dx,surface-greyBrickDim, greyBrickDim, greyBrickDim,false );
                 drawColumn("BrownBloc", "greybrick", 98*dx+30*dx, surface - greyBrickDim, 6,greyBrickDim, greyBrickDim, true);
 
+                drawLine("BrownBloc", "greybrick", 131*dx, 161*dx, surface-greyBrickDim, greyBrickDim, greyBrickDim, true);
+                drawBoo(161*dx, surface-greyBrickDim);
+                drawPiece(161*dx, surface-greyBrickDim-PIECE_HEIGHT-dx);
+                drawLine("BrownBloc", "greybrick", 164*dx, 194*dx, surface-greyBrickDim, greyBrickDim, greyBrickDim, true);
+                drawThwomp(186*dx, (int) (-8*dx*1.2513));
                 break;
             case 3 :
                 drawCastle("castle", 0);
