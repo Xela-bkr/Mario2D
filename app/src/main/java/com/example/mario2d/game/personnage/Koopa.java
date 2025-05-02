@@ -1,8 +1,13 @@
 package com.example.mario2d.game.personnage;
 
+import static com.example.mario2d.game.loop.GameActivity.ennemies;
+import static com.example.mario2d.game.loop.GameActivity.player;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
+import com.example.mario2d.game.loop.GameActivity;
 
 import java.util.Arrays;
 
@@ -25,6 +30,7 @@ public class Koopa extends Ennemy {
         this.frequenceRotation = 16;
         this.compteurRotation = 0;
         this.gravityFall = true;
+        gravity = true;
         graviteCompteur = 1;
         gravityConstant = 15;
         this.setDeadWidth(width/2);
@@ -146,7 +152,7 @@ public class Koopa extends Ennemy {
                 int height = getHeight();
                 setHeight(getDeadHeight());
                 setWidth(getDeadWidth());
-                setY(getY() + getDeadHeight());
+                setY(getY() - getDeadHeight());
             }
             this.bitmap = carapace_face;
             isResting = true;
@@ -155,6 +161,7 @@ public class Koopa extends Ennemy {
         }
         else if(restCompteur >= 100){
             isResting = false;
+            isWalking = true;
             setY(initY);
             setHeight(initHeight);
             setWidth(initWidth);
@@ -185,12 +192,61 @@ public class Koopa extends Ennemy {
         }
     }
     @Override
+    public void decreaseLife(){
+        life --;
+        if(life == 1){
+            isResting = true;
+        }
+        else if(life == 0){
+            isInvincible = true;
+        }
+    }
+    @Override
     public void update(){
         if(activated){
+            if(collisionWithObject(1) || collisionWithObject(3)){reverseDirection();}
+            boolean[] tab = player.detectCollision(this);
+            if(tab[0]){
+                if(isResting){
+                    invincible();
+                    player.rest();
+                    player.setJumping(true);
+                    player.jump();
+                }
+                if(!isResting && !isInvincible){
+                    rest();
+                    player.rest();
+                    player.setJumping(true);
+                    player.jump();
+                }
+                if(isInvincible){
+                    player.recalibrerY(this);
+                }
+            }
+            if(tab[1] || tab[2] || tab[3]){
+                if(player.getInvincible()){
+                    dead();
+                }
+                else if(isResting){
+                    invincible();
+                }
+                else{
+                    if(!player.getResting()){
+                        player.decreaseLife();
+                        player.rest();
+                    }
+                }
+            }
             if(isResting){rest();}
             else if(isInvincible){invincible();}
             else if(isWalking){walk(frequenceMarche);}
             else{dead();}
+            for(Ennemy en : ennemies){
+                boolean tab1[] = detectCollision(en);
+                if(tab1[0] || tab1[1] || tab1[2] || tab1[3]){
+                    if(isInvincible && !en.getInvincible()){en.dead();}
+                }
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.mario2d.game.personnage;
 
+import static com.example.mario2d.game.loop.GameActivity.persos;
 import static com.example.mario2d.game.loop.GameActivity.player;
 
 import android.content.Context;
@@ -26,6 +27,7 @@ public class Thwomp extends Ennemy{
         upAuthor = true;
         activated = false;
         setCollisionMatrixToFalse();
+        setBitmaps();
     }
     @Override
     public void setBitmaps() {
@@ -69,37 +71,27 @@ public class Thwomp extends Ennemy{
                 gravity = true;
             }
         }
-        /*if(collisionWithObject(0)){
-            if(compteurSaut<100){
-                isDown = false;
-                isUp = false;
-                compteurSaut++;
-            }
-            else{
-                isUp = true;
-                translateY(-7);
-                gravity = false;
-                compteurSaut = 0;
-            }
-        }
-        if(getY() <= 0){
-            if(compteurSaut<100){
-                compteurSaut++;
-                isUp = false;
-                isDown = false;
-            }
-            else{
-                isDown = true;
-                compteurSaut = 0;
-            }
-        }*/
     }
     public boolean getUp(){return this.isUp;}
     public void setIsUp(boolean isUp){this.isUp = isUp;}
     public void setUpAuthor(boolean upAuthor){this.upAuthor = upAuthor;}
     @Override
     public void update(){
-        if(activated){invincible();}
+        if(activated){
+            boolean[] tab1 = player.detectCollision(this, (int) (getHeight()*0.05), (int) (-getWidth()*0.05));
+            if(tab1[0]){
+                player.setJumping(true);
+                player.recalibrerY(this);
+            }
+            else if(tab1[2]){
+                if(!player.isResting){
+                    player.decreaseLife();
+                    player.setResting(true);
+                    player.rest();
+                }
+            }
+            invincible();
+        }
         else {if(getX() <= player.getX()){setActivated(true);}}
     }
 

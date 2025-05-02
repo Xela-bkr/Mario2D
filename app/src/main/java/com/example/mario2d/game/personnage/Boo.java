@@ -1,5 +1,7 @@
 package com.example.mario2d.game.personnage;
 
+import static com.example.mario2d.game.loop.GameActivity.player;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,14 +12,18 @@ import com.example.mario2d.game.loop.GameView;
 public class Boo extends Ennemy{
     private Bitmap arret_droite, arret_gauche, cache_droite, cache_gauche, brick;
     private boolean demiBrickMode;
+    private String camouflage;
     public Boo(Context context, String name, int x, int y, int width, int height) {
         super(context, name, x, y, width, height);
         isWalking = false;
         isResting = true;
-        isInvincible = false;
+        isInvincible = true;
+        isRecalibrable = false;
         isRight = true;
         gravity = false;
         demiBrickMode = false;
+        camouflage = "greybrick";
+        setBitmaps();
     }
     @Override
     public void setBitmaps(){
@@ -34,27 +40,47 @@ public class Boo extends Ennemy{
         Bitmap b4 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_cache_droite"));
         cache_droite = Bitmap.createScaledBitmap(b4, getWidth(), getHeight(), true);
 
-        Bitmap b5 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get("greybrick"));
+        Bitmap b5 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(camouflage));
         brick = Bitmap.createScaledBitmap(b5, getWidth(), getHeight(), true);
     }
     @Override
     public void update(){
-        updateMode();
-        if(isWalking){fly();}
-        if(isResting){rest();}
-        if(isInvincible){invincible();}
+        if(activated){
+            boolean[] tab = player.detectCollision(this, (int) (getHeight()*0.04), (int) (-getWidth()*0.05));
+            if(tab[0]){
+                System.out.println("boo en haut");
+                if(!isResting){
+                    dead();
+                }
+                player.jump2();
+                player.recalibrerY(this);
+            }
+            else if(tab[1] || tab[2] || tab[3]){
+                System.out.println("boo cote");
+                if(!player.isResting && !player.isInvincible){
+                    player.decreaseLife();
+                    player.rest();
+                }
+                else if(player.isInvincible){
+                    dead();
+                }
+            }
+            if(isWalking){fly();}
+            if(isResting){rest();}
+            if(isInvincible){invincible();}
+        }
 
     }
     public void fly(){
-
-        if(GameActivity.player.getRight()){
-            if(getX()<GameActivity.player.getX()){
+        gravity = false;
+        if(player.getRight()){
+            if(getX()< player.getX()){
                 if(this.bitmap!=arret_droite){this.bitmap = arret_droite;}
                 translateX(4);
-                if(getY() + getHeight()/2 < GameActivity.player.getY() + GameActivity.player.getHeight()/2 + 4){
+                if(getY() + getHeight()/2 < player.getY() + player.getHeight()/2 + 4){
                     translateY(4);
                 }
-                else if(getY() + getHeight()/2 > GameActivity.player.getY() + GameActivity.player.getHeight()/2 - 4){
+                else if(getY() + getHeight()/2 > player.getY() + player.getHeight()/2 - 4){
                     translateY(-4);
                 }
             }
@@ -63,7 +89,7 @@ public class Boo extends Ennemy{
             }
         }
         else {
-            if (getX() < GameActivity.player.getX()) {
+            if (getX() < player.getX()) {
                 if (this.bitmap != cache_droite) {
                     this.bitmap = cache_droite;
                 }
@@ -71,10 +97,10 @@ public class Boo extends Ennemy{
             else {
                 if (this.bitmap != arret_gauche) {this.bitmap = arret_gauche;}
                 translateX(-4);
-                if(getY() + getHeight()/2 < GameActivity.player.getY() + GameActivity.player.getHeight()/2 + 4){
+                if(getY() + getHeight()/2 < player.getY() + player.getHeight()/2 + 4){
                     translateY(4);
                 }
-                else if(getY() + getHeight()/2 > GameActivity.player.getY() + GameActivity.player.getHeight()/2 - 4){
+                else if(getY() + getHeight()/2 > player.getY() + player.getHeight()/2 - 4){
                     translateY(-4);
                 }
             }
@@ -116,6 +142,10 @@ public class Boo extends Ennemy{
     }
     private void updateMode(){
         pushPositions(new int[]{getX(), getY()});
+    }
+    public void changeCamouflage(String key){
+        Bitmap b1 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(key));
+        brick = Bitmap.createScaledBitmap(b1, getWidth(), getHeight(), true);
     }
 }
 

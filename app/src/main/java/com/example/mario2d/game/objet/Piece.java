@@ -1,22 +1,25 @@
 package com.example.mario2d.game.objet;
 
+import static com.example.mario2d.game.loop.GameActivity.player;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 
-public class Piece extends Objet{
+import com.example.mario2d.game.loop.GameActivity;
+
+public class Piece extends Item{
     private boolean isTaken;
     private int compteurAnimation, compteurRotation;
-    private float takenTime;
     private Bitmap face, rotate1, rotate2, rotate3;
     public Piece(Context context, String name, int x, int y, int width, int height) {
         super(context, name, x, y, width, height);
         this.initX = x;
-        this.isTaken = false;
+        this.isPickable = true;
         this.compteurAnimation = 0;
-        this.initWidth = width;
         this.compteurRotation = 0;
+        gravity = false;
     }
     public void rotate(int frequence, int...compteur){
 
@@ -61,17 +64,17 @@ public class Piece extends Objet{
         if(compteurRotation >= 4*frequence){compteurRotation = 0;}
 
         if(compteur.length >0){
-            if(isTaken && compteurAnimation < compteur[0]) {translateY(-5);}
+            if(isTaken && compteurAnimation < compteur[0]) {
+                translateY(-5);
+                compteurAnimation ++;
+            }
             else{setActivated(false);}
         }
-        compteurAnimation ++;
     }
     public void setCompteurAnimation(int i){this.compteurAnimation = i;}
     public void setIsTaken(boolean taken){this.isTaken = taken;}
-    public void setTakenTime(float takenTime){this.takenTime = takenTime;}
     public int getCompteurAnimation(){return this.compteurAnimation;}
     public boolean getIsTaken(){return this.isTaken;}
-    public float getTakenTime(){return this.takenTime;}
     @Override
     public void setBitmaps(){
 
@@ -90,5 +93,21 @@ public class Piece extends Objet{
         Bitmap b4 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_tourne_3"));
         this.rotate3 = Bitmap.createScaledBitmap(b4, width1_3, getHeight(), true);
     }
-
+    @Override
+    public void update(){
+        if(activated){
+            boolean[] tab = player.detectCollision(this);
+            if(tab[0] || tab[1] || tab[2] || tab[3]){
+                isTaken = true;
+            }
+            if(!isTaken){rotate(12);}
+            else{
+                rotate(4, 50);
+                if(isPickable){
+                    player.increasePieceCount();
+                    isPickable = false;
+                }
+            }
+        }
+    }
 }

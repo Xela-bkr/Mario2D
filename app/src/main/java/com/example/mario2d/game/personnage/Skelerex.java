@@ -9,6 +9,7 @@ public class Skelerex extends Koopa{
     public Skelerex(Context context, String name, int x, int y, int width, int height) {
         super(context, name, x, y, width, height);
         isWalking = true;
+        setBitmaps();
     }
     @Override
     public void setBitmaps(){

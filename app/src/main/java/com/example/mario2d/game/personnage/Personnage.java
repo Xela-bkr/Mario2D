@@ -32,7 +32,7 @@ public abstract class Personnage extends Origin{
      * Variable isRight (bool) pour déterminer si le personnage est orienté à droite ou non
      * Variable isWalking (bool) pour déternimer si le personnage est en train de marcher ou non
      */
-    protected Boolean isJumping, isRight, isWalking, isAlive, isInvincible, isResting, isEnnemy, gravity, gravityFall;
+    protected Boolean isJumping, isRight, isWalking, isAlive, isInvincible, isResting, isEnnemy, gravity, gravityFall, isRecalibrable;
     /**
      * Variable compteurMarche : utile à la fonction de marche du personnage
      */
@@ -86,6 +86,7 @@ public abstract class Personnage extends Origin{
         this.jumpTime = 0;
         this.gravityFall = true;
         this.frequenceMarche = 20;
+        this.isRecalibrable = true;
         setCollisionMatrixToFalse();
     }
 
@@ -316,6 +317,7 @@ public abstract class Personnage extends Origin{
         boolean segment_vertical_droit = getX() < objet.getX() + objet.getWidth() - lateralError;
         boolean segment_horizontal_haut = getY() + getHeight() > objet.getY() + lateralError;
         boolean segment_horizontal_bas = getY() < objet.getY() + objet.getHeight() - lateralError;
+
         // collision en haut :
         boolean ch3 = getY() + getHeight() >= objet.getY() - verticalError;
         boolean ch4 = getY() < objet.getY();
@@ -436,7 +438,9 @@ public abstract class Personnage extends Origin{
         if(life <= 0){dead();}
     }
     public void recalibrerY(Objet objet){
-        this.setY(objet.getY() - getHeight());
+        if(isRecalibrable){
+            this.setY(objet.getY() - getHeight());
+        }
     }
     public void update(){
         if(activated){
@@ -455,6 +459,12 @@ public abstract class Personnage extends Origin{
         collisionMatrix.put(key, tab);
     }
     public void recalibrerY(Personnage personnage){
-        setY(personnage.getY() - getHeight());
+        if(isRecalibrable){
+            setY(personnage.getY() - getHeight());
+        }
+    }
+    public void reverseDirection(){
+        if(isRight){isRight = false;}
+        else{isRight = true;}
     }
 }

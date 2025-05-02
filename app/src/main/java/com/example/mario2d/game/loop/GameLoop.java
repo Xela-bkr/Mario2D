@@ -12,7 +12,6 @@ public class GameLoop implements Runnable{
     public GameLoop(GameView gView){
         gameView = gView;
     }
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void run() {
@@ -28,7 +27,6 @@ public class GameLoop implements Runnable{
             if(delay > FREQUENCY){
                 delay -= FREQUENCY;
             }
-
             // define current frequency according to delay
             double currentFrequency = (double) (FREQUENCY - delay); // nanosecond
 

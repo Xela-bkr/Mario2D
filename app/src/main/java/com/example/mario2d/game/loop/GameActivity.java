@@ -8,19 +8,23 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mario2d.game.objet.BrownBloc;
 import com.example.mario2d.game.objet.Castle;
-import com.example.mario2d.game.objet.Floor;
-import com.example.mario2d.game.objet.Item;
+import com.example.mario2d.game.objet.Champignon;
+import com.example.mario2d.game.objet.Etoile;
 import com.example.mario2d.game.objet.Objet;
 import com.example.mario2d.game.objet.Piece;
 import com.example.mario2d.game.objet.Pipe;
+import com.example.mario2d.game.objet.Platforme;
 import com.example.mario2d.game.objet.YellowBloc;
 import com.example.mario2d.game.personnage.Boo;
+import com.example.mario2d.game.personnage.Ennemy;
 import com.example.mario2d.game.personnage.Goomba;
 import com.example.mario2d.game.personnage.Koopa;
 import com.example.mario2d.game.personnage.Parakoopa;
 import com.example.mario2d.game.personnage.Personnage;
+import com.example.mario2d.game.personnage.PlantePirhana;
 import com.example.mario2d.game.personnage.Player;
 import com.example.mario2d.game.personnage.Skelerex;
+import com.example.mario2d.game.personnage.Spiny;
 import com.example.mario2d.game.personnage.Thwomp;
 
 import java.util.ArrayList;
@@ -32,8 +36,17 @@ public class GameActivity extends AppCompatActivity {
             CHARACTER_SELECTED, PIECE_WIDTH, PIECE_HEIGHT, dx;
 
     private Boolean leftHandMode, soundEffect, music;
-    private ArrayList<Objet> objets = new ArrayList<Objet>();
-    private ArrayList<Personnage> persos = new ArrayList<Personnage>();
+    public static ArrayList<Objet> objets = new ArrayList<Objet>();
+    public static ArrayList<Castle> castles = new ArrayList<Castle>();
+    public static ArrayList<BrownBloc> brownBlocs = new ArrayList<BrownBloc>();
+    public static ArrayList<YellowBloc> yellowBlocs = new ArrayList<YellowBloc>();
+    public static ArrayList<Pipe> pipes = new ArrayList<Pipe>();
+    public static ArrayList<Piece> pieces = new ArrayList<Piece>();
+    public static ArrayList<Champignon> champis = new ArrayList<Champignon>();
+    public static ArrayList<Etoile> etoiles = new ArrayList<Etoile>();
+    public static ArrayList<Ennemy> ennemies = new ArrayList<Ennemy>();
+    public static ArrayList<Personnage> persos = new ArrayList<Personnage>();
+    public static ArrayList<Platforme> platformes = new ArrayList<Platforme>();
     public static Player player;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -47,10 +60,21 @@ public class GameActivity extends AppCompatActivity {
         String name = CHARACTER_SELECTED == 1 ? "mario" : "luigi";
         int playerX = (int)(displayWidth/2 - CHARACTER_WIDTH/2);
         int playerY = displayHeight - FLOOR_HEIGHT - CHARACTER_HEIGHT - 1;
-        Player player = new Player(this, name, playerX, playerY, CHARACTER_WIDTH, CHARACTER_HEIGHT);
-        this.player = player;
+
+        this.player = new Player(this, name, playerX, playerY, CHARACTER_WIDTH, CHARACTER_HEIGHT);
+        objets.clear();
+        persos.clear();
+        ennemies.clear();
+        champis.clear();
+        pieces.clear();
+        pipes.clear();
+        yellowBlocs.clear();
+        brownBlocs.clear();
+        castles.clear();
+        etoiles.clear();
+        platformes.clear();
         setObjets();
-        setContentView(new GameView(this, displayWidth, displayHeight,leftHandMode, LEVEL_SELECTED, objets, persos));
+        setContentView(new GameView(this, displayWidth, displayHeight,leftHandMode, LEVEL_SELECTED));
     }
     public void setExtraData(Bundle extras){
         displayWidth = extras.getInt("displayWidth");
@@ -73,6 +97,9 @@ public class GameActivity extends AppCompatActivity {
         music = extras.getBoolean("music");
     }
     public void setObjets(){
+
+        objets = new ArrayList<Objet>();
+        persos = new ArrayList<Personnage>();
 
         this.dx = (int) (displayWidth*0.01);
         final int mysteryBlocY = displayHeight - FLOOR_HEIGHT - CHARACTER_HEIGHT - BLOC_HEIGHT*2;
@@ -119,18 +146,23 @@ public class GameActivity extends AppCompatActivity {
                 drawPieceSquare(199*dx+7*hardsquareWidth+dx, displayHeight-FLOOR_HEIGHT-PIECE_HEIGHT-dx, 5);
                 drawBloc("bloc", 178*dx, displayHeight-FLOOR_HEIGHT-hardSquareHeight-4*BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT, 4);
 
-                drawGoomba("goomba", 85*dx, surface-4*dx, true);
-                drawGoomba("goomba", 70*dx, surface-4*dx, true);
-                drawKoopa("greenkoopa", 125*dx, (int) (surface-(displayWidth*0.03 - 1.7458) - dx), true);
-                drawKoopa("greenkoopa", 170*dx, (int) (surface-(displayWidth*0.03 - 1.7458) - 4*dx),true);
-                drawParakoopa("greenparakoopa", 240*dx, surface - 30*dx, false);
+                drawGoomba("goomba", 85*dx, surface-4*dx, true, true);
+                drawGoomba("goomba", 70*dx, surface-4*dx, true, true);
+                drawKoopa("greenkoopa", 125*dx, (int) (surface-(displayWidth*0.03 - 1.7458) - 3*dx), true, false);
+                drawKoopa("greenkoopa", 170*dx, (int) (surface-(displayWidth*0.03 - 1.7458) - 6*dx),true, false);
+                drawParakoopa("greenparakoopa", 240*dx, surface - 30*dx, false, true);
+
+                drawPlatforme("platforme", 100*dx, surface - 10*dx, 10*dx, (int) (10*dx*0.1657), 10*dx, true);
 
                 return;
             case 2 :
 
                 drawCastle("greencastle", 0);
                 drawCastle("greencastle", 400*dx, "greenbrick");
-                drawAlternatesBloc("brownbloc", "bloc", 30*dx, staticBlocY, 10, 2, 5);
+                drawAlternatesBloc("greenbloc", "bloc", 30*dx, staticBlocY, 10, 2, 3);
+                drawLine("Objet", "greybrick2", 0, 400*dx, 0, 3*dx, 3*dx, false);
+                drawLine("BrownBloc", "greybrick2", 0, 186*dx, 3*dx, 3*dx, 3*dx, false);
+                drawLine("BrownBloc", "greybrick2", 194*dx, 250*dx,3*dx, 3*dx, 3*dx, false);
 
                 final int greyBrickDim = 3*dx;
                 drawBloc("greybrick", 30*dx, displayHeight-FLOOR_HEIGHT-greyBrickDim, greyBrickDim, greyBrickDim, 1 );
@@ -143,31 +175,81 @@ public class GameActivity extends AppCompatActivity {
                 drawLine("Objet", "greybrick", 98*dx,98*dx+30*dx,surface-3*greyBrickDim, greyBrickDim, greyBrickDim,false );
                 drawLine("Objet", "greybrick", 98*dx,98*dx+30*dx,surface-2*greyBrickDim, greyBrickDim, greyBrickDim,false );
                 drawLine("Objet", "greybrick", 98*dx,98*dx+30*dx,surface-greyBrickDim, greyBrickDim, greyBrickDim,false );
-                drawColumn("BrownBloc", "greybrick", 98*dx+30*dx, surface - greyBrickDim, 6,greyBrickDim, greyBrickDim, true);
 
+                drawColumn("BrownBloc", "greybrick", 98*dx+30*dx, surface - greyBrickDim, 6,greyBrickDim, greyBrickDim, true);
                 drawLine("BrownBloc", "greybrick", 131*dx, 161*dx, surface-greyBrickDim, greyBrickDim, greyBrickDim, true);
                 drawBoo(161*dx, surface-greyBrickDim);
                 drawPiece(161*dx, surface-greyBrickDim-PIECE_HEIGHT-dx);
                 drawLine("BrownBloc", "greybrick", 164*dx, 194*dx, surface-greyBrickDim, greyBrickDim, greyBrickDim, true);
+
                 drawThwomp(186*dx, (int) (-8*dx*1.2513));
+                drawLine("BrownBloc", "greybrick", 194*dx, 403*dx, surface - greyBrickDim, greyBrickDim, greyBrickDim, false);
+                drawColumn("BrownBloc", "greybrick", 200*dx, surface-greyBrickDim, 5, greyBrickDim, greyBrickDim, false);
+                drawColumn("BrownBloc", "greybrick", 248*dx, surface-greyBrickDim, 5, greyBrickDim, greyBrickDim, true);
+                drawSkelerex(223*dx, surface-greyBrickDim-6*dx, true, false);
+                drawAlternatesBloc("greenbloc", "bloc", 220*dx, surface-4*BLOC_WIDTH, 3, 2, 4);
+                drawBoo(248*dx, greyBrickDim, "greybrick2");
+                drawLine("BrownBloc", "greybrick2", 251*dx, 280*dx, greyBrickDim, greyBrickDim, greyBrickDim, false);
+                drawThwomp(278*dx, (int) (-8*dx*1.2513));
 
+                drawColumn("BrownBloc", "greybrick2", 283*dx+3*dx, surface-8*greyBrickDim, 5, greyBrickDim, greyBrickDim, false);
+                drawLine("Objet", "greybrick2", 289*dx, greyBrickDim, 319*dx, greyBrickDim, greyBrickDim, false);
+                drawLine("Objet", "greybrick2", 289*dx, 319*dx, greyBrickDim, greyBrickDim, greyBrickDim, false);
+                drawLine("Objet", "greybrick2", 289*dx, 319*dx, 2*greyBrickDim, greyBrickDim, greyBrickDim, false);
+                drawLine("Objet", "greybrick2", 289*dx, 319*dx, 3*greyBrickDim, greyBrickDim, greyBrickDim, false);
+                drawLine("Objet", "greybrick2", 289*dx, 319*dx, 4*greyBrickDim, greyBrickDim, greyBrickDim, false);
+                drawLine("BrownBloc", "greybrick2", 289*dx, 319*dx, 5*greyBrickDim, greyBrickDim, greyBrickDim, false);
+                drawColumn("BrownBloc", "greybrick2", 319*dx, surface-8*greyBrickDim, 5, greyBrickDim, greyBrickDim, false);
+                drawThwomp(322*dx, (int) (-8*dx*1.2513));
 
-                break;
+                drawColumn("BrownBloc", "greybrick2", 330*dx, surface-8*greyBrickDim, 5, greyBrickDim, greyBrickDim, false);
+                drawLine("Objet", "greybrick2", 333*dx, greyBrickDim, 319*dx, greyBrickDim, greyBrickDim, false);
+                drawLine("Objet", "greybrick2", 333*dx, 363*dx, greyBrickDim, greyBrickDim, greyBrickDim, false);
+                drawLine("Objet", "greybrick2", 333*dx, 363*dx, 2*greyBrickDim, greyBrickDim, greyBrickDim, false);
+                drawLine("Objet", "greybrick2", 333*dx, 363*dx, 3*greyBrickDim, greyBrickDim, greyBrickDim, false);
+                drawLine("Objet", "greybrick2", 333*dx, 345*dx, 4*greyBrickDim, greyBrickDim, greyBrickDim, false);
+                drawBoo(345*dx, 4*greyBrickDim, "greybrick2");
+                drawLine("Objet", "greybrick2", 348*dx, 363*dx,4*greyBrickDim, greyBrickDim, greyBrickDim, false);
+                drawLine("BrownBloc", "greybrick2", 333*dx, 363*dx, 5*greyBrickDim, greyBrickDim, greyBrickDim, false);
+                drawColumn("BrownBloc", "greybrick2", 363*dx, surface-8*greyBrickDim, 5, greyBrickDim, greyBrickDim, false);
+
+                drawBloc("greenbloc", 302*dx, surface - greyBrickDim - BLOC_WIDTH, BLOC_WIDTH, BLOC_HEIGHT, 2);
+                drawBloc("greenbloc", 346*dx, surface - greyBrickDim - BLOC_WIDTH, BLOC_WIDTH, BLOC_HEIGHT, 2);
+
+                return;
             case 3 :
                 drawCastle("castle", 0);
                 drawCastle("castle", 400*dx, "yellowbrick");
                 //drawPyramid("BrownBloc", "goldenbloc", 100*dx, 10, displayHeight-FLOOR_HEIGHT-BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT);
-                drawKoopa("redkoopa", 40*dx, (int) (surface-(displayWidth*0.03 - 1.7458) - dx), true);
-                drawParakoopa("redparakoopa", 50*dx, (int) (surface-(displayWidth*0.03 - 1.7458) - dx), true);
-                break;
+                drawKoopa("redkoopa", 60*dx, surface-8*BLOC_WIDTH , false, false);
+                //drawParakoopa("redparakoopa", 50*dx, (int) (surface-(displayWidth*0.03 - 1.7458) - dx), true);
+                drawAlternatesBloc("goldenbloc", "bloc", 50*dx, surface-3*BLOC_WIDTH, 20, 2, 3);
+                drawAlternatesBloc("goldenbloc", "bloc", 50*dx, surface-6*BLOC_WIDTH, 9, 2, 3);
+                drawAlternatesBloc("goldenbloc", "bloc", 94*dx, surface - 6*BLOC_WIDTH, 9, 2, 3);
+                //drawKoopa("redkoopa", 70*dx, surface - 5*dx, false);
+                drawGoomba("goomba", 70*dx, surface-17*dx, false, false);
+                drawColumn("BrownBloc", "goldenbloc", 130*dx, surface-BLOC_HEIGHT, 6, BLOC_WIDTH, BLOC_HEIGHT, false);
+                drawSpiny("spiny", 60*dx,surface-3*BLOC_WIDTH-3*dx , 3*dx, 3*dx, true, false);
+                drawKoopa("redkoopa", 100*dx, surface-8*BLOC_WIDTH, false, true);
+
+                drawPlantPirhanaWithGreenPipe(160*dx, surface - PIPE_HEIGHT);
+                drawBloc("bloc", 160*dx + (PIPE_WIDTH-BLOC_WIDTH)/2, surface - PIPE_HEIGHT - 4*BLOC_WIDTH, BLOC_WIDTH, BLOC_HEIGHT, 4);
+                drawColumn("BrownBloc", "goldenbloc", 180*dx, surface - 5*BLOC_HEIGHT, 6, BLOC_WIDTH, BLOC_HEIGHT, false);
+                drawLine("BrownBloc", "goldenbloc", 184*dx, 250*dx, surface - 5*BLOC_WIDTH, BLOC_WIDTH, BLOC_HEIGHT, true );
+                drawPlantPirhanaWithGreenPipe(255*dx, surface -PIPE_HEIGHT);
+                drawBloc("bloc", 190*dx, surface - 9*BLOC_WIDTH, BLOC_WIDTH, BLOC_HEIGHT, 5);
+                drawAlternatesBloc("goldenbloc", "bloc", 194*dx, surface -9*BLOC_WIDTH, 9, 1, 3);
+                drawSpiny("spiny", 250*dx, surface - 4*dx, 3*dx, 3*dx, true, false);
+
+                return;
             case 4 :
                 drawCastle("castle", 0);
                 drawCastle("castle", 400*dx, "darkbrick");
-                break;
+                return;
             case 5 :
                 drawCastle("castle", 0);
                 drawCastle("castle", 400*dx, "nuageplatform");
-                break;
+                return;
         }
 
     }
@@ -180,7 +262,7 @@ public class GameActivity extends AppCompatActivity {
     public void drawCastle(String key, int x, String...floorKey){
         int castleY = displayHeight - FLOOR_HEIGHT - CASTLE_HEIGHT;
         Castle castle = new Castle(this, key, x, castleY, CASTLE_WIDTH, CASTLE_HEIGHT);
-        objets.add(castle);
+        castles.add(castle);
         if(x>0){
             setFloor(x + CASTLE_WIDTH, floorKey[0]);
         }
@@ -217,9 +299,8 @@ public class GameActivity extends AppCompatActivity {
         int floorRate = x/FLOOR_WIDTH;
         int floorY = displayHeight - FLOOR_HEIGHT;
         for(int i = 0; i<floorRate; i++){
-            Floor floor = new Floor(this, key, i*FLOOR_WIDTH, floorY, FLOOR_WIDTH, FLOOR_HEIGHT);
-            System.out.print(" | " + i*FLOOR_WIDTH);
-            objets.add(floor);
+            BrownBloc bb = new BrownBloc(this, key, i*FLOOR_WIDTH, floorY, FLOOR_WIDTH, FLOOR_HEIGHT);
+            brownBlocs.add(bb);
         }
     }
 
@@ -231,12 +312,11 @@ public class GameActivity extends AppCompatActivity {
      * @param y
      * @param width
      * @param height
-     * @param objets
      */
-    public void drawPieceLine(String name, int initX, int endX, int y, int width, int height, ArrayList<Objet> objets){
+    public void drawPieceLine(String name, int initX, int endX, int y, int width, int height){
         for(int i = initX; i<endX; i+=width){
             Piece piece = new Piece(this, name, i, y, width, height);
-            objets.add(piece);
+            pieces.add(piece);
         }
     }
     /**
@@ -256,19 +336,19 @@ public class GameActivity extends AppCompatActivity {
             case "BrownBloc" :
                 for(int i = 0; i<rate; i++){
                     BrownBloc bb = new BrownBloc(this, name, initX + i*width, y, width, height);
-                    objets.add(bb);
+                    brownBlocs.add(bb);
                 }
                 break;
             case "YellowBloc" :
                 for(int i = 0; i<rate; i++){
                     YellowBloc yb = new YellowBloc(this, name, initX + i*width, y, width, height);
-                    objets.add(yb);
+                    yellowBlocs.add(yb);
                 }
                 break;
             case "Piece" :
                 for(int i = 0; i<rate; i++){
                     Piece p = new Piece(this, name, initX + i*width, y, width, height);
-                    objets.add(p);
+                    pieces.add(p);
                 }
             case "Objet" :
                 for(int i = 0; i<rate; i++){
@@ -282,8 +362,13 @@ public class GameActivity extends AppCompatActivity {
                 int pieceY = y - PIECE_HEIGHT - dx;
 
                 Piece p = new Piece(this, "piece_jaune", pieceX, pieceY, PIECE_WIDTH, PIECE_HEIGHT);
-                objets.add(p);
+                pieces.add(p);
             }
+        }
+    }
+    public void drawDecorationLine(String key, int x, int y, int width, int height, int quantite, int equart){
+        for(int i = 0; i<quantite; i++){
+            drawDecoration(key, x + i*equart, y, width, height);
         }
     }
     public void drawColumn(String objetType, String name, int x, int initY, int quantite, int width, int height, boolean pieceOnTop){
@@ -291,19 +376,19 @@ public class GameActivity extends AppCompatActivity {
             case "BrownBloc" :
                 for(int i = 0; i<quantite; i++){
                     BrownBloc bb = new BrownBloc(this, name, x, initY-i*height, width, height);
-                    objets.add(bb);
+                    brownBlocs.add(bb);
                 }
                 break;
             case "YellowBloc" :
                 for(int i = 0; i<quantite; i++){
                     YellowBloc yb = new YellowBloc(this, name, x, initY - i*height, width, height);
-                    objets.add(yb);
+                    yellowBlocs.add(yb);
                 }
                 break;
             case "Piece" :
                 for(int i = 0; i<quantite; i++){
                     Piece p = new Piece(this, name, x, initY - i*height, width, height);
-                    objets.add(p);
+                    pieces.add(p);
                 }
             case "Objet" :
                 for(int i = 0; i<quantite; i++){
@@ -313,9 +398,9 @@ public class GameActivity extends AppCompatActivity {
         }
         if(pieceOnTop){
             int pieceX = x + (width-PIECE_WIDTH)/2;
-            int pieceY = initY - quantite*height - PIECE_HEIGHT-dx;
+            int pieceY = initY - quantite*(height-1) - dx;
             Piece piece = new Piece(this, "piece_jaune", pieceX, pieceY, PIECE_WIDTH, PIECE_HEIGHT);
-            objets.add(piece);
+            pieces.add(piece);
         }
     }
 
@@ -328,7 +413,7 @@ public class GameActivity extends AppCompatActivity {
     public void drawPieceLine(int startX, int y, int number){
         for(int i = 0; i<number; i++){
             Piece p = new Piece(this, "piece_jaune", startX + i*PIECE_WIDTH, y, PIECE_WIDTH, PIECE_HEIGHT);
-            objets.add(p);
+            pieces.add(p);
         }
     }
     public void drawPyramid(String objetType, String name, int startX, int stares, int initY, int width, int height){
@@ -351,41 +436,42 @@ public class GameActivity extends AppCompatActivity {
         switch (code){
             case 1 :
                 BrownBloc bloc1 = new BrownBloc(this, name, x, y, width, height);
-                objets.add(bloc1);
+                brownBlocs.add(bloc1);
                 return;
             case 2 :
                 BrownBloc bloc2 = new BrownBloc(this, name, x, y, width, height);
                 Piece piece2 = new Piece(this, "piece_jaune", x + (width-PIECE_WIDTH)/2, y-PIECE_HEIGHT-dx, PIECE_WIDTH, PIECE_HEIGHT);
-                objets.add(bloc2);
-                objets.add(piece2);
+                piece2.setActivated(true);
+                piece2.setIsPickabe(true);
+                brownBlocs.add(bloc2);
+                pieces.add(piece2);
                 return;
             case 3 :
                 YellowBloc yb3 = new YellowBloc(this, name, x, y, width, height);
-                Item item3 = new Item(this, "piece_jaune_face", x+(width-PIECE_WIDTH)/2, y-PIECE_HEIGHT - dx, PIECE_WIDTH, PIECE_HEIGHT);
-                item3.setActivated(false);
-                yb3.setItem(item3);
-                objets.add(yb3);
-                objets.add(item3);
+                Piece p = new Piece(this, "piece_jaune", x+(width-PIECE_WIDTH)/2, y-PIECE_HEIGHT - dx, PIECE_WIDTH, PIECE_HEIGHT);
+                p.setActivated(false);
+                yb3.setPiece(p);
+                yellowBlocs.add(yb3);
+                pieces.add(p);
                 return;
             case 4 :
                 YellowBloc yb4 = new YellowBloc(this, name, x, y, width, height);
                 int itemWidth = (int) (width * 2/3);
                 int itemHeight = itemWidth;
-                Item item4 = new Item(this, "champignon", x+(width-itemWidth)/2, y+(height-itemHeight)/2, itemWidth, itemHeight);
-                item4.setActivated(false);
-                yb4.setItem(item4);
-                objets.add(yb4);
-                objets.add(item4);
+                Champignon item4 = new Champignon(this, "champignon", x+(width-itemWidth)/2, y+(height-itemHeight)/2, itemWidth, itemHeight);
+                yb4.setChampi(item4);
+                yellowBlocs.add(yb4);
+                champis.add(item4);
                 return;
             case 5 :
                 YellowBloc yb5 = new YellowBloc(this, name, x, y, width, height);
                 int itWidth = (int) (width * 2/3);
                 int itHeight = itWidth;
-                Item item5 = new Item(this, "etoile", x+(width-itWidth)/2, y+(height-itHeight)/2, itWidth, itHeight);
+                Etoile item5 = new Etoile(this, "etoile", x+(width-itWidth)/2, y+(height-itHeight)/2, itWidth, itHeight);
                 item5.setActivated(false);
-                yb5.setItem(item5);
-                objets.add(yb5);
-                objets.add(item5);
+                yb5.setEtoile(item5);
+                yellowBlocs.add(yb5);
+                etoiles.add(item5);
                 return;
         }
     }
@@ -430,7 +516,9 @@ public class GameActivity extends AppCompatActivity {
     }
     public void drawPiece(int x, int y){
         Piece piece = new Piece(this, "piece_jaune", x,y, PIECE_WIDTH, PIECE_HEIGHT);
-        objets.add(piece);
+        piece.setActivated(true);
+        piece.setIsPickabe(true);
+        pieces.add(piece);
     }
     public void drawDecoration(String key, int x, int width, int height){
         int decoY = displayHeight - FLOOR_HEIGHT - height;
@@ -447,42 +535,94 @@ public class GameActivity extends AppCompatActivity {
             else{drawBloc(mysteryKey, startX+i*BLOC_WIDTH, y, BLOC_WIDTH, BLOC_HEIGHT, code2);}
         }
     }
-    public void drawGoomba(String key, int x, int y, boolean gravityFall){
+    public void drawGoomba(String key, int x, int y, boolean gravityFall, boolean isRight){
         Goomba goomba = new Goomba(this, key, x, y, dx*3, dx*3);
         goomba.setGravityFall(gravityFall);
+        goomba.setRight(isRight);
         persos.add(goomba);
+        ennemies.add(goomba);
     }
-    public void drawKoopa(String key, int x, int y, boolean gravityFall){
+    public void drawKoopa(String key, int x, int y, boolean gravityFall, boolean isRight){
         final int KOOPA_WIDTH = (int) (displayWidth*0.03);
         final int KOOPA_HEIGHT = (int) (KOOPA_WIDTH*1.7458);
         Koopa koopa = new Koopa(this, key, x, y, KOOPA_WIDTH, KOOPA_HEIGHT);
         koopa.setGravityFall(gravityFall);
+        koopa.setRight(isRight);
         persos.add(koopa);
+        ennemies.add(koopa);
     }
-    public void drawParakoopa(String key, int x, int y, boolean gravityFall){
+    public void drawParakoopa(String key, int x, int y, boolean gravityFall, boolean isRight){
         final int PARAKOOPA_WIDTH = (int) (displayWidth*0.03) + dx;
         final int PARAKOOPA_HEIGHT = (int) (PARAKOOPA_WIDTH*1.7458);
         Parakoopa pk = new Parakoopa(this, key, x, y, PARAKOOPA_WIDTH, PARAKOOPA_HEIGHT);
+        pk.setRight(isRight);
         pk.setGravityFall(gravityFall);
         persos.add(pk);
+        ennemies.add(pk);
     }
     public void drawBoo(int x, int y){
 
         Boo boo2 = new Boo(this, "boo", x, y, 3*dx, 3*dx);
         persos.add(boo2);
+        ennemies.add(boo2);
 
     }
-    public void drawSkelerex(int x, int y, boolean gravityFall){
+    public void drawBoo(int x, int y, String camouflage){
+        Boo boo = new Boo(this, "boo", x, y, 3*dx, 3*dx);
+        boo.changeCamouflage(camouflage);
+        persos.add(boo);
+        ennemies.add(boo);
+    }
+    public void drawSkelerex(int x, int y, boolean gravityFall, boolean isRight){
         final int KOOPA_WIDTH = (int) (displayWidth*0.03);
         final int KOOPA_HEIGHT = (int) (KOOPA_WIDTH*1.7458);
         Skelerex sk = new Skelerex(this, "skelerex", x, y, KOOPA_WIDTH, KOOPA_HEIGHT);
         sk.setGravityFall(gravityFall);
+        sk.setRight(isRight);
         persos.add(sk);
+        ennemies.add(sk);
     }
     public void drawThwomp(int x, int y){
         int thwompWidth = 8*dx;
         int thwompHeight = (int) (thwompWidth*1.2513);
         Thwomp thwomp = new Thwomp(this, "thwomp", x, y, thwompWidth, thwompHeight);
         persos.add(thwomp);
+        ennemies.add(thwomp);
+    }
+    public void drawSpiny(String key, int x, int y, int width, int height, boolean gravityFall, boolean isRight){
+        Spiny spin = new Spiny(this, key, x, y, width, height);
+        spin.setGravityFall(gravityFall);
+        spin.setRight(isRight);
+        persos.add(spin);
+        ennemies.add(spin);
+    }
+    public void drawPlantePirhana(String key, int x, int y){
+        int width = 5*dx;
+        int height = (int) (5*dx*1.488);
+        PlantePirhana pp = new PlantePirhana(this, key, x, y, width, height);
+        persos.add(pp);
+        ennemies.add(pp);
+    }
+    public void drawPlantPirhanaWithGreenPipe(int x, int y){
+
+        int plantWidth = (int) (4.5*dx);
+        int plantHeight = (int) (5*dx*1.488);
+        int plantX = x + Math.abs(PIECE_WIDTH - plantWidth)/2;
+        int plantY = y;
+
+        Pipe pipe = new Pipe(this, "longreenpipe", x, y, PIPE_WIDTH, PIPE_HEIGHT+FLOOR_HEIGHT);
+        PlantePirhana pp = new PlantePirhana(this, " ", plantX, plantY + dx, plantWidth, plantHeight);
+
+        persos.add(pp);
+        ennemies.add(pp);
+        pipes.add(pipe);
+    }
+    public void drawPlatforme(String key, int x, int y, int width, int height, int Ylimit, boolean movable){
+        Platforme platforme = new Platforme(this, key, x, y, width, height);
+        if(movable){
+            platforme.setMovable(true);
+            platforme.setYlimit(Ylimit);
+        }
+        platformes.add(platforme);
     }
 }

@@ -10,73 +10,22 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 public class Item extends Objet{
-    boolean isCollected, isUsing, isPerimed, isRight;
-    private int compteur, compteurPerime, frequenceImage;
-    private Bitmap b;
-    private HashMap<String, boolean[]> collisionMatrix = new HashMap<String, boolean[]>();
+    protected boolean isPickable, gravity;
+    protected Bitmap b;
+    protected HashMap<String, boolean[]> collisionMatrix = new HashMap<String, boolean[]>();
     public Item(Context context, String name, int x, int y, int width, int height) {
         super(context, name, x, y, width, height);
-        this.isCollected = false;
-        this.isUsing = false;
-        this.minWidth = 20;
-        this.minHeight = 20;
-        this.isRight = false;
-        this.compteur = 0;
-        this.compteurPerime = 0;
-        this.frequenceImage = 50;
-        System.out.printf("Width and height : %d & %d\n", width, height);
-        //if(spriteBank.containsKey(name)){this.setBitmap(name);}
-        this.isPerimed = false;
         collisionMatrix.put("objet", new boolean[]{false, false, false, false});
+        collisionMatrix.put("personnage", new boolean[]{false, false, false, false});
+        isPickable = false;
+        gravity = true;
 
-        Bitmap b1 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name));
-        this.b= Bitmap.createScaledBitmap(b1, getWidth(), getHeight(), true);
-    }
-    public boolean getIsCollected() {return isCollected;}
-    public boolean isUsing() {return isUsing;}
-    public boolean getIsPerimed() {return isPerimed;}
-
-    public boolean isRight() {
-        return isRight;
-    }
-
-    public void setRight(boolean right) {
-        isRight = right;
-    }
-
-    public boolean isPerimed() {
-        return isPerimed;
-    }
-
-    public boolean isCollected() {
-        return isCollected;
-    }
-
-    public void setCollected(boolean collected) {isCollected = collected;}
-    public void setUsing(boolean using) {isUsing = using;}
-    public void setPerimed(boolean perimed) {isPerimed = perimed;}
-    public void slideAnimation(int limit, int step){
-        if(getY()<limit + step){translateY(-step);}
-        else{setIsPickabe(true);}
     }
     @Override
-    public void animer(){
-        if(compteur < 1200){
-            if(isRight){translateX(3);}
-            else{translateX(-3);}
-            if(compteur>800){
-                if(this.compteurPerime < 25){
-                    this.bitmap = null;
-                }
-                else {this.bitmap = b;}
-                compteurPerime ++;
-                if(compteurPerime >= 50){compteurPerime = 0;}
-            }
-            compteur ++;
-        }
-        else {
-            this.isPerimed = true;
-            this.activated = false;
+    public void update(){
+        if(activated){
+            if(!isPickable){transition();}
+            else{animer();}
         }
     }
     public boolean[] detectCollision(Origin objet, int...error){
@@ -120,6 +69,7 @@ public class Item extends Objet{
 
         return result;
     }
+
     public void addCollisionValue(String key, int index, boolean b){
         boolean[] tab = collisionMatrix.get(key);
         tab[index] = b;
@@ -128,6 +78,7 @@ public class Item extends Objet{
     public void recalibrerY(Objet objet){
         this.setY(objet.getY() - getHeight());
     }
+    protected void transition(){}
     public boolean[] detectCollisionWithFloor(Floor floor, int...margin){
         boolean[] result = new boolean[4];
         Arrays.fill(result, false);
@@ -136,4 +87,14 @@ public class Item extends Objet{
         return result;
     }
     public HashMap<String, boolean[]> getCollisionMatrix(){return this.collisionMatrix;}
+
+    public boolean isGravity() {
+        return gravity;
+    }
+
+    public void setGravity(boolean gravity) {
+        this.gravity = gravity;
+    }
+    public void reverseDirection(){
+    }
 }

@@ -1,5 +1,8 @@
 package com.example.mario2d.game.personnage;
 
+import static com.example.mario2d.game.loop.GameActivity.ennemies;
+import static com.example.mario2d.game.loop.GameActivity.player;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -26,6 +29,7 @@ public class Parakoopa extends Koopa {
         this.deltaY = 0;
         this.gravity = false;
         this.koopaMode = false;
+        setBitmaps();
     }
     @Override
     public void setBitmaps() {
@@ -100,24 +104,70 @@ public class Parakoopa extends Koopa {
         deltaY += 4;
     }
     @Override public void update() {
-        if (!koopaMode) {
-            fly();
-        } else {
-            if (isResting) {
-                rest();
-            } else if (isInvincible) {
-                invincible();
-            } else if (isAlive) {
-                walk(frequenceMarche);
+        if(activated){
+            boolean[] tab = player.detectCollision(this);
+            if(tab[0]){
+                if(isResting){
+                    isResting = false;
+                    isWalking = false;
+                    isInvincible = true;
+                    player.rest();
+                    player.jump2();
+                }
+                if(!isResting && !isInvincible && !koopaMode){
+                    rest();
+                    player.rest();
+                    player.jump2();
+                }
+                if(!isResting && !isInvincible && koopaMode){
+                    rest();
+                    player.rest();
+                    player.jump2();
+                }
+                if(isInvincible){
+                    player.recalibrerY(this);
+                }
+            }
+            if(tab[1] || tab[2] || tab[3]){
+                if(player.getInvincible()){
+                    dead();
+                }
+                else{
+                    if(!player.getResting()){
+                        player.decreaseLife();
+                        player.rest();
+                    }
+                }
+            }
+            if(collisionWithObject(1) || collisionWithObject(3)){reverseDirection();}
+            if (!koopaMode) {
+                fly();
             } else {
-                dead();
+                if (isResting) {
+                    gravity = true;
+                    rest();
+                } else if (isInvincible) {
+                    gravity = true;
+                    gravityFall = true;
+                    invincible();
+                } else if (isAlive) {
+                    walk(frequenceMarche);
+                } else {
+                    dead();
+                }
+            }
+        }
+        for(Ennemy en : ennemies){
+            boolean tab[] = detectCollision(en);
+            if(tab[0] || tab[1] || tab[2] || tab[3]){
+                if(isInvincible && !en.getInvincible()){en.dead();}
             }
         }
     }
     @Override public void rest(){
         if(!isResting){
             if(!koopaMode){
-                translateY(5);
+                translateY(-getHeight());
                 koopaMode = true;
                 gravity =  true;
                 isResting = false;
@@ -136,10 +186,13 @@ public class Parakoopa extends Koopa {
             }
         }
         else if(restCompteur >= 100){
+            restCompteur = 0;
             isResting = false;
             setHeight(initHeight);
             setWidth(initWidth - 30);
         }
-        restCompteur++;
+        else{
+            restCompteur++;
+        }
     }
 }

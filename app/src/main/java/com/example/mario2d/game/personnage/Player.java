@@ -9,8 +9,6 @@ import com.example.mario2d.game.objet.Item;
 
 public class Player extends Personnage{
     private float agrCoeff = 1.86f;
-    private Item item;
-    public static boolean Right;
     private int piecesCount;
     private int initialWidth, initialHeight;
     private Bitmap arret_droite, arret_gauche, marche_droite, marche_gauche, saute_droite, saute_gauche, mort_droite, mort_gauche;
@@ -19,7 +17,7 @@ public class Player extends Personnage{
         this.initialHeight = height; this.initialWidth = width;
         this.piecesCount = 0;
         this.life = 2;
-        this.frequenceMarche = 10;
+        this.frequenceMarche = 8;
         this.gravityConstant = 1;
         this.jumpImpulse = 18;
         this.compteurSaut = 0;
@@ -33,12 +31,14 @@ public class Player extends Personnage{
     @Override
     public void decreaseLife(){
         this.life --;
+        isResting = true;
         if (this.life == 1){
             int newWidth = getWidth() / 2;
             int newHeight = (int) (agrCoeff*newWidth);
             setWidth(newWidth);
             setHeight(newHeight);
             setBitmaps();
+            setY(getY()-getWidth());
             if(isWalking){
                 if(isRight){this.bitmap = marche_droite;}
                 else{this.bitmap = marche_gauche;}
@@ -56,7 +56,11 @@ public class Player extends Personnage{
         setWidth(initialWidth);
         setHeight(initialHeight);
         setBitmaps();
-        //setY(getY()-getHeight()/2);
+        setY(getY()-initialHeight/2);
+        if(!isWalking){
+            if(isRight){this.bitmap = arret_droite;}
+            else{this.bitmap = arret_gauche;}
+        }
     }
     @Override
     public void walk(int frequence){
@@ -74,12 +78,8 @@ public class Player extends Personnage{
 
         if(compteurMarche >= 2*frequence){compteurMarche = 0;}
     }
-    public void setPiecesCount(int x){this.piecesCount = x;}
-    public void increasePiece(){this.piecesCount ++;}
     public void decreasePiece(){this.piecesCount --;}
     public int getPiecesCount(){return this.piecesCount;}
-    public void setItem(Item item){this.item = item;}
-    public Item getItem(){return this.item;}
     public void setBitmaps(){
         Bitmap b1 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_arret_droite"));
         this.arret_droite= Bitmap.createScaledBitmap(b1, getWidth(), getHeight(), true);
@@ -124,7 +124,13 @@ public class Player extends Personnage{
     }
     @Override
     public void update(){
-        this.Right = isRight;
+        if(collisionWithObject(2)){
+            if(isJumping){isJumping = false;}
+            if(!gravity){gravity = true;}
+        }
+        if(collisionWithObject(1) || collisionWithObject(3)){
+            if(isWalking){isWalking = false;}
+        }
         if(isWalking){walk(frequenceMarche);}
         if(isJumping){
             if(jumpTime == 0){jumpTime = System.nanoTime();}
@@ -155,5 +161,8 @@ public class Player extends Personnage{
     @Override
     public void increasePieceCount(){
         this.piecesCount ++;
+    }
+    public void jump2(){
+        translateY(-7);
     }
 }

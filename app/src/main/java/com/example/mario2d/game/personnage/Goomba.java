@@ -1,5 +1,7 @@
 package com.example.mario2d.game.personnage;
 
+import static com.example.mario2d.game.loop.GameActivity.player;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,6 +24,12 @@ public class Goomba extends Ennemy{
         deadCompteur = 0;
         graviteCompteur = 1;
         gravityConstant = 15;
+        life = 1;
+        isInvincible = false;
+        isResting = false;
+        isAlive = true;
+        isWalking = true;
+        setBitmaps();
     }
     @Override
     public void walk(int frequence){
@@ -63,12 +71,13 @@ public class Goomba extends Ennemy{
     public void dead() {
         isInvincible = false;
         isResting = false;
+        isWalking = false;
         isAlive = false;
         if(deadCompteur < 40){
             if(this.bitmap != dead) this.bitmap = dead;
+            deadCompteur ++;
         }
         else setActivated(false);
-        deadCompteur ++;
     }
     @Override
     public void setBitmaps(){
@@ -86,14 +95,39 @@ public class Goomba extends Ennemy{
         dead();
     }
     @Override
-    public void update(){
-        if(activated){
-            if(isResting){rest();}
-            else if(isInvincible){invincible();}
-            else if(isAlive){walk(frequenceMarche);}
-            else{dead();}
+    public void invincible(){ dead(); }
+    @Override
+    public void decreaseLife(){
+        life --;
+        if(life <= 0){
+            dead();
         }
     }
     @Override
-    public void invincible(){ dead(); }
+    public void update(){
+        if(activated){
+            boolean[] tab = player.detectCollision(this);
+            if(tab[0]){
+                dead();
+                player.jump2();
+                player.rest();
+            }
+            else if(tab[1] || tab[2] || tab[3]){
+                if(player.getInvincible()){
+                    dead();
+                }
+                else{
+                    if(!player.getResting()){
+                        player.decreaseLife();
+                        player.rest();
+                    }
+                }
+            }
+            if(collisionWithObject(1) || collisionWithObject(3)){reverseDirection();}
+            if(isResting){rest();}
+            else if(isInvincible){invincible();}
+            else if(isWalking){walk(frequenceMarche);}
+            else{dead();}
+        }
+    }
 }

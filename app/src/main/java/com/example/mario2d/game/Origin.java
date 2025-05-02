@@ -40,9 +40,11 @@ public abstract class Origin {
         this.context = context;
         this.activated = true;
         this.initSpriteBank();
-        this.initX = x; this.initY = y;
-        this.initWidth = width; this.initHeight = height;
-        setBitmaps();
+        this.initX = x;
+        this.initY = y;
+        this.initWidth = width;
+        this.initHeight = height;
+        //setBitmaps();
     }
     /**
      * @param x
@@ -214,6 +216,15 @@ public abstract class Origin {
         spriteBank.put("skelerex_demi_mort_gauche", R.drawable.skelerex_demi_mort_gauche);
         spriteBank.put("skelerex_mort_droite", R.drawable.skelerex_mort_droite);
         spriteBank.put("skelerex_mort_gauche", R.drawable.skelerex_mort_gauche);
+
+        spriteBank.put("plante_pirhana_1", R.drawable.plante_pirhana_1);
+        spriteBank.put("plante_pirhana_2", R.drawable.plante_pirhana_2);
+        spriteBank.put("longreenpipe", R.drawable.longreenpipe);
+
+        spriteBank.put("window", R.drawable.window);
+        spriteBank.put("pillier_pierre", R.drawable.pillier_pierre);
+        spriteBank.put("greybrick2", R.drawable.greybrick2);
+        spriteBank.put("platforme", R.drawable.platforme);
 
     }
     public void translateX(int dx){this.setX(this.getX()+dx);}

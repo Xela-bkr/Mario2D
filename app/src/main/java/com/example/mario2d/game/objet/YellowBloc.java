@@ -1,11 +1,19 @@
 package com.example.mario2d.game.objet;
 
+import static com.example.mario2d.game.loop.GameActivity.etoiles;
+import static com.example.mario2d.game.loop.GameActivity.player;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.example.mario2d.game.loop.GameActivity;
+import com.example.mario2d.game.personnage.Personnage;
+
 public class YellowBloc extends Objet{
-    private Item item;
+    private Champignon champi;
+    private Piece piece;
+    private Etoile etoile;
     private boolean hasBeenUsed;
     private int compteurAnimation, frequenceAnimation;
     private Bitmap bloc,bloc1, bloc2, staticBloc;
@@ -17,21 +25,38 @@ public class YellowBloc extends Objet{
         setBitmaps();
     }
     public boolean getUsedState(){return this.hasBeenUsed;}
-    public Item getItem(){return this.item;}
+    public Champignon getChampi(){return this.champi;}
     public void setUsed(boolean u){this.hasBeenUsed = u;}
-    public void setItem(Item item){this.item = item;}
-    public void slideItem(int dx){item.translateY(dx);}
-    public void setToStaticBloc(String blocKey){
-        this.hasBeenUsed = true;
-        this.setBitmap(blocKey);
-    }
+
+    public void setChampi(Item item){this.champi = champi;}
+
     public void update(){
+
+        boolean[] tab = player.detectCollision(this);
+
+        if(tab[0]){player.recalibrerY(this);}
+        else if(tab[2]){
+            player.setY(getY()+getHeight());
+            hasBeenUsed = true;
+            if(player.getJumping()){player.setJumping(false);}
+        }
+
         if(!hasBeenUsed){animer();}
         else{
             if(this.bitmap != staticBloc){this.bitmap = staticBloc;}
-            if(item.getInMotion() && item.getY() > getY() - getWidth()){item.translateY(-2);}
-            else if(!item.getIsCollected() && item.getActivated()){item.setIsPickabe(true);}
-            if(item.getPickabe() && !item.getPicked()){item.animer();}
+            if(champi!=null){
+                champi.setActivated(true);
+                champi = null;
+            }
+            if(piece!=null){
+                piece.setActivated(true);
+                piece.setIsTaken(true);
+                piece = null;
+            }
+            if(etoile != null){
+                etoile.setActivated(true);
+                etoile = null;
+            }
         }
     }
     @Override
@@ -61,5 +86,25 @@ public class YellowBloc extends Objet{
 
         Bitmap b4 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get("blocvide"));
         this.staticBloc = Bitmap.createScaledBitmap(b4, getWidth(), getHeight(), true);
+    }
+
+    public Piece getPiece() {
+        return piece;
+    }
+
+    public void setPiece(Piece piece) {
+        this.piece = piece;
+    }
+
+    public void setChampi(Champignon champi) {
+        this.champi = champi;
+    }
+
+    public Etoile getEtoile() {
+        return etoile;
+    }
+
+    public void setEtoile(Etoile etoile) {
+        this.etoile = etoile;
     }
 }
