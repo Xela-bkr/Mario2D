@@ -34,8 +34,8 @@ public class Etoile extends Item{
             else if(isPickable){
                 boolean[] tab = player.detectCollision(this);
                 if(tab[0] || tab[1] || tab[2] || tab[3]){
-                    player.setInvincibleCompteur(1000);
-                    player.setInvincible(true);
+                    player.setInvincibleCompteur(700);
+                    player.invincible();
                     isPickable = false;
                     activated = false;
                 }

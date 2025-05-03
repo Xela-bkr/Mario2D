@@ -7,7 +7,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 
+import com.example.mario2d.R;
 import com.example.mario2d.game.loop.GameActivity;
+import com.example.mario2d.tool.Audio;
 
 public class Piece extends Item{
     private boolean isTaken;

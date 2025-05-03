@@ -6,6 +6,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.example.mario2d.R;
+import com.example.mario2d.tool.Audio;
+
 public class Champignon extends Item{
     private int compteur, compteurPerime;
     private boolean isRight;
@@ -41,6 +44,7 @@ public class Champignon extends Item{
     }
     @Override
     public void transition(){
+        //Audio.playSound(context, R.raw.powerup_appears);
         gravity = false;
         isPickable = false;
         if(getY() > initY - getHeight()*2 ){
@@ -54,11 +58,14 @@ public class Champignon extends Item{
     @Override
     public void update(){
         if(activated){
-            if(!isPickable){transition();}
+            if(!isPickable){
+                transition();
+            }
             else {
                 boolean[] tab = player.detectCollision(this);
                 if(tab[0] || tab[1] || tab[2] || tab[3]){
                     if(!isPicked){
+                        Audio.playSound(context, R.raw.powerup);
                         player.increaseLife();
                     }
                     isPicked = true;

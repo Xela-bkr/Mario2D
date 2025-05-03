@@ -54,6 +54,7 @@ import com.example.mario2d.game.personnage.Personnage;
 import com.example.mario2d.game.personnage.Player;
 import com.example.mario2d.menu.MainActivity;
 import com.example.mario2d.tool.AbstractButton;
+import com.example.mario2d.tool.Audio;
 import com.example.mario2d.tool.Joystick;
 import android.os.Handler;
 import android.os.Looper;
@@ -83,6 +84,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public Joystick joystick;
     public  Player player;
     private GameLoop gameLoop;
+    private Audio theme;
     private int dx, joystickPointerId, jumpPointerId, menuPointerId, pausePointerId, retryPointerId, exitPointerId,
             displayWidth, displayHeight, LEVEL_SELECTED, gameCompteur;
     private Boolean leftHandMode, soundEffect, music, afficherMenuLateral;
@@ -157,6 +159,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         joystickPointerId = -1; jumpPointerId = -1; menuPointerId = -1; pausePointerId = -1;
         retryPointerId = -1; exitPointerId = -1;
+
+        int[] themes = {R.raw.theme1, R.raw.theme2, R.raw.theme3, R.raw.theme4, R.raw.theme5};
+        theme = new Audio(context, themes[LEVEL_SELECTED-1]);
+        themes = null;
+        theme.setLoop(true);
+        theme.play();
+
     }
     /**
      * Listener pour gérer les évènements tacliles
@@ -193,28 +202,27 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 if(insideMenuButton){
                     if(menuButton.getIsPressed()){
                         menuButton.setPressed(false);
-                        System.out.println("menuButton setting to false");
                     }
                     else{
                         menuButton.setPressed(true);
                         menuPointerId = pointerId;
-                        System.out.println("menuButton setting to true");
                     }
+                    Audio.playSound(getContext(), R.raw.pause);
                 }
                 if(insidePauseButton){
                     pauseButton.setPressed(true);
                     pausePointerId = pointerId;
-                    System.out.println("pauseButton setting to true");
+                    Audio.playSound(getContext(), R.raw.open_close);
                 }
                 if(insideRetryButton){
                     retryPointerId = pointerId;
                     retryButton.setPressed(true);
-                    System.out.println("retryButton setting to true");
+                    Audio.playSound(getContext(), R.raw.open_close);
                 }
                 if(insideExitButton){
                     exitPointerId = pointerId;
                     exitButton.setPressed(true);
-                    System.out.println("exitButton setting to true");
+                    Audio.playSound(getContext(), R.raw.open_close);
                 }
                 if(!joystickPressed && !menuButtonPressed && !insideMenuButton && !insideExitButton &&
                         !insidePauseButton && !insideRetryButton){
@@ -406,9 +414,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
      */
     public void update(){
         if(player.getX() + player.getWidth() >= castles.get(1).getX() - player.getWidth()*0.05){
+            if (theme.isRunning) theme.stop();
             win = true;
         }
         if(!player.getAlive()){
+            if (theme.isRunning) theme.stop();
             gameOver = true;
         }
         else{
@@ -785,6 +795,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public void gameOver(Canvas canvas, Paint paint){
         gameOver = true;
         if(gameCompteur <= 200) {
+            if(gameCompteur == 0){
+                Audio.playSound(getContext(), R.raw.mario_dead);
+            }
             player.dead();
 
             String texte = "Game Over";
@@ -807,6 +820,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         gameCompteur++;
     }
     private void quitter(){
+        if (theme.isRunning) { theme.stop(); }
         System.out.println("quitter function");
         Intent intent = new Intent(getContext(), MainActivity.class);
         gameLoop.setRunning(false);

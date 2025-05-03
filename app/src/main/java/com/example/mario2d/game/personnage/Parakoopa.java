@@ -7,6 +7,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.example.mario2d.R;
+import com.example.mario2d.tool.Audio;
+
 public class Parakoopa extends Koopa {
 
     private Bitmap up_droite, up_gauche, down_droite, down_gauche;
@@ -167,6 +170,7 @@ public class Parakoopa extends Koopa {
     @Override public void rest(){
         if(!isResting){
             if(!koopaMode){
+                Audio.playSound(context, R.raw.kick);
                 translateY(-getHeight());
                 koopaMode = true;
                 gravity =  true;

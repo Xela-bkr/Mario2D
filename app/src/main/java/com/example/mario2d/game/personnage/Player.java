@@ -5,11 +5,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import com.example.mario2d.R;
 import com.example.mario2d.game.objet.Item;
+import com.example.mario2d.tool.Audio;
 
 public class Player extends Personnage{
     private float agrCoeff = 1.86f;
     private int piecesCount;
+    private Audio star;
     private int initialWidth, initialHeight;
     private Bitmap arret_droite, arret_gauche, marche_droite, marche_gauche, saute_droite, saute_gauche, mort_droite, mort_gauche, victoire;
     public Player(Context context, String name, int x, int y, int width, int height) {
@@ -112,10 +115,25 @@ public class Player extends Personnage{
     @Override
     public void invincible(){
         if(this.invincibleCompteur > 0){
-            if(!this.isInvincible){setInvincible(true);}
+            if(!this.isInvincible)
+            {
+                setInvincible(true);
+                star = new Audio(context, R.raw.star);
+                star.setLoop(true);
+                star.play();
+            }
+            /*if(star == null){
+                star = new Audio(context, R.raw.staritem);
+                star.setLoop(true);
+            }*/
+
             invincibleCompteur --;
         }
         else{
+            if(star != null)
+            {
+                star.stop();
+            }
             this.setInvincible(false);
         }
     }
@@ -170,7 +188,9 @@ public class Player extends Personnage{
         }
     }
     @Override
-    public void increasePieceCount(){
+    public void increasePieceCount()
+    {
+        Audio.playSound(context, R.raw.coin_3);
         this.piecesCount ++;
     }
     public void jump2(){

@@ -6,8 +6,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.example.mario2d.R;
 import com.example.mario2d.game.loop.GameActivity;
 import com.example.mario2d.game.loop.GameView;
+import com.example.mario2d.tool.Audio;
 
 public class Boo extends Ennemy{
     private Bitmap arret_droite, arret_gauche, cache_droite, cache_gauche, brick;
@@ -58,6 +60,7 @@ public class Boo extends Ennemy{
             else if(tab[1] || tab[2] || tab[3]){
                 System.out.println("boo cote");
                 if(!player.isResting && !player.isInvincible){
+                    Audio.playSound(context, R.raw.boo_02);
                     player.decreaseLife();
                     player.rest();
                 }

@@ -6,6 +6,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.example.mario2d.R;
+import com.example.mario2d.tool.Audio;
+
 public class Goomba extends Ennemy{
     /**
      * Constructor
@@ -108,6 +111,7 @@ public class Goomba extends Ennemy{
         if(activated){
             boolean[] tab = player.detectCollision(this);
             if(tab[0]){
+                Audio.playSound(context, R.raw.kick_2);
                 dead();
                 player.jump2();
                 player.rest();

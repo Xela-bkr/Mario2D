@@ -7,13 +7,16 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.example.mario2d.R;
 import com.example.mario2d.game.loop.GameActivity;
+import com.example.mario2d.tool.Audio;
 
 import java.util.Arrays;
 
 public class Koopa extends Ennemy {
     protected Bitmap arret_droite, arret_gauche, marche_droite, marche_gauche, carapace_face, rotate_1, rotate_2, rotate_3;
     protected int frequenceRotation, compteurRotation;
+    protected Audio invinvibleAudio;
     public Koopa(Context context, String name, int x, int y, int width, int height) {
         super(context, name, x, y, width, height);
         setBitmaps();
@@ -35,6 +38,9 @@ public class Koopa extends Ennemy {
         gravityConstant = 15;
         this.setDeadWidth(width/2);
         this.setDeadHeight(height/2);
+
+        invinvibleAudio = new Audio(context, R.raw.spin_jump);
+        invinvibleAudio.setLoop(true);
     }
     public void setBitmaps(){
         Bitmap b1 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_arret_droite"));
@@ -170,7 +176,11 @@ public class Koopa extends Ennemy {
     }
     @Override
     public void invincible(){
-        isInvincible = true;
+        if(!isInvincible)
+        {
+            isInvincible = true;
+            invinvibleAudio.play();
+        }
         isResting = false;
         if(invincibleCompteur < 300){
             if(compteurRotation < frequenceRotation) this.bitmap = rotate_1;
@@ -187,6 +197,7 @@ public class Koopa extends Ennemy {
             }
         }
         else{
+            invinvibleAudio.stop();
             setInvincibleCompteur(0);
             dead();
         }
@@ -214,6 +225,7 @@ public class Koopa extends Ennemy {
                     player.jump();
                 }
                 if(!isResting && !isInvincible){
+                    Audio.playSound(context, R.raw.kick_2);
                     rest();
                     player.rest();
                     player.setJumping(true);
@@ -225,6 +237,7 @@ public class Koopa extends Ennemy {
             }
             if(tab[1] || tab[2] || tab[3]){
                 if(player.getInvincible()){
+                    Audio.playSound(context, R.raw.kick);
                     dead();
                 }
                 else if(isResting){
@@ -244,7 +257,11 @@ public class Koopa extends Ennemy {
             for(Ennemy en : ennemies){
                 boolean tab1[] = detectCollision(en);
                 if(tab1[0] || tab1[1] || tab1[2] || tab1[3]){
-                    if(isInvincible && !en.getInvincible()){en.dead();}
+                    if(isInvincible && !en.getInvincible())
+                    {
+                        Audio.playSound(context, R.raw.kick_2);
+                        en.dead();
+                    }
                 }
             }
         }

@@ -7,8 +7,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.example.mario2d.R;
 import com.example.mario2d.game.loop.GameActivity;
 import com.example.mario2d.game.personnage.Personnage;
+import com.example.mario2d.tool.Audio;
 
 public class YellowBloc extends Objet{
     private Champignon champi;
@@ -45,6 +47,7 @@ public class YellowBloc extends Objet{
         else{
             if(this.bitmap != staticBloc){this.bitmap = staticBloc;}
             if(champi!=null){
+                Audio.playSound(context, R.raw.powerup_appears);
                 champi.setActivated(true);
                 champi = null;
             }
@@ -54,6 +57,7 @@ public class YellowBloc extends Objet{
                 piece = null;
             }
             if(etoile != null){
+                Audio.playSound(context, R.raw.powerup_appears);
                 etoile.setActivated(true);
                 etoile = null;
             }
