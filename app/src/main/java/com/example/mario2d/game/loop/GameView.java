@@ -405,7 +405,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
      * Appelé par le gameLoop à chaque loop.
      */
     public void update(){
-        if(player.getX() >= castles.get(1).getX()){
+        if(player.getX() + player.getWidth() >= castles.get(1).getX() - player.getWidth()*0.05){
             win = true;
         }
         if(!player.getAlive()){
