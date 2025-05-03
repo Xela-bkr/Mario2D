@@ -1,0 +1,17 @@
+{
+    "Niveau1" : [
+        {"piece" : 0, "point" : 0, "temps" : 0}
+    ],
+    "Niveau2" : [
+        {"piece" : 0, "point" : 0, "temps" : 0}
+    ], 
+    "Niveau3" : [
+        {"piece" : 0, "point" : 0, "temps" : 0}
+    ], 
+    "Niveau4" : [
+        {"piece" : 0, "point" : 0, "temps" : 0}
+    ], 
+    "Niveau5" : [
+        {"piece" : 0, "point" : 0, "temps" : 0}
+    ]
+}

@@ -125,6 +125,9 @@ public abstract class Origin {
         spriteBank.put("mario_marche_gauche", R.drawable.mario_marche_gauche);
         spriteBank.put("mario_saute_droite", R.drawable.mario_saute_droite);
         spriteBank.put("mario_saute_gauche", R.drawable.mario_saute_gauche);
+        spriteBank.put("mario_mort_gauche", R.drawable.mario_mort_gauche);
+        spriteBank.put("mario_mort_droite", R.drawable.mario_mort_droite);
+        spriteBank.put("mario_victoire", R.drawable.mario_victoire);
 
         //Luigi
         //TODO Add dead luigi resource when time 'll come
@@ -134,6 +137,10 @@ public abstract class Origin {
         spriteBank.put("luigi_marche_gauche", R.drawable.luigi_marche_gauche);
         spriteBank.put("luigi_saute_droite", R.drawable.luigi_saute_droite);
         spriteBank.put("luigi_saute_gauche", R.drawable.luigi_saute_gauche);
+        spriteBank.put("luigi_mort_gauche", R.drawable.luigi_mort_gauche);
+        spriteBank.put("luigi_mort_droite", R.drawable.luigi_mort_droite);
+        spriteBank.put("luigi_victoire", R.drawable.luigi_victoire);
+
 
         //Items
         spriteBank.put("bloc", R.drawable.bloc);

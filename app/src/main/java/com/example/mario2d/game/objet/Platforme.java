@@ -11,12 +11,13 @@ import com.example.mario2d.game.personnage.Ennemy;
 public class Platforme extends Objet{
 
     private boolean movable, up;
-    private int Ylimit;
+    private int upperLimit, lowerLimit;
     public Platforme(Context context, String name, int x, int y, int width, int height) {
         super(context, name, x, y, width, height);
         movable = false;
         up = true;
-        Ylimit = initY;
+        lowerLimit = initY;
+        upperLimit = initY + getHeight();
     }
     @Override
     public void update(){
@@ -27,9 +28,9 @@ public class Platforme extends Objet{
                     en.addCollisionValue("objet", 0, true);
                     en.recalibrerY(this);
                 }
-                if(tab[1]){en.addCollisionValue("objet", 1, true);}
+                /*if(tab[1]){en.addCollisionValue("objet", 1, true);}
                 if(tab[2]){en.addCollisionValue("objet", 2, true);}
-                if(tab[3]){en.addCollisionValue("objet", 3, true);}
+                if(tab[3]){en.addCollisionValue("objet", 3, true);}*/
             }
         }
         if(movable){move();}
@@ -43,13 +44,15 @@ public class Platforme extends Objet{
     public void setMovable(boolean b){this.movable = b;}
     protected void move(){
         if(up){
-            if(getY() > Ylimit){translateY(-2);}
+            if(getY() > upperLimit){translateY(-2);}
             else{up = false;}
         }
         else{
-            if(getY() < initY){translateY(2);}
+            if(getY() < lowerLimit){translateY(2);}
             else{up = true;}
         }
     }
-    public void setYlimit(int l){this.Ylimit = l;}
+    public void setUpperLimit(int limit){this.upperLimit = limit;}
+    public void setLowerLimit(int limit){this.lowerLimit = limit;}
+    public void setUp(boolean up){this.up = up;}
 }

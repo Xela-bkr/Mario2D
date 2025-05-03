@@ -11,7 +11,7 @@ public class Player extends Personnage{
     private float agrCoeff = 1.86f;
     private int piecesCount;
     private int initialWidth, initialHeight;
-    private Bitmap arret_droite, arret_gauche, marche_droite, marche_gauche, saute_droite, saute_gauche, mort_droite, mort_gauche;
+    private Bitmap arret_droite, arret_gauche, marche_droite, marche_gauche, saute_droite, saute_gauche, mort_droite, mort_gauche, victoire;
     public Player(Context context, String name, int x, int y, int width, int height) {
         super(context, name, x, y, width, height);
         this.initialHeight = height; this.initialWidth = width;
@@ -32,7 +32,7 @@ public class Player extends Personnage{
     public void decreaseLife(){
         this.life --;
         isResting = true;
-        if (this.life == 1){
+        /*if (this.life == 1){
             int newWidth = getWidth() / 2;
             int newHeight = (int) (agrCoeff*newWidth);
             setWidth(newWidth);
@@ -47,7 +47,7 @@ public class Player extends Personnage{
                 if(isRight){this.bitmap = arret_droite;}
                 else{this.bitmap = arret_gauche;}
             }
-        }
+        }*/
         if(this.life == 0){dead();}
     }
     @Override
@@ -99,6 +99,15 @@ public class Player extends Personnage{
         Bitmap b6 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_saute_gauche"));
         this.saute_gauche = Bitmap.createScaledBitmap(b6, getWidth(), getHeight(), true);
 
+        Bitmap b7 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_mort_droite"));
+        this.mort_droite = Bitmap.createScaledBitmap(b7, getWidth(), getHeight(), true);
+
+        Bitmap b8 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_mort_gauche"));
+        this.mort_gauche = Bitmap.createScaledBitmap(b8, getWidth(), getHeight(), true);
+
+        Bitmap b9 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_victoire"));
+        victoire = Bitmap.createScaledBitmap(b9, getWidth(), getHeight(), true);
+
     }
     @Override
     public void invincible(){
@@ -115,6 +124,7 @@ public class Player extends Personnage{
         isResting = true;
         if(restCompteur < 100){
             if(!isResting) setResting(true);
+
         }
         else{
             restCompteur = 0;
@@ -124,6 +134,7 @@ public class Player extends Personnage{
     }
     @Override
     public void update(){
+
         if(collisionWithObject(2)){
             if(isJumping){isJumping = false;}
             if(!gravity){gravity = true;}
@@ -164,5 +175,20 @@ public class Player extends Personnage{
     }
     public void jump2(){
         translateY(-7);
+    }
+    @Override
+    public void dead(){
+        isAlive = false;
+        if(isRight){
+            if(this.bitmap != mort_droite){this.bitmap = mort_droite;}
+        }
+        else{
+            if(this.bitmap != mort_gauche){this.bitmap = mort_gauche;}
+        }
+    }
+    public void win(){
+        if(this.bitmap != victoire){
+            this.bitmap = victoire;
+        }
     }
 }

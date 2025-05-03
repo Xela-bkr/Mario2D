@@ -55,7 +55,22 @@ import com.example.mario2d.game.personnage.Player;
 import com.example.mario2d.menu.MainActivity;
 import com.example.mario2d.tool.AbstractButton;
 import com.example.mario2d.tool.Joystick;
+import android.os.Handler;
+import android.os.Looper;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -69,7 +84,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public  Player player;
     private GameLoop gameLoop;
     private int dx, joystickPointerId, jumpPointerId, menuPointerId, pausePointerId, retryPointerId, exitPointerId,
-            displayWidth, displayHeight, LEVEL_SELECTED;
+            displayWidth, displayHeight, LEVEL_SELECTED, gameCompteur;
     private Boolean leftHandMode, soundEffect, music, afficherMenuLateral;
     private AbstractButton menuButton, pauseButton, retryButton, exitButton;
 
@@ -102,6 +117,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         this.leftHandMode = leftHandMode;
         this.LEVEL_SELECTED = LEVEL_SELECTED;
         this.afficherMenuLateral = false;
+        this.gameOver = false;
+        this.win = false;
+        gameCompteur = 0;
 
         this.player = GameActivity.player;
 
@@ -111,9 +129,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         /**
          * valeurs par défaut des dimentions du joystick
          */
-        float joystickExternalRadius = (float) ((displayWidth*0.045));
+        float joystickExternalRadius = (float) ((displayWidth*0.05));
         float joystickInternalRadius = (float)(0.7*joystickExternalRadius);
-        float joystickCenterX = 300;
+        float joystickCenterX = (float) (displayWidth*0.1);
         float joystickCenterY = displayHeight - joystickExternalRadius*2;
 
         /**
@@ -121,10 +139,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
          * @see #leftHandMode
          */
         if(leftHandMode){
-            joystickCenterX = (float) ( displayWidth - joystickExternalRadius - displayWidth*0.05);
+            joystickCenterX = (float) ( displayWidth - joystickExternalRadius - displayWidth*0.1);
         }
         else{
-            joystickCenterX = (float) (joystickExternalRadius + displayWidth*0.05);
+            joystickCenterX = (float) (joystickExternalRadius + displayWidth*0.1);
         }
         this.joystick = new Joystick(joystickCenterX, joystickCenterY, joystickInternalRadius, joystickExternalRadius);
         setFocusable(true);
@@ -147,6 +165,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
      */
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event){
+
+        if(gameOver || win){return true;}
 
         int pointerIndex = event.getActionIndex();
         int pointerId = event.getPointerId(pointerIndex);
@@ -230,12 +250,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 }
                 if(pointerId == menuPointerId){
                     if(menuButton.getIsPressed()){
-                        if(!this.gameLoop.isRunning()){
-                            gameLoop.start();
+                        if(gameLoop.isRunning()){
+                            gameLoop.stop();
                         }
-                    }
-                    else{
-                        gameLoop.stop();
+                        else{
+                            gameLoop.start();
+                            menuButton.setPressed(false);
+                        }
                     }
                     menuPointerId = -1;
                 }
@@ -257,12 +278,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 }
                 if(pointerId == exitPointerId){
                     if(exitButton.getIsPressed()){
-                        gameLoop.stop();
-                        Intent intent = new Intent(getContext(), MainActivity.class);
-                        getContext().startActivity(intent);
-                        gameLoop = null;
-                        System.gc();
-                        onFinishInflate();
+                        quitter();
                     }
                     exitPointerId = -1;
                 }
@@ -373,6 +389,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 menuButton.draw(canvas);
                 afficherScore(canvas, paint);
                 drawLife(canvas, paint);
+                if(gameOver){
+                    gameOver(canvas, paint);
+                }
+                if(win){
+                    win();
+                }
             }
         }
         catch (Exception e) { e.printStackTrace(); }
@@ -383,23 +405,35 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
      * Appelé par le gameLoop à chaque loop.
      */
     public void update(){
-        joystick.update();
-        player.pushPositions(new int[]{player.getX(), player.getY()});
-        updateCollision(this.player);
-        player.setWalking(false);
-        if(joystick.getIsPressed()){
-            boolean move = false;
-            player.setRight(joystick.orientedInRight());
-            if(player.getRight() && !player.collisionWithObject(3)){move = true;}
-            if(!player.getRight() && !player.collisionWithObject(1)){move = true;}
-
-            player.setWalking(move);
-            if(player.getWalking()){moveWorld();}
+        if(player.getX() >= castles.get(1).getX()){
+            win = true;
         }
-        player.update();
-        updateEnnemy();
-        updateAnimations();
-        gravity();
+        if(!player.getAlive()){
+            gameOver = true;
+        }
+        else{
+            if(win){
+                win();
+                return;
+            }
+            joystick.update();
+            player.pushPositions(new int[]{player.getX(), player.getY()});
+            updateCollision(this.player);
+            player.setWalking(false);
+            if(joystick.getIsPressed()){
+                boolean move = false;
+                player.setRight(joystick.orientedInRight());
+                if(player.getRight() && !player.collisionWithObject(3)){move = true;}
+                if(!player.getRight() && !player.collisionWithObject(1)){move = true;}
+
+                player.setWalking(move);
+                if(player.getWalking()){moveWorld();}
+            }
+            player.update();
+            updateEnnemy();
+            updateAnimations();
+            gravity();
+        }
     }
     /**
      * Défini la constante de dérivation de tous les éléments du jeu
@@ -747,5 +781,115 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         paint.setTypeface(font);
 
         canvas.drawText(life, StringX, StringY, paint);
+    }
+    public void gameOver(Canvas canvas, Paint paint){
+        gameOver = true;
+        if(gameCompteur <= 200) {
+            player.dead();
+
+            String texte = "Game Over";
+            paint.setTextSize(200);
+            paint.setColor(Color.BLACK);
+
+            Typeface font = ResourcesCompat.getFont(this.getContext(), R.font.title_font);
+            paint.setTypeface(font);
+
+            float textWidth = paint.measureText(texte);
+            float x = (displayWidth - textWidth) / 2;
+            Paint.FontMetrics fontMetrics = paint.getFontMetrics();
+            float y = (displayHeight - (fontMetrics.ascent + fontMetrics.descent)) / 2;
+            canvas.drawText(texte, x, y, paint);
+        }
+        else{
+            System.out.println("quitter");
+            new Handler(Looper.getMainLooper()).post(() -> quitter());
+        }
+        gameCompteur++;
+    }
+    private void quitter(){
+        System.out.println("quitter function");
+        Intent intent = new Intent(getContext(), MainActivity.class);
+        gameLoop.setRunning(false);
+        try {
+            gameLoop.getThread().join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        getContext().startActivity(intent);
+    }
+    private void win(){
+        if(gameCompteur == 0){
+            writeData();
+            gameCompteur ++;
+        }
+        else if(gameCompteur < 200){
+            player.win();
+            gameCompteur++;
+        }
+        else{
+            new Handler(Looper.getMainLooper()).post(() -> quitter());
+        }
+    }
+    private void writeData(){
+        try {
+            String filename = String.format("data.json", LEVEL_SELECTED);
+            File file = new File(getContext().getFilesDir(), filename);
+
+            if (!file.exists()) {
+                JSONObject defaultData = new JSONObject();
+                JSONArray levelArray = new JSONArray();
+                JSONObject initialEntry = new JSONObject();
+                initialEntry.put("piece", 0);
+                initialEntry.put("point", 0);
+                initialEntry.put("temps", 0);
+                levelArray.put(initialEntry);
+
+                for(int i = 1; i<6; i++){
+                    defaultData.put(String.format("Niveau%d", i), levelArray);
+                }
+
+                FileOutputStream fos = getContext().openFileOutput(filename, Context.MODE_PRIVATE);
+                OutputStreamWriter writer = new OutputStreamWriter(fos);
+                writer.write(defaultData.toString(4));
+                writer.close();
+            }
+
+            FileInputStream fileInputStream = getContext().openFileInput("data.json");
+            InputStreamReader inputStremReader = new InputStreamReader(fileInputStream);
+            BufferedReader bufferedReader = new BufferedReader(inputStremReader);
+
+            StringBuilder stringBuilder = new StringBuilder();
+            String line;
+            while((line = bufferedReader.readLine()) != null){
+                stringBuilder.append(line);
+            }
+            bufferedReader.close();
+
+            String data = stringBuilder.toString();
+
+            JSONObject jsonObject = new JSONObject(data);
+
+            JSONObject newData = new JSONObject();
+            newData.put("piece", player.getPiecesCount());
+            newData.put("point", 0);
+            newData.put("temps", 0);
+
+            String key = String.format("Niveau%d", LEVEL_SELECTED);
+            JSONArray jsonArray = jsonObject.getJSONArray(key);
+            jsonArray.put(newData);
+            jsonObject.put(key, jsonArray);
+
+            FileOutputStream fileOutputStream = getContext().openFileOutput("data.json", Context.MODE_PRIVATE);
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
+            outputStreamWriter.write(jsonObject.toString(4));
+            outputStreamWriter.close();
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

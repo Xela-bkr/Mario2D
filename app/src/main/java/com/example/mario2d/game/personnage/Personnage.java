@@ -286,6 +286,7 @@ public abstract class Personnage extends Origin{
             collisionMatrix.put("pipe", tab);
             collisionMatrix.put("piece", tab);
             collisionMatrix.put("item", tab);
+            collisionMatrix.put("objet", tab);
         }
         else{
             for(String key : collisionMatrix.keySet()){collisionMatrix.put(key, tab);}

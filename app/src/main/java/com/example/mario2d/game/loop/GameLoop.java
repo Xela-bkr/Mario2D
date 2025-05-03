@@ -72,5 +72,7 @@ public class GameLoop implements Runnable{
     public void render(){gameView.render();}
 
     public boolean isRunning(){return this.running;}
+    public void setRunning(boolean running){this.running = running;}
+    public Thread getThread(){return this.thread;}
 
 }
