@@ -333,24 +333,28 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
      */
     public void moveWorld(){
         if(joystick.getIsPressed()){
-            setDx(joystick.orientedInRight() ? -8 : 8);
+            dx = 0;
 
             if (joystick.orientedInRight()) {
+                dx = -8;
                 if(castles.get(1).getX() <= displayWidth - castles.get(1).getWidth()) {
-                    player.translateX(dx);
+                    player.translateX(-dx);
+                    return;
                 }
                 if(player.getX() < displayWidth/2 - player.getWidth()/2 - dx/2) {
-                    player.translateX(dx);
+                    player.translateX(-dx);
+                    return;
                 }
             }
             if (!joystick.orientedInRight()) {
-                if(castles.get(0).getX() <= 0) {
-                    player.translateX(dx);
+                dx = 8;
+                if(castles.get(0).getX() >= 0) {
+                    player.translateX(-dx);
+                    return;
                 }
-                else if(player.getX() > displayWidth/2 + player.getWidth()/2 + dx) {
-                    player.translateX(dx);
-                } else {
-
+                if(player.getX() > displayWidth/2 + player.getWidth()/2 + dx) {
+                    player.translateX(-dx);
+                    return;
                 }
             }
             for(Objet obj : objets){obj.translateX(dx);}
