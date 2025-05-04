@@ -41,28 +41,28 @@ public class Parakoopa extends Koopa {
         System.out.println(key);
 
         Bitmap b1 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(key+"_arret_droite"));
-        this.arret_droite= Bitmap.createScaledBitmap(b1, getWidth(), getHeight(), true);
+        this.arret_droite= Bitmap.createScaledBitmap(b1, (int) (getWidth()*0.87), getHeight(), true);
 
         Bitmap b2 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(key+"_arret_gauche"));
-        this.arret_gauche= Bitmap.createScaledBitmap(b2, getWidth(), getHeight(), true);
+        this.arret_gauche= Bitmap.createScaledBitmap(b2, (int) (getWidth()*0.87), getHeight(), true);
 
         Bitmap b3 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(key+"_marche_droite"));
-        this.marche_droite = Bitmap.createScaledBitmap(b3, getWidth(), getHeight(), true);
+        this.marche_droite = Bitmap.createScaledBitmap(b3, (int) (getWidth()*0.87), getHeight(), true);
 
         Bitmap b4 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(key+"_marche_gauche"));
-        this.marche_gauche = Bitmap.createScaledBitmap(b4, getWidth(), getHeight(), true);
+        this.marche_gauche = Bitmap.createScaledBitmap(b4, (int) (getWidth()*0.87), getHeight(), true);
 
         Bitmap b5 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(key+"_carapace_face"));
-        this.carapace_face = Bitmap.createScaledBitmap(b5, getWidth()/2, getHeight()/2, true);
+        this.carapace_face = Bitmap.createScaledBitmap(b5, (int) (getWidth()*0.87), getHeight()/2, true);
 
         Bitmap b6 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(key+"_carapace_tourne_1"));
-        this.rotate_1 = Bitmap.createScaledBitmap(b6, getWidth()/2, getHeight()/2, true);
+        this.rotate_1 = Bitmap.createScaledBitmap(b6, (int) (getWidth()*0.87), getHeight()/2, true);
 
         Bitmap b7 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(key+"_carapace_tourne_2"));
-        this.rotate_2 = Bitmap.createScaledBitmap(b7, getWidth()/2, getHeight()/2, true);
+        this.rotate_2 = Bitmap.createScaledBitmap(b7, (int) (getWidth()*0.87), getHeight()/2, true);
 
         Bitmap b8 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(key+"_carapace_tourne_3"));
-        this.rotate_3 = Bitmap.createScaledBitmap(b8, getWidth()/2, getHeight()/2, true);
+        this.rotate_3 = Bitmap.createScaledBitmap(b8, (int) (getWidth()*0.87), getHeight()/2, true);
 
         Bitmap b9 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_down_droite"));
         this.down_droite = Bitmap.createScaledBitmap(b9, getWidth(), getHeight(), true);
@@ -107,47 +107,16 @@ public class Parakoopa extends Koopa {
         deltaY += 4;
     }
     @Override public void update() {
-        if(activated){
-            boolean[] tab = player.detectCollision(this);
-            if(tab[0]){
-                if(isResting){
-                    isResting = false;
-                    isWalking = false;
-                    isInvincible = true;
-                    player.rest();
-                    player.jump2();
-                }
-                if(!isResting && !isInvincible && !koopaMode){
-                    rest();
-                    player.rest();
-                    player.jump2();
-                }
-                if(!isResting && !isInvincible && koopaMode){
-                    rest();
-                    player.rest();
-                    player.jump2();
-                }
-                if(isInvincible){
-                    player.recalibrerY(this);
-                }
+        if (activated)
+        {
+            if (collisionWithObject(1) || collisionWithObject(3))
+            {
+                reverseDirection();
             }
-            if(tab[1] || tab[2] || tab[3]){
-                if(player.getInvincible()){
-                    dead();
-                }
-                else{
-                    if(!player.getResting()){
-                        player.decreaseLife();
-                        player.rest();
-                    }
-                }
-            }
-            if(collisionWithObject(1) || collisionWithObject(3)){reverseDirection();}
             if (!koopaMode) {
                 fly();
             } else {
                 if (isResting) {
-                    gravity = true;
                     rest();
                 } else if (isInvincible) {
                     gravity = true;
@@ -160,43 +129,51 @@ public class Parakoopa extends Koopa {
                 }
             }
         }
-        for(Ennemy en : ennemies){
-            boolean tab[] = detectCollision(en);
+        for(Ennemy en : ennemies)
+        {
+            boolean[] tab = detectCollision(en);
             if(tab[0] || tab[1] || tab[2] || tab[3]){
-                if(isInvincible && !en.getInvincible()){en.dead();}
+                if(isInvincible && !en.getInvincible() && en.getAlive())
+                {
+                    Audio.playSound(context, R.raw.kick_2);
+                    en.dead();
+                }
             }
         }
     }
-    @Override public void rest(){
-        if(!isResting){
+    @Override public void rest()
+    {
+        if (!isResting)
+        {
             if(!koopaMode){
-                Audio.playSound(context, R.raw.kick);
-                translateY(-getHeight());
-                koopaMode = true;
-                gravity =  true;
+                setKoopaMode();
                 isResting = false;
             }
-            else {
-                if (!(getHeight() < initHeight) && !(getWidth() < initWidth)) {
-                    int height = getHeight();
-                    setHeight(getDeadHeight());
-                    setWidth(getDeadWidth());
-                    setY(getY() + getDeadHeight());
-                }
+            else
+            {
+                resize();
+                gravity = true;
                 this.bitmap = carapace_face;
                 isResting = true;
-                isInvincible = false;
-                restCompteur = 0;
             }
         }
         else if(restCompteur >= 100){
             restCompteur = 0;
             isResting = false;
             setHeight(initHeight);
-            setWidth(initWidth - 30);
+            setWidth((int) (getWidth()*0.87));
         }
         else{
             restCompteur++;
         }
+    }
+    private void setKoopaMode(){
+        koopaMode = true;
+        gravity =  true;
+        setWidth((int) (getWidth()*0.87));
+    }
+    private void resize(){
+        setWidth(getWidth()/2);
+        setHeight(getHeight()/2);
     }
 }

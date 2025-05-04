@@ -18,8 +18,10 @@ public class Ennemy extends Personnage {
      * @param height
      */
     private int deadWidth, deadHeight;
+    protected boolean topIsHurting;
     public Ennemy(Context context, String name, int x, int y, int width, int height) {
         super(context, name, x, y, width, height);
+        topIsHurting = false;
     }
 
     public int getDeadWidth() {
@@ -62,6 +64,14 @@ public class Ennemy extends Personnage {
             else if(isWalking){walk(frequenceMarche);}
             else{dead();}
         }
+    }
+    public void setTopIsHurting(boolean t)
+    {
+        this.topIsHurting = t;
+    }
+    public boolean getTopIsHurting()
+    {
+        return this.topIsHurting;
     }
 
 }

@@ -16,9 +16,10 @@ public class Spiny extends Ennemy{
     public Spiny(Context context, String name, int x, int y, int width, int height) {
         super(context, name, x, y, width, height);
         isWalking = true;
-        isInvincible = true;
+        isInvincible = false;
         gravity = true;
         gravityConstant = 8;
+        topIsHurting = true;
         setBitmaps();
     }
     @Override
@@ -84,5 +85,10 @@ public class Spiny extends Ennemy{
         }
         else{compteurMarche = 0;}
         compteurMarche ++;
+    }
+    @Override
+    public void dead() {
+        setAlive(false);
+        setActivated(false);
     }
 }

@@ -16,6 +16,7 @@ public class YellowBloc extends Objet{
     private Champignon champi;
     private Piece piece;
     private Etoile etoile;
+    private FleurFeu fleur;
     private boolean hasBeenUsed;
     private int compteurAnimation, frequenceAnimation;
     private Bitmap bloc,bloc1, bloc2, staticBloc;
@@ -60,6 +61,10 @@ public class YellowBloc extends Objet{
                 Audio.playSound(context, R.raw.powerup_appears);
                 etoile.setActivated(true);
                 etoile = null;
+            }
+            if(fleur != null) {
+                fleur.setActivated(true);
+                fleur = null;
             }
         }
     }
@@ -110,5 +115,8 @@ public class YellowBloc extends Objet{
 
     public void setEtoile(Etoile etoile) {
         this.etoile = etoile;
+    }
+    public void setFleurFeu(FleurFeu fleur) {
+        this.fleur = fleur;
     }
 }

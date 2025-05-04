@@ -19,7 +19,7 @@ public class Boo extends Ennemy{
         super(context, name, x, y, width, height);
         isWalking = false;
         isResting = true;
-        isInvincible = true;
+        isInvincible = false;
         isRecalibrable = false;
         isRight = true;
         gravity = false;
@@ -47,32 +47,12 @@ public class Boo extends Ennemy{
     }
     @Override
     public void update(){
-        if(activated){
-            boolean[] tab = player.detectCollision(this, (int) (getHeight()*0.04), (int) (-getWidth()*0.05));
-            if(tab[0]){
-                System.out.println("boo en haut");
-                if(!isResting){
-                    dead();
-                }
-                player.jump2();
-                player.recalibrerY(this);
-            }
-            else if(tab[1] || tab[2] || tab[3]){
-                System.out.println("boo cote");
-                if(!player.isResting && !player.isInvincible){
-                    Audio.playSound(context, R.raw.boo_02);
-                    player.decreaseLife();
-                    player.rest();
-                }
-                else if(player.isInvincible){
-                    dead();
-                }
-            }
-            if(isWalking){fly();}
+        if (activated)
+        {
             if(isResting){rest();}
+            if(isWalking){fly();}
             if(isInvincible){invincible();}
         }
-
     }
     public void fly(){
         gravity = false;
@@ -110,10 +90,13 @@ public class Boo extends Ennemy{
         }
     }
     @Override
-    public void invincible(){}
+    public void invincible() {}
     @Override
     public void rest(){
-        if(!isResting){dead();}
+        if (!isResting) {
+            dead();
+            return;
+        }
         if(restCompteur == 0){
             if(this.bitmap!=brick){this.bitmap = brick;}
         }

@@ -129,6 +129,18 @@ public abstract class Origin {
         spriteBank.put("mario_mort_droite", R.drawable.mario_mort_droite);
         spriteBank.put("mario_victoire", R.drawable.mario_victoire);
 
+        spriteBank.put("mario_feu_arret_droite", R.drawable.mario_feu_arret_droite);
+        spriteBank.put("mario_feu_arret_gauche", R.drawable.mario_feu_arret_gauche);
+        spriteBank.put("mario_feu_marche_droite", R.drawable.mario_feu_marche_droite);
+        spriteBank.put("mario_feu_marche_gauche", R.drawable.mario_feu_marche_gauche);
+        spriteBank.put("mario_feu_saute_droite", R.drawable.mario_feu_saute_droite);
+        spriteBank.put("mario_feu_saute_gauche", R.drawable.mario_feu_saute_gauche);
+        spriteBank.put("mario_feu_lance_droite_1", R.drawable.mario_feu_lance_droite_1);
+        spriteBank.put("mario_feu_lance_droite_2", R.drawable.mario_feu_lance_droite_2);
+        spriteBank.put("mario_feu_lance_gauche_1", R.drawable.mario_feu_lance_gauche_1);
+        spriteBank.put("mario_feu_lance_gauche_2", R.drawable.mario_feu_lance_gauche_2);
+        spriteBank.put("mario_feu_victoire", R.drawable.mario_feu_victoire);
+
         //Luigi
         //TODO Add dead luigi resource when time 'll come
         spriteBank.put("luigi_arret_droite", R.drawable.luigi_arret_droite);
@@ -141,6 +153,17 @@ public abstract class Origin {
         spriteBank.put("luigi_mort_droite", R.drawable.luigi_mort_droite);
         spriteBank.put("luigi_victoire", R.drawable.luigi_victoire);
 
+        spriteBank.put("luigi_feu_arret_droite", R.drawable.luigi_feu_arret_droite);
+        spriteBank.put("luigi_feu_arret_gauche", R.drawable.luigi_feu_arret_gauche);
+        spriteBank.put("luigi_feu_marche_droite", R.drawable.luigi_feu_marche_droite);
+        spriteBank.put("luigi_feu_marche_gauche", R.drawable.luigi_feu_marche_gauche);
+        spriteBank.put("luigi_feu_saute_droite", R.drawable.luigi_feu_saute_droite);
+        spriteBank.put("luigi_feu_saute_gauche", R.drawable.luigi_feu_saute_gauche);
+        spriteBank.put("luigi_feu_lance_droite_1", R.drawable.luigi_feu_lance_droite_1);
+        spriteBank.put("luigi_feu_lance_droite_2", R.drawable.luigi_feu_lance_droite_2);
+        spriteBank.put("luigi_feu_lance_gauche_1", R.drawable.luigi_feu_lance_gauche_1);
+        spriteBank.put("luigi_feu_lance_gauche_2", R.drawable.luigi_feu_lance_gauche_2);
+        spriteBank.put("luigi_feu_victoire", R.drawable.luigi_feu_victoire);
 
         //Items
         spriteBank.put("bloc", R.drawable.bloc);
@@ -232,6 +255,19 @@ public abstract class Origin {
         spriteBank.put("pillier_pierre", R.drawable.pillier_pierre);
         spriteBank.put("greybrick2", R.drawable.greybrick2);
         spriteBank.put("platforme", R.drawable.platforme);
+
+        spriteBank.put("podoboo_down_1", R.drawable.podoboo_down_1);
+        spriteBank.put("podoboo_down_2", R.drawable.podoboo_down_2);
+        spriteBank.put("podoboo_down_3", R.drawable.podoboo_down_3);
+        spriteBank.put("podoboo_up_1", R.drawable.podoboo_up_1);
+        spriteBank.put("podoboo_up_2", R.drawable.podoboo_up_2);
+        spriteBank.put("podoboo_up_3", R.drawable.podoboo_up_3);
+
+        spriteBank.put("boule_feu_1", R.drawable.boule_feu_1);
+        spriteBank.put("boule_feu_2", R.drawable.boule_feu_2);
+        spriteBank.put("boule_feu_3", R.drawable.boule_feu_3);
+
+        spriteBank.put("fleurfeu", R.drawable.fleurfeu);
 
     }
     public void translateX(int dx){this.setX(this.getX()+dx);}

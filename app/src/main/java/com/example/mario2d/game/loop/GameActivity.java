@@ -10,6 +10,7 @@ import com.example.mario2d.game.objet.BrownBloc;
 import com.example.mario2d.game.objet.Castle;
 import com.example.mario2d.game.objet.Champignon;
 import com.example.mario2d.game.objet.Etoile;
+import com.example.mario2d.game.objet.FleurFeu;
 import com.example.mario2d.game.objet.Objet;
 import com.example.mario2d.game.objet.Piece;
 import com.example.mario2d.game.objet.Pipe;
@@ -17,12 +18,14 @@ import com.example.mario2d.game.objet.Platforme;
 import com.example.mario2d.game.objet.YellowBloc;
 import com.example.mario2d.game.personnage.Boo;
 import com.example.mario2d.game.personnage.Ennemy;
+import com.example.mario2d.game.personnage.FireBowl;
 import com.example.mario2d.game.personnage.Goomba;
 import com.example.mario2d.game.personnage.Koopa;
 import com.example.mario2d.game.personnage.Parakoopa;
 import com.example.mario2d.game.personnage.Personnage;
 import com.example.mario2d.game.personnage.PlantePirhana;
 import com.example.mario2d.game.personnage.Player;
+import com.example.mario2d.game.personnage.Podoboo;
 import com.example.mario2d.game.personnage.Skelerex;
 import com.example.mario2d.game.personnage.Spiny;
 import com.example.mario2d.game.personnage.Thwomp;
@@ -33,7 +36,8 @@ public class GameActivity extends AppCompatActivity {
 
     private int displayWidth, displayHeight, CHARACTER_WIDTH, CHARACTER_HEIGHT, FLOOR_WIDTH, FLOOR_HEIGHT, FLOOR_RATE,
             CASTLE_WIDTH, CASTLE_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT, PIPE_WIDTH, PIPE_HEIGHT, LEVEL_SELECTED,
-            CHARACTER_SELECTED, PIECE_WIDTH, PIECE_HEIGHT, dx;
+            CHARACTER_SELECTED, PIECE_WIDTH, PIECE_HEIGHT;
+    public static int dx;
 
     private Boolean leftHandMode, soundEffect, music;
     public static ArrayList<Objet> objets = new ArrayList<Objet>();
@@ -44,7 +48,10 @@ public class GameActivity extends AppCompatActivity {
     public static ArrayList<Piece> pieces = new ArrayList<Piece>();
     public static ArrayList<Champignon> champis = new ArrayList<Champignon>();
     public static ArrayList<Etoile> etoiles = new ArrayList<Etoile>();
+    public static ArrayList<FleurFeu> fleursfeu = new ArrayList<FleurFeu>();
     public static ArrayList<Ennemy> ennemies = new ArrayList<Ennemy>();
+    public static ArrayList<Ennemy> waitingLine = new ArrayList<Ennemy>();
+    public static ArrayList<Ennemy> waitingLineForRemoving = new ArrayList<Ennemy>();
     public static ArrayList<Personnage> persos = new ArrayList<Personnage>();
     public static ArrayList<Platforme> platformes = new ArrayList<Platforme>();
     public static Player player;
@@ -74,6 +81,8 @@ public class GameActivity extends AppCompatActivity {
         castles.clear();
         etoiles.clear();
         platformes.clear();
+        waitingLine.clear();
+        fleursfeu.clear();
         setObjets();
         setContentView(new GameView(this, displayWidth, displayHeight,leftHandMode, LEVEL_SELECTED));
     }
@@ -234,7 +243,6 @@ public class GameActivity extends AppCompatActivity {
                 drawCastle("castle", 0);
                 drawCastle("castle", 400*dx );
                 drawLine("BrownBloc", "yellowbrick", 0, 400*dx, surface, FLOOR_WIDTH, FLOOR_HEIGHT, false);
-
                 //drawPyramid("BrownBloc", "goldenbloc", 100*dx, 10, displayHeight-FLOOR_HEIGHT-BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT);
                 drawKoopa("redkoopa", 60*dx, surface-8*BLOC_WIDTH , false, false);
                 //drawParakoopa("redparakoopa", 50*dx, (int) (surface-(displayWidth*0.03 - 1.7458) - dx), true);
@@ -261,6 +269,9 @@ public class GameActivity extends AppCompatActivity {
                 drawCastle("castle", 0);
                 drawCastle("castle", 400*dx );
                 drawLine("BrownBloc", "darkbrick", 0, 400*dx, surface, FLOOR_WIDTH, FLOOR_HEIGHT, false);
+
+                drawPodoboo("podoboo", 30*dx, surface - 9*dx, 3*dx, 3*dx);
+                drawBloc("bloc", 40*dx, surface - 4*BLOC_WIDTH, BLOC_WIDTH, BLOC_HEIGHT, 6);
 
                 return;
             case 5 :
@@ -488,6 +499,15 @@ public class GameActivity extends AppCompatActivity {
                 yellowBlocs.add(yb5);
                 etoiles.add(item5);
                 return;
+            case 6 :
+                YellowBloc yb6 = new YellowBloc(this, name, x, y, width, height);
+                int fleurWidth = (int) (width * 2/3);
+                int fleurHeight = fleurWidth;
+                FleurFeu fleur = new FleurFeu(this, "fleurfeu", x+(width-fleurWidth)/2, y+(height-fleurHeight)/2, fleurWidth, fleurHeight);
+                fleur.setActivated(false);
+                yb6.setFleurFeu(fleur);
+                yellowBlocs.add(yb6);
+                fleursfeu.add(fleur);
         }
     }
     public void drawStaticPlatform(String footName, String headName, int x, int footWidth, int footHeight, int headWidth, int headHeight, int code){
@@ -644,5 +664,10 @@ public class GameActivity extends AppCompatActivity {
         platforme.setUpperLimit(upperLimit);
         platforme.setLowerLimit(lowerLimit);
         platformes.add(platforme);
+    }
+    public void drawPodoboo(String name, int x, int y, int width, int height)
+    {
+        Podoboo pdb = new Podoboo(this, name, x, y, width, height);
+        ennemies.add(pdb);
     }
 }

@@ -32,7 +32,7 @@ public class Skelerex extends Koopa{
         demi_mort_gauche = Bitmap.createScaledBitmap(b6, getWidth(), getHeight(), true);
 
         Bitmap b7 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_mort_droite"));
-        mort_droite = Bitmap.createScaledBitmap(b7, getWidth(), getHeight(), true);
+        mort_droite = Bitmap.createScaledBitmap(b7, getWidth(),getHeight(), true);
 
         Bitmap b8 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_mort_gauche"));
         mort_gauche = Bitmap.createScaledBitmap(b8, getWidth(), getHeight(), true);
@@ -69,5 +69,4 @@ public class Skelerex extends Koopa{
     }
     @Override
     public void dead(){}
-
 }

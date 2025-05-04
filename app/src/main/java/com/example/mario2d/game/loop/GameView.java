@@ -3,7 +3,10 @@ package com.example.mario2d.game.loop;
 import static com.example.mario2d.game.loop.GameActivity.castles;
 import static com.example.mario2d.game.loop.GameActivity.ennemies;
 import static com.example.mario2d.game.loop.GameActivity.etoiles;
+import static com.example.mario2d.game.loop.GameActivity.fleursfeu;
 import static com.example.mario2d.game.loop.GameActivity.platformes;
+import static com.example.mario2d.game.loop.GameActivity.waitingLine;
+import static com.example.mario2d.game.loop.GameActivity.waitingLineForRemoving;
 import static com.example.mario2d.game.loop.GameActivity.yellowBlocs;
 import static com.example.mario2d.game.loop.GameActivity.brownBlocs;
 import static com.example.mario2d.game.loop.GameActivity.pieces;
@@ -41,6 +44,7 @@ import com.example.mario2d.game.objet.BrownBloc;
 import com.example.mario2d.game.objet.Castle;
 import com.example.mario2d.game.objet.Champignon;
 import com.example.mario2d.game.objet.Etoile;
+import com.example.mario2d.game.objet.FleurFeu;
 import com.example.mario2d.game.objet.Floor;
 import com.example.mario2d.game.objet.Item;
 import com.example.mario2d.game.objet.Objet;
@@ -56,6 +60,8 @@ import com.example.mario2d.menu.MainActivity;
 import com.example.mario2d.tool.AbstractButton;
 import com.example.mario2d.tool.Audio;
 import com.example.mario2d.tool.Joystick;
+import com.example.mario2d.tool.RoundButton;
+
 import android.os.Handler;
 import android.os.Looper;
 
@@ -86,9 +92,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private GameLoop gameLoop;
     private Audio theme;
     private int dx, joystickPointerId, jumpPointerId, menuPointerId, pausePointerId, retryPointerId, exitPointerId,
-            displayWidth, displayHeight, LEVEL_SELECTED, gameCompteur;
+            displayWidth, displayHeight, LEVEL_SELECTED, gameCompteur, firePointerId;
     private Boolean leftHandMode, soundEffect, music, afficherMenuLateral;
     private AbstractButton menuButton, pauseButton, retryButton, exitButton;
+    private RoundButton fireButton;
 
     /**
      * Largeur du menuLatéral initial à afficher si le jeu est en pause
@@ -156,9 +163,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         setpauseButton();
         setExitButton();
         setretryButton();
+        setFireButton();
 
         joystickPointerId = -1; jumpPointerId = -1; menuPointerId = -1; pausePointerId = -1;
-        retryPointerId = -1; exitPointerId = -1;
+        retryPointerId = -1; exitPointerId = -1; firePointerId = -1;
 
         int[] themes = {R.raw.theme1, R.raw.theme2, R.raw.theme3, R.raw.theme4, R.raw.theme5};
         theme = new Audio(context, themes[LEVEL_SELECTED-1]);
@@ -195,6 +203,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 boolean insideRetryButton = retryButton.isInside(x, y);
                 boolean insideExitButton = exitButton.isInside(x, y);
 
+                if(player.fire) {
+                    boolean insideFireButton = fireButton.pointerIn(x, y);
+                    if(insideFireButton) {
+                        firePointerId = pointerId;
+                        player.dropFireBowl();
+                        return true;
+                    }
+                }
                 if(joystickPressed){
                     joystick.setIsPressed(true);
                     joystickPointerId = pointerId;
@@ -232,6 +248,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                         player.setWalking(false);
                         gravity = false;
                         player.setJumpTime(System.nanoTime());
+                        Audio.playSound(getContext(), R.raw.jump_2);
                     }
                 }
                 return true;
@@ -267,6 +284,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                         }
                     }
                     menuPointerId = -1;
+                }
+                if(pointerId == firePointerId) {
+                    firePointerId = -1;
                 }
                 if(pointerId == pausePointerId){
                     if(pauseButton.getIsPressed()){
@@ -320,6 +340,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             for(BrownBloc bb : brownBlocs){bb.translateX(dx);}
             for(Champignon c : champis){c.translateX(dx);}
             for(Etoile c : etoiles){c.translateX(dx);}
+            for(FleurFeu ff : fleursfeu){ff.translateX(dx);}
             for(YellowBloc yb : yellowBlocs){yb.translateX(dx);}
             for(Piece p : pieces){p.translateX(dx);}
             for(Pipe pipe : pipes){pipe.translateX(dx);}
@@ -364,6 +385,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                         canvas.drawBitmap(c.getBitmap(), c.getX(), c.getY(), paint);
                     }
                 }
+                for(FleurFeu ff : fleursfeu) {
+                    if (ff.getActivated() && onScreen(ff, 10, 10) && ff.getBitmap() != null) {
+                        canvas.drawBitmap(ff.getBitmap(), ff.getX(), ff.getY(), paint);
+                    }
+                }
                 for(YellowBloc yb : yellowBlocs){
                     if (yb.getActivated() && onScreen(yb, 10, 10) && yb.getBitmap() != null) {
                         canvas.drawBitmap(yb.getBitmap(), yb.getX(), yb.getY(), paint);
@@ -397,6 +423,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 menuButton.draw(canvas);
                 afficherScore(canvas, paint);
                 drawLife(canvas, paint);
+
+                if(player.fire) {
+                    fireButton.draw(canvas);
+                }
                 if(gameOver){
                     gameOver(canvas, paint);
                 }
@@ -413,6 +443,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
      * Appelé par le gameLoop à chaque loop.
      */
     public void update(){
+        for(Ennemy en : waitingLine) {
+            ennemies.add(en);
+        }
+        waitingLine.clear();
+        for(Ennemy en : waitingLineForRemoving) {
+            ennemies.remove(en);
+        }
         if(player.getX() + player.getWidth() >= castles.get(1).getX() - player.getWidth()*0.05){
             if (theme.isRunning) theme.stop();
             win = true;
@@ -564,6 +601,18 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         exitButton.setTextColor(Color.valueOf(Color.WHITE));
         exitButton.setRectangleRoundRadius(20);
     }
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void setFireButton() {
+
+        int rayon = (int) (displayWidth * 0.06);
+        int buttonX = (int) (displayWidth*0.9);
+        int buttonY = displayHeight - rayon*2;
+
+        if (leftHandMode) {
+            buttonX = (int) (displayWidth*0.1);
+        }
+        fireButton = new RoundButton(getContext(), buttonX, buttonY, rayon, Color.WHITE, R.drawable.fleurfeu);
+    }
     public void reset(){}
     /**
      * fonction appelée à chaque loop pour vérifier les collisions relatives à chaque objet.
@@ -693,6 +742,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 etoile.translateY(5);
             }
         }
+        for(FleurFeu etoile : fleursfeu){
+            if(etoile.isGravity() && !etoile.getCollisionMatrix().get("objet")[0]){
+                etoile.translateY(5);
+            }
+        }
     }
     public void updateAnimations(){
 
@@ -722,6 +776,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
         for(Platforme p : platformes){
             p.update();
+        }
+        for (FleurFeu ff : fleursfeu) {
+            if(ff.isGravity()){
+                updateCollision(ff);
+            }
+            ff.update();
         }
     }
     public void afficherScore(Canvas canvas, Paint paint){

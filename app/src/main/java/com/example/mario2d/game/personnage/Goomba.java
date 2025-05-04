@@ -109,24 +109,6 @@ public class Goomba extends Ennemy{
     @Override
     public void update(){
         if(activated){
-            boolean[] tab = player.detectCollision(this);
-            if(tab[0]){
-                Audio.playSound(context, R.raw.kick_2);
-                dead();
-                player.jump2();
-                player.rest();
-            }
-            else if(tab[1] || tab[2] || tab[3]){
-                if(player.getInvincible()){
-                    dead();
-                }
-                else{
-                    if(!player.getResting()){
-                        player.decreaseLife();
-                        player.rest();
-                    }
-                }
-            }
             if(collisionWithObject(1) || collisionWithObject(3)){reverseDirection();}
             if(isResting){rest();}
             else if(isInvincible){invincible();}

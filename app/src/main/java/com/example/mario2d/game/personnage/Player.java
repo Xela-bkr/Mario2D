@@ -1,5 +1,10 @@
 package com.example.mario2d.game.personnage;
 
+import static com.example.mario2d.game.loop.GameActivity.dx;
+import static com.example.mario2d.game.loop.GameActivity.ennemies;
+import static com.example.mario2d.game.loop.GameActivity.player;
+import static com.example.mario2d.game.loop.GameActivity.waitingLine;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,10 +16,14 @@ import com.example.mario2d.tool.Audio;
 
 public class Player extends Personnage{
     private float agrCoeff = 1.86f;
-    private int piecesCount;
+    private int piecesCount, compteurPetitSaut;
+    private String skin;
     private Audio star;
     private int initialWidth, initialHeight;
-    private Bitmap arret_droite, arret_gauche, marche_droite, marche_gauche, saute_droite, saute_gauche, mort_droite, mort_gauche, victoire;
+    public boolean fire;
+    private Bitmap arret_droite, arret_gauche, marche_droite, marche_gauche, saute_droite, saute_gauche, mort_droite, mort_gauche,
+            victoire, feu_droite_1, feu_droite_2, feu_gauche_1, feu_gauche_2;
+    private boolean smallJump;
     public Player(Context context, String name, int x, int y, int width, int height) {
         super(context, name, x, y, width, height);
         this.initialHeight = height; this.initialWidth = width;
@@ -26,16 +35,31 @@ public class Player extends Personnage{
         this.compteurSaut = 0;
         this.isResting = false;
         this.restCompteur = 0;
+        this.smallJump = true;
+        compteurPetitSaut = 0;
         if(!name.equals("mario") && !name.equals("luigi")){name="mario";}
-        setBitmaps();
         this.bitmap = arret_droite;
         collisionMatrix.put("ennemy", new boolean[]{false, false, false, false});
+        skin = "";
+        fire = false;
+        setBitmaps();
     }
     @Override
     public void decreaseLife(){
-        this.life --;
+        if (fire) {
+            fire = false;
+            skin = "";
+            setBitmaps();
+        } else if (life > 1) {
+            isResting = true;
+            life --;
+        } else {
+            life --;
+            dead();
+        }
+        /*this.life --;
         isResting = true;
-        /*if (this.life == 1){
+        if (this.life == 1){
             int newWidth = getWidth() / 2;
             int newHeight = (int) (agrCoeff*newWidth);
             setWidth(newWidth);
@@ -50,19 +74,21 @@ public class Player extends Personnage{
                 if(isRight){this.bitmap = arret_droite;}
                 else{this.bitmap = arret_gauche;}
             }
-        }*/
-        if(this.life == 0){dead();}
+        }
+        if(this.life == 0){dead();}*/
     }
     @Override
     public void increaseLife(){
-        this.life ++;
-        setWidth(initialWidth);
-        setHeight(initialHeight);
-        setBitmaps();
-        setY(getY()-initialHeight/2);
-        if(!isWalking){
-            if(isRight){this.bitmap = arret_droite;}
-            else{this.bitmap = arret_gauche;}
+        if (life == 1) {
+            this.life ++;
+            setWidth(initialWidth);
+            setHeight(initialHeight);
+            setBitmaps();
+            setY(getY()-initialHeight/2);
+            if(!isWalking){
+                if(isRight){this.bitmap = arret_droite;}
+                else{this.bitmap = arret_gauche;}
+            }
         }
     }
     @Override
@@ -84,22 +110,27 @@ public class Player extends Personnage{
     public void decreasePiece(){this.piecesCount --;}
     public int getPiecesCount(){return this.piecesCount;}
     public void setBitmaps(){
-        Bitmap b1 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_arret_droite"));
+
+        String key = name;
+        if(skin.equals("_feu")){
+            key += "_feu";
+        }
+        Bitmap b1 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(key+"_arret_droite"));
         this.arret_droite= Bitmap.createScaledBitmap(b1, getWidth(), getHeight(), true);
 
-        Bitmap b2 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_arret_gauche"));
+        Bitmap b2 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(key+"_arret_gauche"));
         this.arret_gauche= Bitmap.createScaledBitmap(b2, getWidth(), getHeight(), true);
 
-        Bitmap b3 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_marche_droite"));
+        Bitmap b3 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(key+"_marche_droite"));
         this.marche_droite = Bitmap.createScaledBitmap(b3, getWidth(), getHeight(), true);
 
-        Bitmap b4 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_marche_gauche"));
+        Bitmap b4 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(key+"_marche_gauche"));
         this.marche_gauche = Bitmap.createScaledBitmap(b4, getWidth(), getHeight(), true);
 
-        Bitmap b5 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_saute_droite"));
+        Bitmap b5 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(key+"_saute_droite"));
         this.saute_droite = Bitmap.createScaledBitmap(b5, getWidth(), getHeight(), true);
 
-        Bitmap b6 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_saute_gauche"));
+        Bitmap b6 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(key+"_saute_gauche"));
         this.saute_gauche = Bitmap.createScaledBitmap(b6, getWidth(), getHeight(), true);
 
         Bitmap b7 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_mort_droite"));
@@ -108,8 +139,20 @@ public class Player extends Personnage{
         Bitmap b8 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_mort_gauche"));
         this.mort_gauche = Bitmap.createScaledBitmap(b8, getWidth(), getHeight(), true);
 
-        Bitmap b9 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_victoire"));
+        Bitmap b9 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(key+"_victoire"));
         victoire = Bitmap.createScaledBitmap(b9, getWidth(), getHeight(), true);
+
+        Bitmap b10 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_feu_lance_droite_1"));
+        feu_droite_1 = Bitmap.createScaledBitmap(b9, getWidth(), getHeight(), true);
+
+        Bitmap b11 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_feu_lance_gauche_1"));
+        feu_gauche_1 = Bitmap.createScaledBitmap(b9, getWidth(), getHeight(), true);
+
+        Bitmap b12 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_feu_lance_droite_2"));
+        feu_droite_2 = Bitmap.createScaledBitmap(b9, getWidth(), getHeight(), true);
+
+        Bitmap b13 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_feu_lance_gauche_2"));
+        feu_gauche_2 = Bitmap.createScaledBitmap(b9, getWidth(), getHeight(), true);
 
     }
     @Override
@@ -141,7 +184,7 @@ public class Player extends Personnage{
     public void rest(){
         isResting = true;
         if(restCompteur < 100){
-            if(!isResting) setResting(true);
+            if (!isResting) setResting(true);
 
         }
         else{
@@ -153,20 +196,25 @@ public class Player extends Personnage{
     @Override
     public void update(){
 
-        if(collisionWithObject(2)){
-            if(isJumping){isJumping = false;}
-            if(!gravity){gravity = true;}
+        updateEnnemyCollision();
+        updateObjetCollision();
+
+        if (smallJump) {
+            jump2();
         }
-        if(collisionWithObject(1) || collisionWithObject(3)){
-            if(isWalking){isWalking = false;}
+        if (isWalking) {
+            walk(frequenceMarche);
         }
-        if(isWalking){walk(frequenceMarche);}
-        if(isJumping){
+        if(isJumping) {
             if(jumpTime == 0){jumpTime = System.nanoTime();}
             jump();
         }
-        if(isResting){rest();}
-        if(isInvincible){invincible();}
+        if (isResting) {
+            rest();
+        }
+        if (isInvincible) {
+            invincible();
+        }
     }
     public void jump(){
 
@@ -174,13 +222,14 @@ public class Player extends Personnage{
 
         long currentTime = System.nanoTime();
         long deltaTime = currentTime - getJumpTime();
-        if(deltaTime <= ascentTime && !collisionWithObject(2)){
+
+        if (deltaTime <= ascentTime && !collisionWithObject(2))
+        {
             int dy = -(getJumpImpulse() - getGravityConstant()*getCompteurSaut());
             translateY(dy);
             this.bitmap = isRight ? saute_droite : saute_gauche;
             increaseCompteurSaut();
-        }
-        else{
+        } else {
             setJumping(false);
             setCompteurSaut(0);
             gravity = true;
@@ -194,7 +243,19 @@ public class Player extends Personnage{
         this.piecesCount ++;
     }
     public void jump2(){
-        translateY(-7);
+        if (compteurPetitSaut < 10)
+        {
+            gravity = false;
+            int dy = compteurPetitSaut - 10;
+            translateY(dy);
+            compteurPetitSaut ++;
+        }
+        else
+        {
+            compteurPetitSaut = 0;
+            smallJump = false;
+            gravity = true;
+        }
     }
     @Override
     public void dead(){
@@ -207,8 +268,81 @@ public class Player extends Personnage{
         }
     }
     public void win(){
-        if(this.bitmap != victoire){
+        if(this.bitmap != victoire)
+        {
             this.bitmap = victoire;
         }
+    }
+    private void updateEnnemyCollision()
+    {
+        for(Ennemy en : ennemies)
+        {
+            if (en.getActivated() && en.getAlive())
+            {
+                boolean[] tab = detectCollision(en);
+                if (tab[0])
+                {
+                    if (en.getResting())
+                    {
+                        Audio.playSound(context, R.raw.kick_2);
+                        en.invincible();
+                    } else if (en.getInvincible())
+                    {
+                        recalibrerY(en);
+                        if (en.getTopIsHurting()) {
+                            if (!isResting)
+                            {
+                                decreaseLife();
+                            }
+                        }
+                    } else {
+                        Audio.playSound(context, R.raw.kick_2);
+                        en.rest();
+                    }
+                    smallJump = true;
+                } else if (tab[1] || tab[2] || tab[3]) {
+                    if (en.getResting())
+                    {
+                        en.invincible();
+                    } else {
+                        if (!isResting) {
+                            decreaseLife();
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+    private void updateObjetCollision()
+    {
+        if(collisionWithObject(2))
+        {
+            if(isJumping)
+            {
+                isJumping = false;
+            }
+            if(!gravity){gravity = true;}
+        }
+        if(collisionWithObject(1) || collisionWithObject(3)){
+            if(isWalking){isWalking = false;}
+        }
+    }
+    public void setSkin() {
+        skin = "_feu";
+        setBitmaps();
+        fire = true;
+    }
+    public void dropFireBowl(){
+        int fbWidth = getWidth();
+        int fbHeight = fbWidth;
+        int fbX = getX() + getWidth() + 3*dx;
+        if (!isRight) {
+            fbX = getX() - getWidth() - 3*dx;
+        }
+        int fbY = getY() + getHeight()/2 - (getHeight()-fbHeight)/2;
+        FireBowl fb = new FireBowl(context, "boule_feu",fbX, fbY, fbWidth, fbHeight );
+        fb.setRight(isRight);
+        waitingLine.add(fb);
     }
 }

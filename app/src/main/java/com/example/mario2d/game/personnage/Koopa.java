@@ -17,6 +17,7 @@ public class Koopa extends Ennemy {
     protected Bitmap arret_droite, arret_gauche, marche_droite, marche_gauche, carapace_face, rotate_1, rotate_2, rotate_3;
     protected int frequenceRotation, compteurRotation;
     protected Audio invinvibleAudio;
+    protected boolean rotable;
     public Koopa(Context context, String name, int x, int y, int width, int height) {
         super(context, name, x, y, width, height);
         setBitmaps();
@@ -33,6 +34,7 @@ public class Koopa extends Ennemy {
         this.frequenceRotation = 16;
         this.compteurRotation = 0;
         this.gravityFall = true;
+        this.rotable = false;
         gravity = true;
         graviteCompteur = 1;
         gravityConstant = 15;
@@ -153,12 +155,17 @@ public class Koopa extends Ennemy {
     }
     @Override
     public void rest(){
+        if (restCompteur < 10) { player.translateY(-4); }
+        else{
+            player.gravity = true;
+            rotable = true;
+        }
         if(!isResting){
             if(! (getHeight() < initHeight) && !(getWidth() < initWidth)){
                 int height = getHeight();
                 setHeight(getDeadHeight());
                 setWidth(getDeadWidth());
-                setY(getY() - getDeadHeight());
+                setY(getY() + getDeadHeight());
             }
             this.bitmap = carapace_face;
             isResting = true;
@@ -166,6 +173,7 @@ public class Koopa extends Ennemy {
             restCompteur = 0;
         }
         else if(restCompteur >= 100){
+            rotable = false;
             isResting = false;
             isWalking = true;
             setY(initY);
@@ -215,49 +223,27 @@ public class Koopa extends Ennemy {
     @Override
     public void update(){
         if(activated){
+
             if(collisionWithObject(1) || collisionWithObject(3)){reverseDirection();}
-            boolean[] tab = player.detectCollision(this);
-            if(tab[0]){
-                if(isResting){
-                    invincible();
-                    player.rest();
-                    player.setJumping(true);
-                    player.jump();
-                }
-                if(!isResting && !isInvincible){
-                    Audio.playSound(context, R.raw.kick_2);
-                    rest();
-                    player.rest();
-                    player.setJumping(true);
-                    player.jump();
-                }
-                if(isInvincible){
-                    player.recalibrerY(this);
-                }
+
+            if (isResting)
+            {
+                rest();
+            }  else if (isInvincible)
+            {
+                invincible();
+            } else if (isWalking)
+            {
+                walk(frequenceMarche);
+            } else
+            {
+                dead();
             }
-            if(tab[1] || tab[2] || tab[3]){
-                if(player.getInvincible()){
-                    Audio.playSound(context, R.raw.kick);
-                    dead();
-                }
-                else if(isResting){
-                    invincible();
-                }
-                else{
-                    if(!player.getResting()){
-                        player.decreaseLife();
-                        player.rest();
-                    }
-                }
-            }
-            if(isResting){rest();}
-            else if(isInvincible){invincible();}
-            else if(isWalking){walk(frequenceMarche);}
-            else{dead();}
-            for(Ennemy en : ennemies){
-                boolean tab1[] = detectCollision(en);
+            for(Ennemy en : ennemies)
+            {
+                boolean[] tab1 = detectCollision(en);
                 if(tab1[0] || tab1[1] || tab1[2] || tab1[3]){
-                    if(isInvincible && !en.getInvincible())
+                    if(isInvincible && !en.getInvincible() && en.getAlive())
                     {
                         Audio.playSound(context, R.raw.kick_2);
                         en.dead();
