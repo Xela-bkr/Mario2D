@@ -270,9 +270,6 @@ public class GameActivity extends AppCompatActivity {
                 drawCastle("castle", 0);
                 drawCastle("castle", 400*dx );
                 drawLine("BrownBloc", "darkbrick", 0, 400*dx, surface, FLOOR_WIDTH, FLOOR_HEIGHT, false);
-                drawDecoration("lava", 0, 0, displayWidth, displayHeight);
-                drawDecoration("lava", displayWidth, 0, displayWidth, displayHeight);
-                drawDecoration("lava", 2*displayWidth, 0, displayWidth, displayHeight);
 
                 drawPodoboo("podoboo", 30*dx, surface - 9*dx, 3*dx, 3*dx);
                 drawBloc("bloc", 40*dx, surface - 4*BLOC_WIDTH, BLOC_WIDTH, BLOC_HEIGHT, 6);
