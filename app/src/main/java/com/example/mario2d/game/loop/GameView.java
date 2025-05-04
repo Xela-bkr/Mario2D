@@ -668,8 +668,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
     public void updateCollision(Item item){
 
-        System.out.println("detection collision");
-
         item.getCollisionMatrix().put("objet", new boolean[]{false, false, false, false});
 
         int[] brownBlocOffset = new int[]{5, Math.abs(this.dx)+2};

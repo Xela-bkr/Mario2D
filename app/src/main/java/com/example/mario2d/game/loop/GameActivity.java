@@ -83,6 +83,7 @@ public class GameActivity extends AppCompatActivity {
         platformes.clear();
         waitingLine.clear();
         fleursfeu.clear();
+        waitingLineForRemoving.clear();
         setObjets();
         setContentView(new GameView(this, displayWidth, displayHeight,leftHandMode, LEVEL_SELECTED));
     }
@@ -147,7 +148,7 @@ public class GameActivity extends AppCompatActivity {
                 drawDecoration("nuage", 175*dx, 1*dx, nuageSimpeWidth, nuageSimpleHeight);
 
 
-                drawAlternatesBloc("brownbloc", "bloc", 30*dx, displayHeight-FLOOR_HEIGHT-BLOC_HEIGHT*4, 3, 2, 4);
+                drawAlternatesBloc("brownbloc", "bloc", 30*dx, displayHeight-FLOOR_HEIGHT-BLOC_HEIGHT*4, 3, 2, 6);
                 drawStaticPlatform("pillier_champi_platforme", "champi_platforme", 80*dx, 4*dx, 10*dx, 12*dx, 4*dx, 2);
                 drawStaticPlatform("pillier_champi_platforme", "champi_platforme", 120*dx, 4*dx, 15*dx, 15*dx, 4*dx, 2);
                 drawStaticPlatform("pillier_champi_platforme", "champi_platforme", 160*dx, 4*dx, 10*dx, 12*dx, 4*dx, 2);
@@ -269,6 +270,9 @@ public class GameActivity extends AppCompatActivity {
                 drawCastle("castle", 0);
                 drawCastle("castle", 400*dx );
                 drawLine("BrownBloc", "darkbrick", 0, 400*dx, surface, FLOOR_WIDTH, FLOOR_HEIGHT, false);
+                drawDecoration("lava", 0, 0, displayWidth, displayHeight);
+                drawDecoration("lava", displayWidth, 0, displayWidth, displayHeight);
+                drawDecoration("lava", 2*displayWidth, 0, displayWidth, displayHeight);
 
                 drawPodoboo("podoboo", 30*dx, surface - 9*dx, 3*dx, 3*dx);
                 drawBloc("bloc", 40*dx, surface - 4*BLOC_WIDTH, BLOC_WIDTH, BLOC_HEIGHT, 6);

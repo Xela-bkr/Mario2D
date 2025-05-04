@@ -5,12 +5,10 @@ import static com.example.mario2d.game.loop.GameActivity.player;
 import android.content.Context;
 
 public class FleurFeu extends Item{
-    private int compteurPerime;
     public FleurFeu(Context context, String name, int x, int y, int width, int height) {
         super(context, name, x, y, width, height);
         isPickable = false;
         isPicked = false;
-        compteurPerime = 0;
         activated = false;
         gravity = false;
     }

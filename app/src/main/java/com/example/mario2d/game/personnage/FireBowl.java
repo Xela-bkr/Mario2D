@@ -14,7 +14,7 @@ public class FireBowl extends Ennemy{
         super(context, name, x, y, width, height);
         isInvincible = true;
         gravity = false;
-        life = 400;
+        life = 100;
         setBitmaps();
     }
     @Override
