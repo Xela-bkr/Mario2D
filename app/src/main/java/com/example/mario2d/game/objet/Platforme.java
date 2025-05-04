@@ -4,20 +4,23 @@ import static com.example.mario2d.game.loop.GameActivity.ennemies;
 import static com.example.mario2d.game.loop.GameActivity.player;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import com.example.mario2d.game.personnage.Ennemy;
 
 public class Platforme extends Objet{
 
-    private boolean movable, up;
-    private int upperLimit, lowerLimit;
+    protected boolean movable, up;
+    private int upperLimit, lowerLimit, rightLimit, leftLimit;
     public Platforme(Context context, String name, int x, int y, int width, int height) {
         super(context, name, x, y, width, height);
         movable = false;
         up = true;
         lowerLimit = initY;
         upperLimit = initY + getHeight();
+        rightLimit = getX() + getWidth()*2;
+        leftLimit = getX() - getWidth()*2;
     }
     @Override
     public void update(){
@@ -28,9 +31,6 @@ public class Platforme extends Objet{
                     en.addCollisionValue("objet", 0, true);
                     en.recalibrerY(this);
                 }
-                /*if(tab[1]){en.addCollisionValue("objet", 1, true);}
-                if(tab[2]){en.addCollisionValue("objet", 2, true);}
-                if(tab[3]){en.addCollisionValue("objet", 3, true);}*/
             }
         }
         if(movable){move();}

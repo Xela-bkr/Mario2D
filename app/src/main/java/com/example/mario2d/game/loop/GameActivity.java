@@ -14,6 +14,7 @@ import com.example.mario2d.game.objet.FleurFeu;
 import com.example.mario2d.game.objet.Objet;
 import com.example.mario2d.game.objet.Piece;
 import com.example.mario2d.game.objet.Pipe;
+import com.example.mario2d.game.objet.PlateformeEphemere;
 import com.example.mario2d.game.objet.Platforme;
 import com.example.mario2d.game.objet.YellowBloc;
 import com.example.mario2d.game.personnage.Boo;
@@ -34,9 +35,10 @@ import java.util.ArrayList;
 
 public class GameActivity extends AppCompatActivity {
 
-    private int displayWidth, displayHeight, CHARACTER_WIDTH, CHARACTER_HEIGHT, FLOOR_WIDTH, FLOOR_HEIGHT, FLOOR_RATE,
+    private int  CHARACTER_WIDTH, CHARACTER_HEIGHT, FLOOR_WIDTH, FLOOR_HEIGHT, FLOOR_RATE,
             CASTLE_WIDTH, CASTLE_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT, PIPE_WIDTH, PIPE_HEIGHT, LEVEL_SELECTED,
             CHARACTER_SELECTED, PIECE_WIDTH, PIECE_HEIGHT;
+    public static int displayWidth, displayHeight;
     public static int dx;
 
     private Boolean leftHandMode, soundEffect, music;
@@ -273,6 +275,7 @@ public class GameActivity extends AppCompatActivity {
 
                 drawPodoboo("podoboo", 30*dx, surface - 9*dx, 3*dx, 3*dx);
                 drawBloc("bloc", 40*dx, surface - 4*BLOC_WIDTH, BLOC_WIDTH, BLOC_HEIGHT, 6);
+                drawPlatformeEphemere("tile1", 50*dx, 10*dx, 3*dx, 3*dx, 300, true, false);
 
                 return;
             case 5 :
@@ -670,5 +673,12 @@ public class GameActivity extends AppCompatActivity {
     {
         Podoboo pdb = new Podoboo(this, name, x, y, width, height);
         ennemies.add(pdb);
+    }
+    public void drawPlatformeEphemere(String key, int x, int y, int width, int height, int vie, boolean movable, boolean up) {
+        PlateformeEphemere pe = new PlateformeEphemere(this, key, x, y, width, height);
+        pe.setMovable(movable);
+        pe.setUp(up);
+        pe.setVie(vie);
+        platformes.add(pe);
     }
 }
