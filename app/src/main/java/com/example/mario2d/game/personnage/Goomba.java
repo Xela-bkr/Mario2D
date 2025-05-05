@@ -1,6 +1,7 @@
 package com.example.mario2d.game.personnage;
 
 import static com.example.mario2d.game.loop.GameActivity.player;
+import static com.example.mario2d.game.loop.GameActivity.waitingLineForRemoving;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -76,11 +77,13 @@ public class Goomba extends Ennemy{
         isResting = false;
         isWalking = false;
         isAlive = false;
-        if(deadCompteur < 40){
+        if (deadCompteur < 40){
             if(this.bitmap != dead) this.bitmap = dead;
             deadCompteur ++;
+        } else {
+            setActivated(false);
+            waitingLineForRemoving.add(this);
         }
-        else setActivated(false);
     }
     @Override
     public void setBitmaps(){

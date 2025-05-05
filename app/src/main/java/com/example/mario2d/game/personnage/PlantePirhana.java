@@ -1,6 +1,7 @@
 package com.example.mario2d.game.personnage;
 
 import static com.example.mario2d.game.loop.GameActivity.player;
+import static com.example.mario2d.game.loop.GameActivity.waitingLineForRemoving;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -43,8 +44,12 @@ public class PlantePirhana extends Ennemy{
             boolean[] tab = player.detectCollision(this, (int) (-getHeight() * 0.1), (int) (-getWidth() * 0.1));
             if (tab[0] || tab[1] || tab[2] || tab[3]) {
                 if (!player.getResting()) {
-                    player.decreaseLife();
-                    player.rest();
+                    if(!player.getInvincible()) {
+                        player.decreaseLife();
+                        player.rest();
+                    } else {
+                        dead();
+                    }
                 }
             }
             if (tab[0]) {
@@ -107,5 +112,11 @@ public class PlantePirhana extends Ennemy{
             isResting = false;
             up = true;
         }
+    }
+    @Override
+    public void dead() {
+        this.activated = false;
+        this.isAlive = false;
+        waitingLineForRemoving.add(this);
     }
 }

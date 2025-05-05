@@ -1,5 +1,6 @@
 package com.example.mario2d.game.personnage;
 
+import static com.example.mario2d.game.loop.GameActivity.displayHeight;
 import static com.example.mario2d.game.loop.GameActivity.dx;
 import static com.example.mario2d.game.loop.GameActivity.ennemies;
 import static com.example.mario2d.game.loop.GameActivity.player;
@@ -219,6 +220,9 @@ public class Player extends Personnage{
         if (isWalking) {
             walk(frequenceMarche);
         }
+        if (getY() + getHeight() <= 0) {
+            isJumping = false;
+        }
         if(isJumping) {
             if(jumpTime == 0){jumpTime = System.nanoTime();}
             jump();
@@ -228,6 +232,9 @@ public class Player extends Personnage{
         }
         if (isInvincible) {
             invincible();
+        }
+        if (getY() > displayHeight + getWidth()*3) {
+            dead();
         }
     }
     public void jump(){

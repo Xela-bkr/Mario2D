@@ -269,9 +269,14 @@ public class GameActivity extends AppCompatActivity {
 
                 return;
             case 4 :
+
+                int decorVolcanWidth = (int) ((displayHeight-FLOOR_HEIGHT)*1.179);
+                int decorVolcanHeight = displayHeight- FLOOR_HEIGHT;
+
                 drawCastle("castle", 0);
                 drawCastle("castle", 400*dx );
-                drawLine("BrownBloc", "darkbrick", 0, 400*dx, surface, FLOOR_WIDTH, FLOOR_HEIGHT, false);
+                drawLine("BrownBloc", "darkbrick", 0, CASTLE_WIDTH*3, surface, FLOOR_WIDTH, FLOOR_HEIGHT, false);
+
 
                 drawPodoboo("podoboo", 30*dx, surface - 9*dx, 3*dx, 3*dx);
                 drawBloc("bloc", 40*dx, surface - 4*BLOC_WIDTH, BLOC_WIDTH, BLOC_HEIGHT, 6);

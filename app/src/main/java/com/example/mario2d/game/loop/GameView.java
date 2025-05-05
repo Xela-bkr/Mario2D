@@ -243,7 +243,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 if(!joystickPressed && !menuButtonPressed && !insideMenuButton && !insideExitButton &&
                         !insidePauseButton && !insideRetryButton){
                     jumpPointerId = pointerId;
-                    if(!player.getJumping()){
+                    if(!player.getJumping() && (player.collisionWithObject(0) || player.getCollisionMatrix().get("ennemy")[0])){
                         player.setJumping(true);
                         player.setWalking(false);
                         gravity = false;
@@ -687,6 +687,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             if(tab[1]){player.addCollisionValue("pipe", 1, true);}
             if(tab[2]){player.addCollisionValue("pipe", 2, true);}
             if(tab[3]){player.addCollisionValue("pipe", 3, true);}
+        }
+        for (Ennemy en : ennemies) {
+            if (en == player) {continue;}
+            boolean[] tab = player.detectCollision(en, 5, -5);
+            if(tab[0]){player.addCollisionValue("ennemy", 0, true);}
+            if(tab[1]){player.addCollisionValue("ennemy", 1, true);}
+            if(tab[2]){player.addCollisionValue("ennemy", 2, true);}
+            if(tab[3]){player.addCollisionValue("ennemy", 3, true);}
         }
     }
     public void updateCollision(Item item){

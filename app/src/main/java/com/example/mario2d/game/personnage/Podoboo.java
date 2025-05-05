@@ -1,5 +1,8 @@
 package com.example.mario2d.game.personnage;
 
+import static com.example.mario2d.game.loop.GameActivity.player;
+import static com.example.mario2d.game.loop.GameActivity.waitingLineForRemoving;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -43,8 +46,11 @@ public class Podoboo extends Ennemy {
     }
     public void update()
     {
-        updateImage();
-        updateMovement();
+       if (activated) {
+           updateImage();
+           updateMovement();
+           updatePlayerCollision();
+       }
 
     }
     public void updateImage()
@@ -127,5 +133,18 @@ public class Podoboo extends Ennemy {
     {
         setActivated(false);
         setAlive(false);
+        waitingLineForRemoving.add(this);
+    }
+    public void updatePlayerCollision() {
+        boolean[] tab = player.detectCollision(this);
+        if (tab[0] || tab[1] || tab[2] || tab[3]) {
+            if(!player.getResting()) {
+                if(!player.getInvincible()) {
+                    player.decreaseLife();
+                } else {
+                    dead();
+                }
+            }
+        }
     }
 }

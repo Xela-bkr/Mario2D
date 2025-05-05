@@ -2,6 +2,7 @@ package com.example.mario2d.game.personnage;
 
 import static com.example.mario2d.game.loop.GameActivity.ennemies;
 import static com.example.mario2d.game.loop.GameActivity.player;
+import static com.example.mario2d.game.loop.GameActivity.waitingLineForRemoving;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -152,6 +153,7 @@ public class Koopa extends Ennemy {
         isResting = false;
         isAlive = false;
         activated = false;
+        waitingLineForRemoving.add(this);
     }
     @Override
     public void rest(){

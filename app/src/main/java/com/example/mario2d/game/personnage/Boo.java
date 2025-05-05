@@ -1,6 +1,7 @@
 package com.example.mario2d.game.personnage;
 
 import static com.example.mario2d.game.loop.GameActivity.player;
+import static com.example.mario2d.game.loop.GameActivity.waitingLineForRemoving;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -125,6 +126,7 @@ public class Boo extends Ennemy{
     public void dead(){
         setAlive(false);
         setActivated(false);
+        waitingLineForRemoving.add(this);
     }
     private void updateMode(){
         pushPositions(new int[]{getX(), getY()});
