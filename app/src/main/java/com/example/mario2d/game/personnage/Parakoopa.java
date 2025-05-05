@@ -113,6 +113,7 @@ public class Parakoopa extends Koopa {
             {
                 reverseDirection();
             }
+            updateCollisions();
             if (!koopaMode) {
                 fly();
             } else {

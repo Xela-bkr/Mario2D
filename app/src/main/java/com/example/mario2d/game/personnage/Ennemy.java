@@ -40,31 +40,7 @@ public class Ennemy extends Personnage {
         this.deadHeight = deadHeight;
     }
     @Override
-    public void update(){
-        if(activated){
-            boolean[] tab = player.detectCollision(this);
-            if(tab[0]){
-                if(player.getInvincible()){
-                    dead();
-                }
-                decreaseLife();
-            }
-            if(tab[1] || tab[2] || tab[3]){
-                if(player.getInvincible()){
-                    dead();
-                }
-                else{
-                    if(!player.getResting()){
-                        player.decreaseLife();
-                    }
-                }
-            }
-            if(isResting){rest();}
-            else if(isInvincible){invincible();}
-            else if(isWalking){walk(frequenceMarche);}
-            else{dead();}
-        }
-    }
+    public void update(){}
     public void setTopIsHurting(boolean t)
     {
         this.topIsHurting = t;

@@ -11,6 +11,7 @@ import android.graphics.Matrix;
 
 import com.example.mario2d.R;
 import com.example.mario2d.game.objet.BrownBloc;
+import com.example.mario2d.tool.Audio;
 
 public class Spiny extends Ennemy{
     private Bitmap arret_gauche, marche_gauche, arret_droite, marche_droite;
@@ -57,16 +58,13 @@ public class Spiny extends Ennemy{
                     if(!player.getInvincible()) {
                         player.decreaseLife();
                     } else {
+                        Audio.playSound(context, R.raw.kick_2);
                         dead();
                     }
                 }
             }
-            if(tab[0]){player.recalibrerY(this);}
-            if(tab[2]){
-                player.setY(getY()+getHeight() + 5);
-                if(player.getJumping()){
-                    player.setJumping(false);
-                }
+            if(tab[0]){
+                player.jump2();
             }
         }
     }

@@ -199,8 +199,10 @@ public abstract class Origin {
         spriteBank.put("herbe_platforme", R.drawable.herbe_platforme);
         spriteBank.put("hill2", R.drawable.hill2);
         spriteBank.put("hills1", R.drawable.hills1);
+        spriteBank.put("nuageplatform2", R.drawable.nuageplatform2);
+        spriteBank.put("forest_platform", R.drawable.forest_platform);
+        spriteBank.put("bloc_jaune", R.drawable.bloc_jaune);
         /*
-        spriteBank.put("", R.drawable.);
         spriteBank.put("", R.drawable.);
         spriteBank.put("", R.drawable.);*/
 
@@ -276,6 +278,29 @@ public abstract class Origin {
         spriteBank.put("greybrick3", R.drawable.greybrick3);
         spriteBank.put("briquestriee", R.drawable.briquestriee);
         spriteBank.put("brique_jaune", R.drawable.brique_jaune);
+
+        spriteBank.put("billboum_gauche_1", R.drawable.billboum_gauche_1);
+        spriteBank.put("billboum_gauche_2", R.drawable.billboum_gauche_2);
+        spriteBank.put("billboum_droite_1", R.drawable.billboum_droite_1);
+        spriteBank.put("billboum_droite_2", R.drawable.billboum_droite_2);
+        spriteBank.put("canon", R.drawable.canon);
+
+        spriteBank.put("champi_platforme_jaune", R.drawable.champi_platforme_jaune);
+
+        spriteBank.put("magikoopa_lance_droite", R.drawable.magikoopa_lance_droite);
+        spriteBank.put("magikoopa_lance_gauche", R.drawable.magikoopa_lance_gauche);
+        spriteBank.put("magikoopa_prepare_droite_1", R.drawable.magikoopa_prepare_droite_1);
+        spriteBank.put("magikoopa_prepare_droite_2", R.drawable.magikoopa_prepare_droite_2);
+        spriteBank.put("magikoopa_prepare_droite_3", R.drawable.magikoopa_prepare_droite_3);
+        spriteBank.put("magikoopa_prepare_gauche_1", R.drawable.magikoopa_prepare_gauche_1);
+        spriteBank.put("magikoopa_prepare_gauche_2", R.drawable.magikoopa_prepare_gauche_2);
+        spriteBank.put("magikoopa_prepare_gauche_3", R.drawable.magikoopa_prepare_gauche_3);
+        spriteBank.put("magikoopa_wait_droite", R.drawable.magikoopa_wait_droite);
+        spriteBank.put("magikoopa_wait_gauche", R.drawable.magikoopa_wait_gauche);
+        spriteBank.put("magiboule_1", R.drawable.magiboule_1);
+        spriteBank.put("magiboule_2", R.drawable.magiboule_2);
+        spriteBank.put("magiboule_3", R.drawable.magiboule_3);
+        spriteBank.put("magiboule_4", R.drawable.magiboule_4);
 
     }
     public void translateX(int dx){this.setX(this.getX()+dx);}

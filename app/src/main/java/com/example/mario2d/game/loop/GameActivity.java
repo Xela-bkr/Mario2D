@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mario2d.game.objet.BrownBloc;
+import com.example.mario2d.game.objet.Canon;
 import com.example.mario2d.game.objet.Castle;
 import com.example.mario2d.game.objet.Champignon;
 import com.example.mario2d.game.objet.Etoile;
@@ -22,6 +23,7 @@ import com.example.mario2d.game.personnage.Ennemy;
 import com.example.mario2d.game.personnage.FireBowl;
 import com.example.mario2d.game.personnage.Goomba;
 import com.example.mario2d.game.personnage.Koopa;
+import com.example.mario2d.game.personnage.Magikoopa;
 import com.example.mario2d.game.personnage.Parakoopa;
 import com.example.mario2d.game.personnage.Personnage;
 import com.example.mario2d.game.personnage.PlantePirhana;
@@ -40,7 +42,6 @@ public class GameActivity extends AppCompatActivity {
             CHARACTER_SELECTED, PIECE_WIDTH, PIECE_HEIGHT;
     public static int displayWidth, displayHeight;
     public static int dx;
-
     private Boolean leftHandMode, soundEffect, music;
     public static ArrayList<Objet> objets = new ArrayList<Objet>();
     public static ArrayList<Castle> castles = new ArrayList<Castle>();
@@ -150,7 +151,7 @@ public class GameActivity extends AppCompatActivity {
                 drawDecoration("nuage", 175*dx, 1*dx, nuageSimpeWidth, nuageSimpleHeight);
 
 
-                drawAlternatesBloc("brownbloc", "bloc", 30*dx, displayHeight-FLOOR_HEIGHT-BLOC_HEIGHT*4, 3, 2, 6);
+                drawAlternatesBloc("brownbloc", "bloc", 30*dx, displayHeight-FLOOR_HEIGHT-BLOC_HEIGHT*4, 3, 2, 4);
                 drawStaticPlatform("pillier_champi_platforme", "champi_platforme", 80*dx, 4*dx, 10*dx, 12*dx, 4*dx, 2);
                 drawStaticPlatform("pillier_champi_platforme", "champi_platforme", 120*dx, 4*dx, 15*dx, 15*dx, 4*dx, 2);
                 drawStaticPlatform("pillier_champi_platforme", "champi_platforme", 160*dx, 4*dx, 10*dx, 12*dx, 4*dx, 2);
@@ -174,6 +175,7 @@ public class GameActivity extends AppCompatActivity {
 
                 drawParakoopa("greenparakoopa", 285*dx, surface - 10*dx, true, true);
                 drawLine("BrownBloc", "redbrick", 345*dx, 420*dx, surface , FLOOR_WIDTH, FLOOR_HEIGHT, false);
+
 
                 return;
             case 2 :
@@ -276,17 +278,54 @@ public class GameActivity extends AppCompatActivity {
                 drawCastle("castle", 0);
                 drawCastle("castle", 400*dx );
                 drawLine("BrownBloc", "darkbrick", 0, CASTLE_WIDTH*3, surface, FLOOR_WIDTH, FLOOR_HEIGHT, false);
-
-
-                drawPodoboo("podoboo", 30*dx, surface - 9*dx, 3*dx, 3*dx);
-                drawBloc("bloc", 40*dx, surface - 4*BLOC_WIDTH, BLOC_WIDTH, BLOC_HEIGHT, 6);
-                drawPlatformeEphemere("tile1", 50*dx, 10*dx, 3*dx, 3*dx, 300, true, false);
-
+                drawBloc("bloc", 40*dx, surface-4*BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT, 6);
+                drawPodoboo("podoboo", 75*dx, surface - 9*dx, 3*dx, 3*dx);
+                drawLine("BrownBloc", "platforme_rouge", 80*dx, 150*dx, surface, 10*dx, 10*dx, false);
+                drawKoopa("redkoopa", 90*dx, surface - 6*dx, false, false);
+                drawKoopa("redkoopa", 130*dx, surface-5*dx, false, true);
+                drawPodoboo("podoboo", 155*dx, surface - 9*dx, 3*dx, 3*dx);
+                drawPlatformeEphemereLine("tile1", 160*dx, surface, 3*dx, 3*dx, 400, true, false, 5);
+                drawPlatformeEphemereLine("tile1", 175*dx, surface - 6*dx, 3*dx, 3*dx, 400, true, false, 5);
+                drawPlatformeEphemereLine("tile1", 190*dx, surface - 12*dx, 3*dx, 3*dx, 400, true, false, 5);
+                drawPodoboo("podoboo", 207*dx, surface-15*dx, 3*dx, 3*dx);
+                drawLine("BrownBloc", "platforme_rouge", 212*dx, 252*dx, surface - 12*dx, 20*dx, 20*dx, true);
+                drawUnmovablePlatforme("briquestriee", 242*dx, surface-22*dx, 10*dx, 10*dx);
+                drawAlternatesBloc("darkbloc", "bloc", 226*dx, surface - 22*dx - BLOC_HEIGHT, 3, 2, 3 );
+                drawGoomba("goomba", 232*dx, surface-26*dx, false, true);
+                //drawLine("BrownBloc", "greybrick3", 0, 250*dx, 0, 10*dx, 10*dx, false);
                 return;
             case 5 :
                 drawCastle("castle", 0);
-                drawCastle("castle", 400*dx );
-                drawLine("BrownBloc", "nuageplatform", 0, 400*dx, surface, FLOOR_WIDTH, FLOOR_HEIGHT, false);
+                drawCastle("castle", 600*dx );
+                drawBloc("forest_platform",0, surface, CASTLE_WIDTH, CASTLE_HEIGHT/3, 1 );
+                drawLine("BrownBloc", "brownbloc", CASTLE_WIDTH + 2*BLOC_WIDTH, 76*dx, surface, BLOC_WIDTH, BLOC_HEIGHT, true);
+                drawStaticPlatform("pillier_champi_platforme", "champi_platforme", 80*dx, displayHeight-15*dx,5*dx, 20*dx, 20*dx, 5*dx, 3);
+                drawStaticPlatform("pillier_champi_platforme", "champi_platforme_jaune", 110*dx, displayHeight-20*dx,5*dx, 21*dx, 20*dx, 5*dx, 2);
+                drawMovablePlatform("platforme", 130*dx, surface - 10*dx, 10*dx, (int) (20*dx*0.1657), true, 10*dx, surface-6*dx);
+                drawMovablePlatform("platforme", 150*dx, surface - 10*dx, 10*dx, (int) (20*dx*0.1657), false, 10*dx, surface-6*dx);
+                drawMovablePlatform("platforme", 170*dx, surface - 10*dx, 10*dx, (int) (20*dx*0.1657), true, 10*dx, surface-6*dx);
+                drawMovablePlatform("platforme", 190*dx, surface - 10*dx, 10*dx, (int) (20*dx*0.1657), false, 10*dx, surface-6*dx);
+                drawLine("BrownBloc", "brownbloc", 210*dx, 255*dx, surface - 5*BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT, true);
+                drawBloc("bloc", 254*dx, surface - 5*BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT, 5);
+                drawLine("BrownBloc", "brownbloc", 258*dx, 300*dx, surface - 5*BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT, true);
+                drawLine("BrownBloc", "brownbloc", 210*dx, 300*dx, displayHeight-BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT, true);
+                drawBloc("bloc_jaune", 294*dx, surface - 6*BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT, 1);
+                drawMovablePlatform("nuageplatform2", 300*dx, displayHeight-BLOC_HEIGHT, 10*dx, 3*dx, true, surface - 5*BLOC_HEIGHT, displayHeight - BLOC_HEIGHT);
+                drawMovablePlatform("nuageplatform2", 310*dx, displayHeight-BLOC_HEIGHT, 10*dx, 3*dx, false, surface - 5*BLOC_HEIGHT, displayHeight - BLOC_HEIGHT);
+                drawPlatformeEphemereLine("tile1", 322*dx, surface - 2*BLOC_HEIGHT, 3*dx, 3*dx, 300, true, true, 10);
+                drawPlatformeEphemereLine("tile1", 352*dx, surface - 2*BLOC_HEIGHT-3*dx, 3*dx, 3*dx, 300, true, true, 10);
+                drawBloc("forest_platform", 385*dx, surface - 2*BLOC_HEIGHT-3*dx, CASTLE_WIDTH, CASTLE_HEIGHT/3, 2);
+                drawBloc("forest_platform", 385*dx+CASTLE_WIDTH +4*dx, surface - 8*dx, CASTLE_WIDTH, CASTLE_HEIGHT/3, 1);
+                drawCanon("canon", 425*dx, surface - 18*dx, 5*dx, 10*dx, false);
+                drawBloc("forest_platform", 440*dx, surface - 8*dx, CASTLE_WIDTH, CASTLE_HEIGHT/3, 1);
+                drawPyramid("BrownBloc", "brique_jaune", 480*dx, 10, surface-8*dx, 4*dx, 4*dx);
+                drawUnmovablePlatforme("nuageplatform2", 479*dx, (int) (surface - 6.5*dx), 10*dx, 3*dx);
+                drawUnmovablePlatforme("nuageplatform2", 496*dx, (int) (surface - 6.5*dx), 10*dx, 3*dx);
+                drawUnmovablePlatforme("nuageplatform2", 511*dx, (int) (surface - 6.5*dx), 10*dx, 3*dx);
+                drawUnmovablePlatforme("nuageplatform2", 487*dx, (int) (surface - 6.5*dx), 10*dx, 3*dx);
+                drawUnmovablePlatforme("nuageplatform2", 503*dx, (int) (surface - 6.5*dx), 10*dx, 3*dx);
+                drawGoomba("goomba", 120*dx, displayHeight-26*dx, false, true);
+                drawAlternatesBloc("bloc_jaune", "bloc", 76*dx, displayHeight - 33*dx, 3, 1, 3);
                 return;
         }
 
@@ -546,6 +585,33 @@ public class GameActivity extends AppCompatActivity {
                 return;
         }
     }
+    public void drawStaticPlatform(String footName, String headName, int x, int y, int footWidth, int footHeight, int headWidth, int headHeight, int code){
+        int footY = y;
+        drawBloc(footName, x, footY, footWidth, footHeight, 1);
+        int headX = x + footWidth/2 - headWidth/2;
+        int headY = footY - headHeight;
+        switch(code){
+
+            case 1 :
+                drawBloc(headName, headX, headY, headWidth, headHeight, 1);
+                return;
+            case 2 :
+                drawBloc(headName, headX, headY, headWidth, headHeight, 2);
+                return;
+            case 3 :
+                int quantity = headWidth/PIECE_WIDTH;
+                drawBloc(headName, headX, headY, headWidth, headHeight, 1);
+                drawPieceLine(headX, headY - PIECE_HEIGHT-dx, quantity, 1);
+                return;
+            case 4 :
+                int quantite = headWidth/PIECE_WIDTH;
+                drawBloc(headName, headX, headY, headWidth, headHeight, 1);
+                drawPieceLine(headX, headY-PIECE_HEIGHT-dx, quantite, 2);
+                break;
+            default :
+                return;
+        }
+    }
     public void drawPieceLine(int startX,int y, int quantite, int code){
         switch (code){
             case 1 :
@@ -661,10 +727,15 @@ public class GameActivity extends AppCompatActivity {
         ennemies.add(pp);
         pipes.add(pipe);
     }
-    public void drawUnmovablePlatforme(String key, int x, int y, int width, int height,boolean movable){
+    public void drawUnmovablePlatforme(String key, int x, int y, int width, int height){
         Platforme platforme = new Platforme(this, key, x, y, width, height);
         platforme.setMovable(false);
         platformes.add(platforme);
+    }
+    public void drawUnmovablePlaftformLine(String key, int x, int y, int width, int height, int quantite) {
+        for (int i = 0; i<quantite; i++) {
+            drawUnmovablePlatforme(key, x + i*width, y, width, height);
+        }
     }
     public void drawMovablePlatform(String key, int x, int y, int width, int height, boolean up, int upperLimit, int lowerLimit){
         Platforme platforme = new Platforme(this, key, x, y, width, height);
@@ -685,5 +756,21 @@ public class GameActivity extends AppCompatActivity {
         pe.setUp(up);
         pe.setVie(vie);
         platformes.add(pe);
+    }
+    public void drawPlatformeEphemereLine(String key, int x, int y, int width, int height, int vie, boolean movable, boolean up, int quantite) {
+        for (int i = 0; i<quantite; i++) {
+            drawPlatformeEphemere(key, x + i*width, y, width, height, vie, movable, up);
+        }
+    }
+    public void drawCanon (String key, int x, int y, int width, int height, boolean right) {
+        Canon canon = new Canon(this, key, x, y, width, height);
+        canon.setRight(right);
+        brownBlocs.add(canon);
+    }
+    public void drawMagikoopa(int x, int y) {
+        int magWidth = 5*dx;
+        int magHeight = (int) (magWidth*1.2);
+        Magikoopa mag = new Magikoopa(this, "magikoopa", x, y, magWidth, magHeight);
+        ennemies.add(mag);
     }
 }

@@ -455,9 +455,11 @@ public abstract class Personnage extends Origin{
     public void rest(){}
     public void invincible(){}
     public void addCollisionValue(String key, int index, boolean b){
-        boolean[] tab = collisionMatrix.get(key);
-        tab[index] = b;
-        collisionMatrix.put(key, tab);
+        if(collisionMatrix.containsKey(key)) {
+            boolean[] tab = collisionMatrix.get(key);
+            tab[index] = b;
+            collisionMatrix.put(key, tab);
+        }
     }
     public void recalibrerY(Personnage personnage){
         if(isRecalibrable){

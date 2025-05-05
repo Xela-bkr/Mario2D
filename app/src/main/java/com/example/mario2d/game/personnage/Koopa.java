@@ -17,7 +17,7 @@ import java.util.Arrays;
 public class Koopa extends Ennemy {
     protected Bitmap arret_droite, arret_gauche, marche_droite, marche_gauche, carapace_face, rotate_1, rotate_2, rotate_3;
     protected int frequenceRotation, compteurRotation;
-    protected Audio invinvibleAudio;
+    protected Audio invincibleAudio;
     protected boolean rotable;
     public Koopa(Context context, String name, int x, int y, int width, int height) {
         super(context, name, x, y, width, height);
@@ -42,8 +42,8 @@ public class Koopa extends Ennemy {
         this.setDeadWidth(width/2);
         this.setDeadHeight(height/2);
 
-        invinvibleAudio = new Audio(context, R.raw.spin_jump);
-        invinvibleAudio.setLoop(true);
+        invincibleAudio = new Audio(context, R.raw.spin_jump);
+        invincibleAudio.setLoop(true);
     }
     public void setBitmaps(){
         Bitmap b1 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(name+"_arret_droite"));
@@ -189,7 +189,7 @@ public class Koopa extends Ennemy {
         if(!isInvincible)
         {
             isInvincible = true;
-            invinvibleAudio.play();
+            invincibleAudio.play();
         }
         isResting = false;
         if(invincibleCompteur < 300){
@@ -207,7 +207,7 @@ public class Koopa extends Ennemy {
             }
         }
         else{
-            invinvibleAudio.stop();
+            invincibleAudio.stop();
             setInvincibleCompteur(0);
             dead();
         }
@@ -227,22 +227,17 @@ public class Koopa extends Ennemy {
         if(activated){
 
             if(collisionWithObject(1) || collisionWithObject(3)){reverseDirection();}
-
-            if (isResting)
-            {
+            updateCollisions();
+            if (isResting) {
                 rest();
-            }  else if (isInvincible)
-            {
+            }  else if (isInvincible) {
                 invincible();
-            } else if (isWalking)
-            {
+            } else if (isWalking) {
                 walk(frequenceMarche);
-            } else
-            {
+            } else {
                 dead();
             }
-            for(Ennemy en : ennemies)
-            {
+            for(Ennemy en : ennemies) {
                 boolean[] tab1 = detectCollision(en);
                 if(tab1[0] || tab1[1] || tab1[2] || tab1[3]){
                     if(isInvincible && !en.getInvincible() && en.getAlive())
@@ -251,6 +246,39 @@ public class Koopa extends Ennemy {
                         en.dead();
                     }
                 }
+            }
+        }
+    }
+    public void updateCollisions() {
+        boolean[] tab = player.detectCollision(this);
+        if (tab[0]) {
+            if(!getInvincible()) {
+                if(!getResting()) {
+                    Audio.playSound(context, R.raw.kick_2);
+                    rest();
+                } else {
+                    invincible();
+                }
+            }
+            player.recalibrerY(this);
+            player.jump2();
+        } else if (tab[1] || tab[2] || tab[3]) {
+            if(!isInvincible) {
+                if (!isResting) {
+                    if (!player.getInvincible()) {
+                        if(!player.getResting()) {
+                            player.decreaseLife();
+                        } else {
+                            invincible();
+                        }
+                    } else {
+                        dead();
+                    }
+                } else {
+                    invincible();
+                }
+            } else {
+                player.decreaseLife();
             }
         }
     }

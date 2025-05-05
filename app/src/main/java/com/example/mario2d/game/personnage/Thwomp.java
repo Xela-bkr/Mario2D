@@ -80,16 +80,14 @@ public class Thwomp extends Ennemy{
         if(activated){
             boolean[] tab1 = player.detectCollision(this, (int) (getHeight()*0.05), (int) (-getWidth()*0.05));
             if(tab1[0]){
-                player.setJumping(true);
                 player.recalibrerY(this);
             }
             else if(tab1[2]){
                 if(!player.isResting){
                     player.decreaseLife();
-                    player.setResting(true);
-                    player.rest();
                 }
-            }
+            } else if (tab1[1]) {player.addCollisionValue("brownbloc", 1, true);}
+            else if (tab1[3]) {player.addCollisionValue("brownbloc", 3, true);}
             invincible();
         }
         else {if(getX() <= player.getX()){setActivated(true);}}

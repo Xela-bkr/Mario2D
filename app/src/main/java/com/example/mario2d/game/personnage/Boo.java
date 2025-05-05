@@ -50,6 +50,7 @@ public class Boo extends Ennemy{
     public void update(){
         if (activated)
         {
+            updateCollisions();
             if(isResting){rest();}
             if(isWalking){fly();}
             if(isInvincible){invincible();}
@@ -134,6 +135,24 @@ public class Boo extends Ennemy{
     public void changeCamouflage(String key){
         Bitmap b1 = BitmapFactory.decodeResource(context.getResources(), spriteBank.get(key));
         brick = Bitmap.createScaledBitmap(b1, getWidth(), getHeight(), true);
+    }
+    public void updateCollisions() {
+        boolean[] tab = player.detectCollision(this);
+        if(tab[0]) {
+            Audio.playSound(context, R.raw.boo_08);
+            player.jump2();
+            dead();
+        } else if (tab[1] || tab[2] || tab[3]) {
+            if (!player.getResting()) {
+                if (!player.getInvincible()) {
+                    Audio.playSound(context, R.raw.boo_02);
+                    player.decreaseLife();
+                } else {
+                    Audio.playSound(context, R.raw.kick_2);
+                    dead();
+                }
+            }
+        }
     }
 }
 

@@ -388,16 +388,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                         canvas.drawBitmap(obj.getBitmap(), obj.getX(), obj.getY(), paint);
                     }
                 }
-                for(Castle c : castles){
-                    if (c.getActivated() && onScreen(c, 10, 10) && c.getBitmap() != null) {
-                        canvas.drawBitmap(c.getBitmap(), c.getX(), c.getY(), paint);
-                    }
-                }
-                for(BrownBloc bb : brownBlocs){
-                    if (bb.getActivated() && onScreen(bb, 10, 10) && bb.getBitmap() != null) {
-                        canvas.drawBitmap(bb.getBitmap(), bb.getX(), bb.getY(), paint);
-                    }
-                }
                 for(Champignon c : champis){
                     if (c.getActivated() && onScreen(c, 10, 10) && c.getBitmap() != null) {
                         canvas.drawBitmap(c.getBitmap(), c.getX(), c.getY(), paint);
@@ -418,9 +408,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                         canvas.drawBitmap(yb.getBitmap(), yb.getX(), yb.getY(), paint);
                     }
                 }
-                for(Platforme p : platformes){
-                    if(p.getActivated() && onScreen(p, 10, 10) && p.getBitmap()!=null){
-                        canvas.drawBitmap(p.getBitmap(), p.getX(), p.getY(), paint);
+                for(Castle c : castles){
+                    if (c.getActivated() && onScreen(c, 10, 10) && c.getBitmap() != null) {
+                        canvas.drawBitmap(c.getBitmap(), c.getX(), c.getY(), paint);
                     }
                 }
                 for(Piece p : pieces){
@@ -431,6 +421,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 for(Ennemy en : ennemies) {
                     if(en.getActivated() && onScreen(en, 10, 10) && en.getBitmap()!=null) {
                         canvas.drawBitmap(en.getBitmap(), en.getX(), en.getY(), paint);
+                    }
+                }
+                for(BrownBloc bb : brownBlocs){
+                    if (bb.getActivated() && onScreen(bb, 10, 10) && bb.getBitmap() != null) {
+                        canvas.drawBitmap(bb.getBitmap(), bb.getX(), bb.getY(), paint);
+                    }
+                }
+                for(Platforme p : platformes){
+                    if(p.getActivated() && onScreen(p, 10, 10) && p.getBitmap()!=null){
+                        canvas.drawBitmap(p.getBitmap(), p.getX(), p.getY(), paint);
                     }
                 }
                 for(Pipe pipe : pipes){

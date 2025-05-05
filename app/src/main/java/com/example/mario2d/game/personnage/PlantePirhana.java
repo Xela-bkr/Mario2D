@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import com.example.mario2d.R;
+import com.example.mario2d.tool.Audio;
 
 
 public class PlantePirhana extends Ennemy{
@@ -118,5 +119,24 @@ public class PlantePirhana extends Ennemy{
         this.activated = false;
         this.isAlive = false;
         waitingLineForRemoving.add(this);
+    }
+    public void updateCollisions() {
+        boolean[] tab = player.detectCollision(this);
+        if(tab[0]) {
+            if(!player.getInvincible()) {
+                if(!player.getResting()) {player.decreaseLife();}
+            } else {
+                    dead();
+                }
+        } else if (tab[1] || tab[2] || tab[3]) {
+            if (!player.getResting()) {
+                if (!player.getInvincible()) {
+                    player.decreaseLife();
+                } else {
+                    Audio.playSound(context, R.raw.kick_2);
+                    dead();
+                }
+            }
+        }
     }
 }

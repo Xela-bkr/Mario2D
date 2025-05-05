@@ -211,7 +211,7 @@ public class Player extends Personnage{
     @Override
     public void update(){
 
-        updateEnnemyCollision();
+        //updateEnnemyCollision();
         updateObjetCollision();
 
         if (smallJump) {
@@ -264,6 +264,7 @@ public class Player extends Personnage{
         this.piecesCount ++;
     }
     public void jump2(){
+        if(!smallJump) {smallJump = true;}
         if (compteurPetitSaut < 10)
         {
             gravity = false;
@@ -294,13 +295,14 @@ public class Player extends Personnage{
             this.bitmap = victoire;
         }
     }
+    @Deprecated
     private void updateEnnemyCollision()
     {
         for(Ennemy en : ennemies)
         {
             if (en.getActivated() && en.getAlive())
             {
-                boolean[] tab = detectCollision(en);
+                boolean[] tab = detectCollision(en, 5, -5);
                 if (tab[0])
                 {
                     if (en.getResting())

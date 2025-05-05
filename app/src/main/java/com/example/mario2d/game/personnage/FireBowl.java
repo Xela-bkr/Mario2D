@@ -8,6 +8,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.example.mario2d.R;
+import com.example.mario2d.tool.Audio;
+
 public class FireBowl extends Ennemy{
     private Bitmap boule1, boule2, boule3;
     public FireBowl(Context context, String name, int x, int y, int width, int height) {
@@ -80,15 +83,20 @@ public class FireBowl extends Ennemy{
                 boolean[] tab = en.detectCollision(this);
                 if(tab[0] || tab[1] || tab[2] || tab[3]) {
                     if(!en.getInvincible()) {
+                        Audio.playSound(context, R.raw.kick_2);
                         en.dead();
                     }
                 }
             }
         }
         boolean[] play = player.detectCollision(this);
-        if(play[0] || play[1] || play[2] || play[3]) {
-            if(!player.getInvincible() && !player.getResting()) {
-                player.decreaseLife();
+        if (play[0] || play[1] || play[2] || play[3]) {
+            if (!player.getInvincible()){
+                if (!player.getResting()) {
+                    player.decreaseLife();
+                }
+            } else {
+                dead();
             }
         }
     }
