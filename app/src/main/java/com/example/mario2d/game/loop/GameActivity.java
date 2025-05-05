@@ -278,7 +278,7 @@ public class GameActivity extends AppCompatActivity {
                 drawCastle("castle", 0);
                 drawCastle("castle", 400*dx );
                 drawLine("BrownBloc", "darkbrick", 0, CASTLE_WIDTH*3, surface, FLOOR_WIDTH, FLOOR_HEIGHT, false);
-                drawBloc("bloc", 40*dx, surface-4*BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT, 6);
+                drawBloc("bloc", 40*dx, surface-3*BLOC_HEIGHT-dx, BLOC_WIDTH, BLOC_HEIGHT, 6);
                 drawPodoboo("podoboo", 75*dx, surface - 9*dx, 3*dx, 3*dx);
                 drawLine("BrownBloc", "platforme_rouge", 80*dx, 150*dx, surface, 10*dx, 10*dx, false);
                 drawKoopa("redkoopa", 90*dx, surface - 6*dx, false, false);
@@ -288,11 +288,14 @@ public class GameActivity extends AppCompatActivity {
                 drawPlatformeEphemereLine("tile1", 175*dx, surface - 6*dx, 3*dx, 3*dx, 400, true, false, 5);
                 drawPlatformeEphemereLine("tile1", 190*dx, surface - 12*dx, 3*dx, 3*dx, 400, true, false, 5);
                 drawPodoboo("podoboo", 207*dx, surface-15*dx, 3*dx, 3*dx);
-                drawLine("BrownBloc", "platforme_rouge", 212*dx, 252*dx, surface - 12*dx, 20*dx, 20*dx, true);
-                drawUnmovablePlatforme("briquestriee", 242*dx, surface-22*dx, 10*dx, 10*dx);
-                drawAlternatesBloc("darkbloc", "bloc", 226*dx, surface - 22*dx - BLOC_HEIGHT, 3, 2, 3 );
+                drawLine("BrownBloc", "platforme_rouge", 212*dx, 252*dx, surface - 12*dx, 20*dx, 20*dx, false);
+                drawAlternatesBloc("darkbloc", "bloc", 226*dx, surface - 22*dx - BLOC_HEIGHT, 3, 2, 4 );
                 drawGoomba("goomba", 232*dx, surface-26*dx, false, true);
-                //drawLine("BrownBloc", "greybrick3", 0, 250*dx, 0, 10*dx, 10*dx, false);
+                drawLine("BrownBloc", "brique_marron", 260*dx, 350*dx, surface - 4*dx, 5*dx, 5*dx, false);
+                drawBloc("brique_marron", 260*dx, surface-9*dx, 5*dx, 5*dx, 2);
+                drawBloc("brique_marron", 345*dx, surface-9*dx, 5*dx, 5*dx, 2);
+                drawMagikoopa(305*dx, surface - 15*dx);
+                drawBloc("bloc", 305*dx, surface - 20*dx, BLOC_WIDTH, BLOC_HEIGHT, 6);
                 return;
             case 5 :
                 drawCastle("castle", 0);

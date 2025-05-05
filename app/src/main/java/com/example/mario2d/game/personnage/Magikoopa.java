@@ -25,7 +25,7 @@ public class Magikoopa extends Ennemy{
         activated = false;
         gravityFall = false;
         isResting = false;
-        this.life = 2;
+        this.life = 3;
         setBitmaps();
     }
     @Override
@@ -65,10 +65,14 @@ public class Magikoopa extends Ennemy{
             } else {
                 if (player.getX() < getX()) {
                     isRight = false;
-                    translateX(-3);
+                    if (!collisionWithObject(1)) {
+                        translateX(-3);
+                    }
                 } else if (player.getX() > getX() + getWidth()) {
                     isRight = true;
-                    translateX(3);
+                    if (!collisionWithObject(3)) {
+                        translateX(3);
+                    }
                 }
                 if(waiting <= 200) {
                     updateImage();

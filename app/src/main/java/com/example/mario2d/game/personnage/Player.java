@@ -17,7 +17,7 @@ import com.example.mario2d.tool.Audio;
 
 public class Player extends Personnage{
     private float agrCoeff = 1.86f;
-    private int piecesCount, compteurPetitSaut;
+    private int piecesCount, compteurPetitSaut, shotCount;
     private String skin;
     private Audio star;
     private int initialWidth, initialHeight;
@@ -38,6 +38,7 @@ public class Player extends Personnage{
         this.restCompteur = 0;
         this.smallJump = true;
         compteurPetitSaut = 0;
+        shotCount = 0;
         droppingFire = false;
         if(!name.equals("mario") && !name.equals("luigi")){name="mario";}
         collisionMatrix.put("ennemy", new boolean[]{false, false, false, false});
@@ -214,6 +215,13 @@ public class Player extends Personnage{
         //updateEnnemyCollision();
         updateObjetCollision();
 
+        if (shotCount <= 0) {
+            if (fire) {
+                fire = false;
+                skin = "";
+                setBitmaps();
+            }
+        }
         if (smallJump) {
             jump2();
         }
@@ -358,6 +366,7 @@ public class Player extends Personnage{
     }
     public void dropFireBowl(){
         droppingFire = true;
+        shotCount --;
         int fbWidth = getWidth();
         int fbHeight = fbWidth;
         int fbX = getX() + getWidth() + 3*dx;
@@ -369,4 +378,5 @@ public class Player extends Personnage{
         fb.setRight(isRight);
         waitingLine.add(fb);
     }
+    public void setShotCount(int count) {this.shotCount = count;}
 }

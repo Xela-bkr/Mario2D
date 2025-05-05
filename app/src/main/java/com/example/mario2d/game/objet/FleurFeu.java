@@ -22,6 +22,7 @@ public class FleurFeu extends Item{
                 boolean[] tab = player.detectCollision(this);
                 if(tab[0] || tab[1] || tab[2] || tab[3]) {
                     player.setSkin();
+                    player.setShotCount(14);
                     setActivated(false);
                     isPicked = true;
                 }
