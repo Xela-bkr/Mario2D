@@ -44,6 +44,8 @@ public class GameActivity extends AppCompatActivity {
     public static int dx;
     private Boolean leftHandMode, soundEffect, music;
     public static ArrayList<Objet> objets = new ArrayList<Objet>();
+    public static ArrayList<BrownBloc> waitingLineBrownBlocs = new ArrayList<BrownBloc>();
+    public static ArrayList<BrownBloc> waitingLineBrownBlocsForRemoving = new ArrayList<BrownBloc>();
     public static ArrayList<Castle> castles = new ArrayList<Castle>();
     public static ArrayList<BrownBloc> brownBlocs = new ArrayList<BrownBloc>();
     public static ArrayList<YellowBloc> yellowBlocs = new ArrayList<YellowBloc>();
@@ -87,6 +89,8 @@ public class GameActivity extends AppCompatActivity {
         waitingLine.clear();
         fleursfeu.clear();
         waitingLineForRemoving.clear();
+        waitingLineBrownBlocs.clear();
+        waitingLineBrownBlocsForRemoving.clear();
         setObjets();
         setContentView(new GameView(this, displayWidth, displayHeight,leftHandMode, LEVEL_SELECTED));
     }
@@ -181,11 +185,8 @@ public class GameActivity extends AppCompatActivity {
             case 2 :
 
                 drawCastle("greencastle", 0);
-                drawCastle("greencastle", 400*dx);
-
-                drawLine("BrownBloc", "greenbrick", 0, 400*dx, surface, FLOOR_WIDTH, FLOOR_HEIGHT, false);
-
-
+                drawCastle("greencastle", 500*dx);
+                drawLine("BrownBloc", "greenbrick", 0, 450*dx, surface, FLOOR_WIDTH, FLOOR_HEIGHT, false);
                 drawAlternatesBloc("greenbloc", "bloc", 30*dx, staticBlocY, 10, 2, 3);
                 drawLine("Objet", "greybrick2", 0, 400*dx, 0, 3*dx, 3*dx, false);
                 drawLine("BrownBloc", "greybrick2", 0, 186*dx, 3*dx, 3*dx, 3*dx, false);
@@ -259,9 +260,8 @@ public class GameActivity extends AppCompatActivity {
                 drawAlternatesBloc("goldenbloc", "bloc", 50*dx, surface-6*BLOC_WIDTH, 9, 2, 3);
                 drawAlternatesBloc("goldenbloc", "bloc", 94*dx, surface - 6*BLOC_WIDTH, 9, 2, 3);
                 //drawKoopa("redkoopa", 70*dx, surface - 5*dx, false);
-                drawGoomba("goomba", 70*dx, surface-17*dx, false, false);
                 drawColumn("BrownBloc", "goldenbloc", 130*dx, surface-BLOC_HEIGHT, 6, BLOC_WIDTH, BLOC_HEIGHT, false);
-                drawSpiny("spiny", 60*dx,surface-3*BLOC_WIDTH-3*dx , 3*dx, 3*dx, true, false);
+                drawSpiny("spiny", 70*dx,surface-17*dx , 3*dx, 3*dx, false, true);
                 drawKoopa("redkoopa", 100*dx, surface-8*BLOC_WIDTH, false, true);
 
                 drawPlantPirhanaWithGreenPipe(160*dx, surface - PIPE_HEIGHT);
@@ -295,11 +295,11 @@ public class GameActivity extends AppCompatActivity {
                 drawLine("BrownBloc", "platforme_rouge", 212*dx, 252*dx, surface - 12*dx, 20*dx, 20*dx, false);
                 drawAlternatesBloc("darkbloc", "bloc", 226*dx, surface - 22*dx - BLOC_HEIGHT, 3, 2, 4 );
                 drawGoomba("goomba", 232*dx, surface-26*dx, false, true);
-                drawLine("BrownBloc", "brique_marron", 260*dx, 350*dx, surface - 4*dx, 5*dx, 5*dx, false);
-                drawBloc("brique_marron", 260*dx, surface-9*dx, 5*dx, 5*dx, 2);
-                drawBloc("brique_marron", 345*dx, surface-9*dx, 5*dx, 5*dx, 2);
-                drawMagikoopa(305*dx, surface - 15*dx);
-                drawBloc("bloc", 305*dx, surface - 20*dx, BLOC_WIDTH, BLOC_HEIGHT, 6);
+                drawLine("BrownBloc", "brique_marron", 260*dx, 400*dx, surface - 4*dx, 5*dx, 5*dx, false);
+                /*drawBloc("brique_marron", 260*dx, surface-9*dx, 5*dx, 5*dx, 2);
+                drawBloc("brique_marron", 345*dx, surface-9*dx, 5*dx, 5*dx, 2);*/
+                drawMagikoopa(330*dx, surface - 15*dx);
+                drawBloc("bloc", 302*dx, surface - 20*dx, BLOC_WIDTH, BLOC_HEIGHT, 6);
                 return;
             case 5 :
                 drawCastle("castle", 0);

@@ -301,6 +301,9 @@ public abstract class Origin {
         spriteBank.put("magiboule_2", R.drawable.magiboule_2);
         spriteBank.put("magiboule_3", R.drawable.magiboule_3);
         spriteBank.put("magiboule_4", R.drawable.magiboule_4);
+        spriteBank.put("magikoopa_mort_gauche", R.drawable.magikoopa_mort_gauche);
+        spriteBank.put("magikoopa_mort_droite", R.drawable.magikoopa_mort_droite);
+
 
         spriteBank.put("brique_marron", R.drawable.brique_marron);
         spriteBank.put("pyramides", R.drawable.pyramides);

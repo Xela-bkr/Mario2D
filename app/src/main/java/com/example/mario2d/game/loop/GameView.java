@@ -6,6 +6,8 @@ import static com.example.mario2d.game.loop.GameActivity.etoiles;
 import static com.example.mario2d.game.loop.GameActivity.fleursfeu;
 import static com.example.mario2d.game.loop.GameActivity.platformes;
 import static com.example.mario2d.game.loop.GameActivity.waitingLine;
+import static com.example.mario2d.game.loop.GameActivity.waitingLineBrownBlocs;
+import static com.example.mario2d.game.loop.GameActivity.waitingLineBrownBlocsForRemoving;
 import static com.example.mario2d.game.loop.GameActivity.waitingLineForRemoving;
 import static com.example.mario2d.game.loop.GameActivity.yellowBlocs;
 import static com.example.mario2d.game.loop.GameActivity.brownBlocs;
@@ -90,7 +92,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public Joystick joystick;
     public  Player player;
     private GameLoop gameLoop;
-    private Audio theme;
+    public static Audio theme;
     private int dx, joystickPointerId, jumpPointerId, menuPointerId, pausePointerId, retryPointerId, exitPointerId,
             displayWidth, displayHeight, LEVEL_SELECTED, gameCompteur, firePointerId;
     private Boolean leftHandMode, soundEffect, music, afficherMenuLateral;
@@ -468,6 +470,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         waitingLine.clear();
         for(Ennemy en : waitingLineForRemoving) {
             ennemies.remove(en);
+        }
+        for(BrownBloc b : waitingLineBrownBlocs) {
+            brownBlocs.add(b);
+        }
+        waitingLineBrownBlocs.clear();
+        for(BrownBloc b : waitingLineBrownBlocsForRemoving) {
+            brownBlocs.remove(b);
         }
         if(player.getX() + player.getWidth() >= castles.get(1).getX() - player.getWidth()*0.05){
             if (theme.isRunning) theme.stop();

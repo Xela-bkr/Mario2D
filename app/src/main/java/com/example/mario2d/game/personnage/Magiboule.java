@@ -49,13 +49,13 @@ public class Magiboule extends Ennemy{
         }
     }
     private void animer(){
-        if(compteurMarche < 8) {
+        if(compteurMarche < 3) {
             this.bitmap = mag1;
-        } else if (compteurMarche < 16) {
+        } else if (compteurMarche < 6) {
             this.bitmap = mag2;
-        } else if (compteurMarche < 24) {
+        } else if (compteurMarche < 9) {
             this.bitmap = mag3;
-        } else if (compteurMarche < 32) {
+        } else if (compteurMarche < 12) {
             this.bitmap = mag4;
         } else {
             compteurMarche = 0;
@@ -83,8 +83,12 @@ public class Magiboule extends Ennemy{
         waitingLineForRemoving.add(this);
     }
     public void updateCollisions() {
-        boolean[] tab = player.detectCollision(this, (int) (getHeight()*0.1), (int) (getWidth()*0.1), (int) (getHeight()*0.1), (int) (getWidth()*0.1));
-        if (tab[0] || tab[1] || tab[2] || tab[3]) {
+        boolean[] tab = player.detectCollision(this, 0, (int) (getWidth()*0.2), 0, (int) (getWidth()*0.2));
+        if(tab[0]) {
+            Audio.playSound(context, R.raw.kick_2);
+            dead();
+        }
+        else if (tab[1] || tab[2] || tab[3]) {
             if (!player.getInvincible()) {
                 if(!player.getResting()) {
                     player.decreaseLife();
