@@ -36,7 +36,7 @@ public class Player extends Personnage{
         this.compteurSaut = 0;
         this.isResting = false;
         this.restCompteur = 0;
-        this.smallJump = true;
+        this.smallJump = false;
         compteurPetitSaut = 0;
         shotCount = 0;
         droppingFire = false;

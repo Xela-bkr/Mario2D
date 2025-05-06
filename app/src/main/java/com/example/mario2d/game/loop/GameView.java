@@ -167,13 +167,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         joystickPointerId = -1; jumpPointerId = -1; menuPointerId = -1; pausePointerId = -1;
         retryPointerId = -1; exitPointerId = -1; firePointerId = -1;
-
-        int[] themes = {R.raw.theme1, R.raw.theme2, R.raw.theme3, R.raw.theme4, R.raw.theme5};
-        theme = new Audio(context, themes[LEVEL_SELECTED-1]);
-        themes = null;
-        theme.setLoop(true);
-        theme.play();
-
+        setTheme();
     }
     /**
      * Listener pour gérer les évènements tacliles
@@ -441,7 +435,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     canvas.drawBitmap(player.getBitmap(), player.getX(), player.getY(), paint);
                 }
                 joystick.draw(canvas);
-                if(menuButton.getIsPressed()) afficherMenuLateral(canvas);
+                if(menuButton.getIsPressed()) {
+                    afficherMenuLateral(canvas);
+                }
                 menuButton.draw(canvas);
                 afficherScore(canvas, paint);
                 drawLife(canvas, paint);
@@ -465,6 +461,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
      * Appelé par le gameLoop à chaque loop.
      */
     public void update(){
+        if(!theme.getIsRunning()) {setTheme();}
         for(Ennemy en : waitingLine) {
             ennemies.add(en);
         }
@@ -534,6 +531,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void afficherMenuLateral(Canvas canvas){
+        if (this.theme.getIsRunning()) {
+            this.theme.stop();
+        }
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
         paint.setColor(ContextCompat.getColor(getContext(), R.color.jaune_poussin));
@@ -993,5 +993,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+    }
+    public void setTheme() {
+        int[] themes = {R.raw.theme1, R.raw.theme2, R.raw.theme3, R.raw.theme4, R.raw.theme5};
+        theme = new Audio(getContext(), themes[LEVEL_SELECTED-1]);
+        theme.setLoop(true);
+        theme.play();
     }
 }

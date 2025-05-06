@@ -1,5 +1,6 @@
 package com.example.mario2d.game.personnage;
 
+import static com.example.mario2d.game.loop.GameActivity.displayWidth;
 import static com.example.mario2d.game.loop.GameActivity.persos;
 import static com.example.mario2d.game.loop.GameActivity.player;
 
@@ -8,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import com.example.mario2d.R;
+import com.example.mario2d.tool.Audio;
 
 public class Thwomp extends Ennemy{
     private boolean isUp, upAuthor, isDown;
@@ -78,7 +80,7 @@ public class Thwomp extends Ennemy{
     @Override
     public void update(){
         if(activated){
-            boolean[] tab1 = player.detectCollision(this, (int) (getHeight()*0.05), (int) (-getWidth()*0.05));
+            boolean[] tab1 = player.detectCollision(this, (int) (-getHeight()*0.05), (int) (getWidth()*0.1), (int) (getHeight()*0.1), (int) (getWidth()*0.1));
             if(tab1[0]){
                 player.recalibrerY(this);
             }
@@ -89,7 +91,29 @@ public class Thwomp extends Ennemy{
             } else if (tab1[1]) {player.addCollisionValue("brownbloc", 1, true);}
             else if (tab1[3]) {player.addCollisionValue("brownbloc", 3, true);}
             invincible();
+            if (!onScreen()) {
+                activated = false;
+                compteurSaut = 0;
+                gravity = false;
+                setY(initY);
+            }
+        } else if (onScreen()) {
+            if (onPlayerPlan()) {
+                activated = true;
+                gravity = true;
+            }
         }
-        else {if(getX() <= player.getX()){setActivated(true);}}
+    }
+    private boolean onScreen() {
+        boolean droite = getX() < displayWidth;
+        boolean gauche = getX() + getWidth() > 0;
+        return droite && gauche;
+    }
+    private boolean onPlayerPlan() {
+        if(getX() < player.getX() + player.getWidth() && getX() + getWidth() >= player.getX()) {
+            setActivated(true);
+            return true;
+        }
+        return false;
     }
 }
