@@ -251,7 +251,7 @@ public class Koopa extends Ennemy {
         }
     }
     public void updateCollisions() {
-        boolean[] tab = player.detectCollision(this, 0, (int) (getWidth()*0.2), 0, (int) (getWidth()*0.2));
+        boolean[] tab = player.detectCollision(this, 0, (int) (getWidth()*0.1), 0, (int) (getWidth()*0.1));
         if (tab[0]) {
             if(!getInvincible()) {
                 if(!getResting()) {

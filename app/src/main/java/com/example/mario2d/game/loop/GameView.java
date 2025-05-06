@@ -294,7 +294,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 }
                 if(pointerId == retryPointerId){
                     if(retryButton.getIsPressed()){
-                        reset();
+
                     }
                     retryPointerId = -1;
                 }
@@ -411,11 +411,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                         canvas.drawBitmap(p.getBitmap(), p.getX(), p.getY(), paint);
                     }
                 }
-                for(Ennemy en : ennemies) {
-                    if(en.getActivated() && onScreen(en, 10, 10) && en.getBitmap()!=null) {
-                        canvas.drawBitmap(en.getBitmap(), en.getX(), en.getY(), paint);
-                    }
-                }
                 for(BrownBloc bb : brownBlocs){
                     if (bb.getActivated() && onScreen(bb, 10, 10) && bb.getBitmap() != null) {
                         canvas.drawBitmap(bb.getBitmap(), bb.getX(), bb.getY(), paint);
@@ -424,6 +419,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 for(Platforme p : platformes){
                     if(p.getActivated() && onScreen(p, 10, 10) && p.getBitmap()!=null){
                         canvas.drawBitmap(p.getBitmap(), p.getX(), p.getY(), paint);
+                    }
+                }
+                for(Ennemy en : ennemies) {
+                    if(en.getActivated() && onScreen(en, 10, 10) && en.getBitmap()!=null) {
+                        canvas.drawBitmap(en.getBitmap(), en.getX(), en.getY(), paint);
                     }
                 }
                 for(Pipe pipe : pipes){
@@ -635,7 +635,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
         fireButton = new RoundButton(getContext(), buttonX, buttonY, rayon, Color.WHITE, R.drawable.fleurfeu);
     }
-    public void reset(){}
     /**
      * fonction appelée à chaque loop pour vérifier les collisions relatives à chaque objet.
      *

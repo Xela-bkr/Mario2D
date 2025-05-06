@@ -41,7 +41,23 @@ public class YellowBloc extends Objet{
             if(tab[0]){player.recalibrerY(this);}
             else if(tab[2]){
                 player.setY(getY()+getHeight());
-                hasBeenUsed = true;
+                if (!hasBeenUsed) {
+                    hasBeenUsed = true;
+                    if(player.getLife() == 1 && (fleur != null || etoile != null)) {
+                        int itemWidth = (int) (width * 2/3);
+                        int itemHeight = itemWidth;
+                        champi = new Champignon(context, "champignon", x+(width-itemWidth)/2, y+(height-itemHeight)/2, itemWidth, itemHeight);
+                        GameActivity.champis.add(champi);
+                        etoile = null;
+                        fleur = null;
+                    } else if (player.getLife() == 2 && champi != null) {
+                        champi = null;
+                        int itemWidth = (int) (width * 2/3);
+                        int itemHeight = itemWidth;
+                        piece = new Piece(context, "piece_jaune", x+(width-itemWidth)/2, y+(height-itemHeight)/2, itemWidth, itemHeight);
+                        GameActivity.pieces.add(piece);
+                    }
+                }
                 if(player.getJumping()){player.setJumping(false);}
             }
 

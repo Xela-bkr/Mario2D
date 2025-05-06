@@ -313,4 +313,7 @@ public abstract class Origin {
     public void increaseWidth(int i){setWidth(getWidth() + i);}
     public void setBitmaps(){}
     public void update(){}
+    public void reset() {
+
+    }
 }
