@@ -77,7 +77,7 @@ public class Goomba extends Ennemy{
         isResting = false;
         isWalking = false;
         isAlive = false;
-        if (deadCompteur < 40){
+        if (deadCompteur < 25){
             if(this.bitmap != dead) this.bitmap = dead;
             deadCompteur ++;
         } else {
@@ -121,7 +121,7 @@ public class Goomba extends Ennemy{
         }
     }
     public void updateCollisions() {
-        boolean[] tab = player.detectCollision(this);
+        boolean[] tab = player.detectCollision(this, (int) (-getWidth()*0.2), (int) (getWidth()*0.2), (int) (-getWidth()*0.05), (int) (getWidth()*0.2));
         if (tab[0]) {
             if(isAlive) {
                 Audio.playSound(context, R.raw.kick_2);

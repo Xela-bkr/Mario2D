@@ -92,18 +92,15 @@ public class PlantePirhana extends Ennemy{
         compteurMarche++;
 
         if(getY() + getHeight() < initY){
-            System.out.println("getY() + getHeight() < initY");
             up = false;
         }
         else if(getY() > initY){
-            System.out.println("getY() > initY");
             setY(initY+1);
             isResting = true;
         }
     }
     @Override
     public void rest(){
-        System.out.println("Rest()" + restCompteur);
         if(restCompteur < 100){
             restCompteur++;
 

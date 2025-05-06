@@ -273,11 +273,15 @@ public class Player extends Personnage{
     }
     public void jump2(){
         if(!smallJump) {smallJump = true;}
-        if (compteurPetitSaut < 10)
+        if (compteurPetitSaut < 20)
         {
             gravity = false;
-            int dy = compteurPetitSaut - 10;
+            int dy = compteurPetitSaut - 20;
             translateY(dy);
+            if(isWalking) {
+                if(isRight) translateX(2);
+                else translateX(-2);
+            }
             compteurPetitSaut ++;
         }
         else

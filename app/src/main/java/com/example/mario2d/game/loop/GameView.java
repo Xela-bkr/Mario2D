@@ -215,6 +215,17 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     joystick.setIsPressed(true);
                     joystickPointerId = pointerId;
                 }
+                if(!joystickPressed && !menuButtonPressed && !insideMenuButton && !insideExitButton &&
+                        !insidePauseButton && !insideRetryButton){
+                    jumpPointerId = pointerId;
+                    if(!player.getJumping() && (player.collisionWithObject(0) || player.getCollisionMatrix().get("ennemy")[0])){
+                        player.setJumping(true);
+                        player.setWalking(false);
+                        gravity = false;
+                        player.setJumpTime(System.nanoTime());
+                        Audio.playSound(getContext(), R.raw.jump_2);
+                    }
+                }
                 if(insideMenuButton){
                     if(menuButton.getIsPressed()){
                         menuButton.setPressed(false);
@@ -239,17 +250,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     exitPointerId = pointerId;
                     exitButton.setPressed(true);
                     Audio.playSound(getContext(), R.raw.open_close);
-                }
-                if(!joystickPressed && !menuButtonPressed && !insideMenuButton && !insideExitButton &&
-                        !insidePauseButton && !insideRetryButton){
-                    jumpPointerId = pointerId;
-                    if(!player.getJumping() && (player.collisionWithObject(0) || player.getCollisionMatrix().get("ennemy")[0])){
-                        player.setJumping(true);
-                        player.setWalking(false);
-                        gravity = false;
-                        player.setJumpTime(System.nanoTime());
-                        Audio.playSound(getContext(), R.raw.jump_2);
-                    }
                 }
                 return true;
             case MotionEvent.ACTION_MOVE:
@@ -334,7 +334,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public void moveWorld(){
         if(joystick.getIsPressed()){
             dx = 0;
-
             if (joystick.orientedInRight()) {
                 dx = -8;
                 if(castles.get(1).getX() <= displayWidth - castles.get(1).getWidth()) {

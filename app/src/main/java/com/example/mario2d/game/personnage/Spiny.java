@@ -51,7 +51,7 @@ public class Spiny extends Ennemy{
             if(isRight){translateX(4);}
             else{translateX(-4);}
 
-            boolean[] tab = player.detectCollision(this, (int) (getHeight()*0.1), (int) (getWidth()*0.08));
+            boolean[] tab = player.detectCollision(this, (int) (getHeight()*0.15), (int) (getWidth()*0.1), (int) (getWidth()*0.1), (int) (getWidth()*0.1));
 
             if(tab[0] || tab[1] || tab[2] || tab[3]){
                 if(!player.getResting()) {

@@ -220,6 +220,7 @@ public class Koopa extends Ennemy {
         }
         else if(life == 0){
             isInvincible = true;
+            dead();
         }
     }
     @Override
@@ -250,17 +251,18 @@ public class Koopa extends Ennemy {
         }
     }
     public void updateCollisions() {
-        boolean[] tab = player.detectCollision(this);
+        boolean[] tab = player.detectCollision(this, 0, (int) (getWidth()*0.2), 0, (int) (getWidth()*0.2));
         if (tab[0]) {
             if(!getInvincible()) {
                 if(!getResting()) {
                     Audio.playSound(context, R.raw.kick_2);
+                    System.out.println("koopa resting 0");
                     rest();
                 } else {
+                    System.out.println("koopa invincible 0");
                     invincible();
                 }
             }
-            player.recalibrerY(this);
             player.jump2();
         } else if (tab[1] || tab[2] || tab[3]) {
             if(!isInvincible) {
@@ -268,8 +270,6 @@ public class Koopa extends Ennemy {
                     if (!player.getInvincible()) {
                         if(!player.getResting()) {
                             player.decreaseLife();
-                        } else {
-                            invincible();
                         }
                     } else {
                         dead();
@@ -280,4 +280,5 @@ public class Koopa extends Ennemy {
             }
         }
     }
+
 }

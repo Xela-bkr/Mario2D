@@ -92,5 +92,4 @@ public class Thwomp extends Ennemy{
         }
         else {if(getX() <= player.getX()){setActivated(true);}}
     }
-
 }

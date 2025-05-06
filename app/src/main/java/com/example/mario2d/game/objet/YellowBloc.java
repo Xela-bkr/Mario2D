@@ -35,36 +35,38 @@ public class YellowBloc extends Objet{
 
     public void update(){
 
-        boolean[] tab = player.detectCollision(this);
+        if (activated) {
+            boolean[] tab = player.detectCollision(this);
 
-        if(tab[0]){player.recalibrerY(this);}
-        else if(tab[2]){
-            player.setY(getY()+getHeight());
-            hasBeenUsed = true;
-            if(player.getJumping()){player.setJumping(false);}
-        }
+            if(tab[0]){player.recalibrerY(this);}
+            else if(tab[2]){
+                player.setY(getY()+getHeight());
+                hasBeenUsed = true;
+                if(player.getJumping()){player.setJumping(false);}
+            }
 
-        if(!hasBeenUsed){animer();}
-        else{
-            if(this.bitmap != staticBloc){this.bitmap = staticBloc;}
-            if(champi!=null){
-                Audio.playSound(context, R.raw.powerup_appears);
-                champi.setActivated(true);
-                champi = null;
-            }
-            if(piece!=null){
-                piece.setActivated(true);
-                piece.setIsTaken(true);
-                piece = null;
-            }
-            if(etoile != null){
-                Audio.playSound(context, R.raw.powerup_appears);
-                etoile.setActivated(true);
-                etoile = null;
-            }
-            if(fleur != null) {
-                fleur.setActivated(true);
-                fleur = null;
+            if(!hasBeenUsed){animer();}
+            else{
+                if(this.bitmap != staticBloc){this.bitmap = staticBloc;}
+                if(champi!=null){
+                    Audio.playSound(context, R.raw.powerup_appears);
+                    champi.setActivated(true);
+                    champi = null;
+                }
+                if(piece!=null){
+                    piece.setActivated(true);
+                    piece.setIsTaken(true);
+                    piece = null;
+                }
+                if(etoile != null){
+                    Audio.playSound(context, R.raw.powerup_appears);
+                    etoile.setActivated(true);
+                    etoile = null;
+                }
+                if(fleur != null) {
+                    fleur.setActivated(true);
+                    fleur = null;
+                }
             }
         }
     }

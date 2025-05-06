@@ -137,7 +137,7 @@ public class Boo extends Ennemy{
         brick = Bitmap.createScaledBitmap(b1, getWidth(), getHeight(), true);
     }
     public void updateCollisions() {
-        boolean[] tab = player.detectCollision(this);
+        boolean[] tab = player.detectCollision(this, 0, (int) (getWidth()*0.1), (int) (getHeight()*0.1), (int) (getWidth()*0.1));
         if(tab[0]) {
             Audio.playSound(context, R.raw.boo_08);
             player.jump2();
@@ -153,6 +153,10 @@ public class Boo extends Ennemy{
                 }
             }
         }
+    }
+    @Override
+    public void decreaseLife() {
+        dead();
     }
 }
 

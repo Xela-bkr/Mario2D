@@ -84,7 +84,7 @@ public class FireBowl extends Ennemy{
                 if(tab[0] || tab[1] || tab[2] || tab[3]) {
                     if(!en.getInvincible()) {
                         Audio.playSound(context, R.raw.kick_2);
-                        en.dead();
+                        en.decreaseLife();
                     }
                 }
             }

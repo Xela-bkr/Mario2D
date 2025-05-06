@@ -80,7 +80,7 @@ public abstract class Personnage extends Origin{
         this.isResting = false;
         this.invincibleCompteur = 0;
         this.restCompteur = 0;
-        this.life = 2;
+        this.life = 1;
         this.deadCompteur = 50;
         this.gravity = true;
         this.jumpTime = 0;
@@ -339,6 +339,36 @@ public abstract class Personnage extends Origin{
         boolean cg3 = getX() + getWidth() >= objet.getX();
         boolean cg4 = getX() + getWidth() +lateralError <= objet.getX() + objet.getWidth()/2;
         result[3] = segment_horizontal_bas && segment_horizontal_haut && cg3 && cg4;
+
+        return result;
+    }
+    public boolean[] detectCollision(Origin objet, int topMargin, int rightMargin, int bottomMargin, int leftMargin){
+
+        // [haut, droite, bas, gauche] -> en haut de l'objet, à droite de l'objet ...
+        boolean[] result = new boolean[4];
+        Arrays.fill(result, false);
+
+        boolean segment_vertical_gauche = getX() + getWidth() >= objet.getX() + leftMargin;
+        boolean segment_vertical_droit = getX() < objet.getX() + objet.getWidth() - rightMargin;
+        boolean segment_horizontal_haut = getY() + getHeight() >= objet.getY() + topMargin;
+        boolean segment_horizontal_bas = getY() < objet.getY() + objet.getHeight() - bottomMargin;
+
+        // collision en haut :
+        boolean ch4 = getY() < objet.getY();
+        boolean ch5 = getY() + getHeight() <= objet.getY() + objet.getHeight()/2;
+        result[0] = segment_horizontal_haut && segment_vertical_droit && segment_vertical_gauche && ch4 && ch5;
+
+        //collision à droite
+        boolean cd3 = getX() >= objet.getX() + objet.getWidth()/2;
+        result[1] = segment_horizontal_bas && segment_horizontal_haut && cd3 && segment_vertical_droit;
+
+        // collision en bas :
+        boolean cb2 = getY() >= objet.getY() + objet.getHeight()/2;
+        result[2] = segment_horizontal_bas && cb2 && segment_vertical_droit && segment_vertical_gauche;
+
+        // collision à gauche :
+        boolean cg4 = getX() + getWidth() <= objet.getX() + objet.getWidth()/2;
+        result[3] = segment_horizontal_bas && segment_horizontal_haut && segment_vertical_gauche && cg4;
 
         return result;
     }

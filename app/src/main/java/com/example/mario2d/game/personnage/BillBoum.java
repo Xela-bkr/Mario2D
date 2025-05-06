@@ -51,7 +51,7 @@ public class BillBoum extends Ennemy{
         }
     }
     private void updateCollisions() {
-        boolean[] tab = player.detectCollision(this, 5, -10);
+        boolean[] tab = player.detectCollision(this, 0, (int) (getWidth()*0.2), (int) (getHeight()*0.1), (int) (getWidth()*0.2));
         if (tab[0]) {
             dead();
             Audio.playSound(context, R.raw.kick_2);
@@ -90,5 +90,9 @@ public class BillBoum extends Ennemy{
             compteurMarche = 0;
         }
         compteurMarche ++;
+    }
+    @Override
+    public void decreaseLife() {
+        dead();
     }
 }

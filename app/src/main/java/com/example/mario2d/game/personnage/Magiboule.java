@@ -83,7 +83,7 @@ public class Magiboule extends Ennemy{
         waitingLineForRemoving.add(this);
     }
     public void updateCollisions() {
-        boolean[] tab = player.detectCollision(this);
+        boolean[] tab = player.detectCollision(this, (int) (getHeight()*0.1), (int) (getWidth()*0.1), (int) (getHeight()*0.1), (int) (getWidth()*0.1));
         if (tab[0] || tab[1] || tab[2] || tab[3]) {
             if (!player.getInvincible()) {
                 if(!player.getResting()) {
