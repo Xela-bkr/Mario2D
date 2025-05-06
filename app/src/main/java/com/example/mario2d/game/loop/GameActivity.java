@@ -248,6 +248,10 @@ public class GameActivity extends AppCompatActivity {
                 drawCastle("castle", 0);
                 drawCastle("castle", 400*dx );
                 drawLine("BrownBloc", "yellowbrick", 0, 400*dx, surface, FLOOR_WIDTH, FLOOR_HEIGHT, false);
+                drawDecoration("pyramides", CASTLE_WIDTH,0, displayWidth, displayHeight-FLOOR_HEIGHT);
+                drawDecoration("sable", CASTLE_WIDTH + displayWidth,0, displayWidth, displayHeight-FLOOR_HEIGHT);
+                drawDecoration("sable", CASTLE_WIDTH + displayWidth*2,0, displayWidth, displayHeight-FLOOR_HEIGHT);
+                drawDecoration("pyramides", CASTLE_WIDTH + displayWidth*3,0, displayWidth, displayHeight-FLOOR_HEIGHT);
                 //drawPyramid("BrownBloc", "goldenbloc", 100*dx, 10, displayHeight-FLOOR_HEIGHT-BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT);
                 drawKoopa("redkoopa", 60*dx, surface-8*BLOC_WIDTH , false, false);
                 //drawParakoopa("redparakoopa", 50*dx, (int) (surface-(displayWidth*0.03 - 1.7458) - dx), true);
