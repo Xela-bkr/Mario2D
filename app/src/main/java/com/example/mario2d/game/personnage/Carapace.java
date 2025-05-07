@@ -12,12 +12,14 @@ import com.example.mario2d.tool.Audio;
 
 public class Carapace extends Ennemy{
     private Bitmap face, tourne1, tourne2, tourne3;
+    private int[] vectors;
     public Carapace(Context context, String name, int x, int y, int width, int height) {
         super(context, name, x, y, width, height);
         isResting = true;
         life = 400;
         System.out.println("carapace créée");
         setBitmaps();
+        vectors = calculerDxDy();
     }
     @Override
     public void setBitmaps() {
@@ -48,7 +50,7 @@ public class Carapace extends Ennemy{
         }
     }
     private void deplacer() {
-        if (getX() < player.getX()) {
+        /*if (getX() < player.getX()) {
             translateX(8);
         }
         if (getX() > player.getX() + player.getWidth()) {
@@ -59,7 +61,9 @@ public class Carapace extends Ennemy{
         }
         if(getY() > player.getY() + player.getHeight()) {
             translateY(-6);
-        }
+        }*/
+        translateX(vectors[0]);
+        translateY(vectors[1]);
     }
     @Override
     public void rest() {
@@ -107,6 +111,20 @@ public class Carapace extends Ennemy{
             compteurMarche = 0;
         }
         compteurMarche ++;
+    }
+    private int[] calculerDxDy() {
+        int deltaX = player.getX() + player.getWidth() / 2 - (getX() + getWidth() / 2);
+        int deltaY = player.getY() + player.getHeight() / 2 - (getY() + getHeight() / 2);
+
+        double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        if (distance == 0) distance = 1; // éviter division par zéro
+
+        double vitesse = 15.0;
+
+        int incrementX = (int) (vitesse * deltaX / distance);
+        int incrementY = (int) (vitesse * deltaY / distance);
+
+        return new int[] {incrementX, incrementY};
     }
 }
 

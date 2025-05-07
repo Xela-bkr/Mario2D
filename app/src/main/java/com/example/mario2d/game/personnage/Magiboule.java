@@ -12,6 +12,7 @@ import com.example.mario2d.tool.Audio;
 
 public class Magiboule extends Ennemy{
     Bitmap mag1, mag2, mag3, mag4;
+    private int[] vectors;
     public Magiboule(Context context, String name, int x, int y, int width, int height) {
         super(context, name, x, y, width, height);
         setBitmaps();
@@ -19,6 +20,7 @@ public class Magiboule extends Ennemy{
         isRight = true;
         gravity = false;
         life = 200;
+        vectors = calculerDxDy();
     }
     @Override
     public void setBitmaps() {
@@ -36,15 +38,16 @@ public class Magiboule extends Ennemy{
         if(activated) {
             animer();
             updateCollisions();
+            if (life <= 0) {
+                dead();
+                return;
+            } else {
+                life --;
+            }
             if (restCompteur < 30) {
                 restCompteur ++;
             } else {
                 deplacer();
-            }
-            if (life <= 0) {
-                dead();
-            } else {
-                life --;
             }
         }
     }
@@ -63,18 +66,8 @@ public class Magiboule extends Ennemy{
         compteurMarche ++;
     }
     private void deplacer() {
-        if (player.getX() < getX() - getWidth()) {
-            isRight = false;
-            translateX(-5);
-        } else if (player.getX() > getX() +getWidth()) {
-            isRight = true;
-            translateX(5);
-        }
-        if(player.getY() + player.getHeight()/2 < getY() + getHeight()/2) {
-            translateY(-2);
-        } else if (player.getY() + player.getHeight()/2 > getY() + getHeight()/2) {
-            translateY(2);
-        }
+        translateX(vectors[0]);
+        translateY(vectors[1]);
     }
     @Override
     public void dead() {
@@ -98,5 +91,19 @@ public class Magiboule extends Ennemy{
                 dead();
             }
         }
+    }
+    private int[] calculerDxDy() {
+        int deltaX = player.getX() + player.getWidth() / 2 - (getX() + getWidth() / 2);
+        int deltaY = player.getY() + player.getHeight() / 2 - (getY() + getHeight() / 2);
+
+        double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        if (distance == 0) distance = 1; // éviter division par zéro
+
+        double vitesse = 10.0;
+
+        int incrementX = (int) (vitesse * deltaX / distance);
+        int incrementY = (int) (vitesse * deltaY / distance);
+
+        return new int[] { incrementX, incrementY };
     }
 }
