@@ -118,7 +118,7 @@ public class PlantePirhana extends Ennemy{
         waitingLineForRemoving.add(this);
     }
     public void updateCollisions() {
-        boolean[] tab = player.detectCollision(this);
+        boolean[] tab = player.detectCollision(this, 0, (int) (getWidth()*0.1), 0, (int) (getWidth()*0.1));
         if(tab[0]) {
             if(!player.getInvincible()) {
                 if(!player.getResting()) {player.decreaseLife();}

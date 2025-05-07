@@ -308,6 +308,7 @@ public abstract class Origin {
         spriteBank.put("brique_marron", R.drawable.brique_marron);
         spriteBank.put("pyramides", R.drawable.pyramides);
         spriteBank.put("sable", R.drawable.sable);
+        spriteBank.put("palmier", R.drawable.palmier);
 
     }
     public void translateX(int dx){this.setX(this.getX()+dx);}

@@ -252,8 +252,13 @@ public class GameActivity extends AppCompatActivity {
                 drawDecoration("pyramides", CASTLE_WIDTH,0, displayWidth, displayHeight-FLOOR_HEIGHT);
                 drawDecoration("sable", CASTLE_WIDTH + displayWidth,0, displayWidth, displayHeight-FLOOR_HEIGHT);
                 drawDecoration("sable", CASTLE_WIDTH + displayWidth*2,0, displayWidth, displayHeight-FLOOR_HEIGHT);
-                drawDecoration("pyramides", CASTLE_WIDTH + displayWidth*3,0, displayWidth, displayHeight-FLOOR_HEIGHT);
-                //drawPyramid("BrownBloc", "goldenbloc", 100*dx, 10, displayHeight-FLOOR_HEIGHT-BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT);
+                drawDecoration("sable", CASTLE_WIDTH + displayWidth*3,0, displayWidth, displayHeight-FLOOR_HEIGHT);
+                drawDecoration("sable", CASTLE_WIDTH + displayWidth*4,0, displayWidth, displayHeight-FLOOR_HEIGHT);
+                drawDecoration("pyramides", CASTLE_WIDTH + displayWidth*5,0, displayWidth, displayHeight-FLOOR_HEIGHT);
+                drawDecoration("palmier", 40*dx, 10*dx, 30*dx);
+                drawDecoration("palmier", 140*dx, 10*dx, 30*dx);
+                drawPyramid("BrownBloc", "brique_jaune", 280*dx, 12, surface-BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT);
+                //drawPyramid("BrownBloc", "brique_jaune", 328*dx, 12, surface-BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT);
                 drawKoopa("redkoopa", 60*dx, surface-8*BLOC_WIDTH , false, false);
                 //drawParakoopa("redparakoopa", 50*dx, (int) (surface-(displayWidth*0.03 - 1.7458) - dx), true);
                 drawAlternatesBloc("goldenbloc", "bloc", 50*dx, surface-3*BLOC_WIDTH, 20, 2, 3);

@@ -80,7 +80,7 @@ public class Thwomp extends Ennemy{
     @Override
     public void update(){
         if(activated){
-            boolean[] tab1 = player.detectCollision(this, (int) (-getHeight()*0.05), (int) (getWidth()*0.1), (int) (getHeight()*0.1), (int) (getWidth()*0.1));
+            boolean[] tab1 = player.detectCollision(this, 0, (int) (getWidth()*0.1), (int) (getHeight()*0.1), (int) (getWidth()*0.1));
             if(tab1[0]){
                 player.recalibrerY(this);
             }
