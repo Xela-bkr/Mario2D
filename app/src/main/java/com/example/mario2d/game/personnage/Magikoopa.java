@@ -187,7 +187,7 @@ public class Magikoopa extends Ennemy{
         deadCompteur ++;
     }
     public void updateCollisions() {
-        boolean[] tab = player.detectCollision(this);
+        boolean[] tab = player.detectCollision(this, 0, (int) (getWidth()*0.1), 0, (int) (getWidth()*0.1));
         if (tab[0]) {
             if(!isResting) {
                 System.out.printf("magikoopa lost a life %d\n", life);

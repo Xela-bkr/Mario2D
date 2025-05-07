@@ -77,11 +77,7 @@ public class Magiboule extends Ennemy{
     }
     public void updateCollisions() {
         boolean[] tab = player.detectCollision(this, 0, (int) (getWidth()*0.2), 0, (int) (getWidth()*0.2));
-        if(tab[0]) {
-            Audio.playSound(context, R.raw.kick_2);
-            dead();
-        }
-        else if (tab[1] || tab[2] || tab[3]) {
+        if(tab[0] || tab[1] || tab[2] || tab[3]) {
             if (!player.getInvincible()) {
                 if(!player.getResting()) {
                     player.decreaseLife();
