@@ -138,7 +138,7 @@ public class GameActivity extends AppCompatActivity {
 
                 drawCastle("castle", 0);
                 drawCastle("castle", 450*dx);
-                drawLine("BrownBloc", "redbrick", 0, 450*dx+CASTLE_WIDTH, surface, FLOOR_WIDTH, FLOOR_HEIGHT, false);
+                drawLine("BrownBloc", "redbrick", 0, 455*dx+CASTLE_WIDTH, surface, FLOOR_WIDTH, FLOOR_HEIGHT, false);
 
                 drawDecoration("colline_petite", 40*dx,15*dx, 7*dx);
                 drawDecoration("colline_grande", 80*dx, 20*dx, 10*dx);
@@ -230,8 +230,8 @@ public class GameActivity extends AppCompatActivity {
             case 2 :
 
                 drawCastle("greencastle", 0);
-                drawCastle("greencastle", 500*dx);
-                drawLine("BrownBloc", "greenbrick", 0, 450*dx, surface, FLOOR_WIDTH, FLOOR_HEIGHT, false);
+                drawCastle("greencastle", 561*dx);
+                drawLine("BrownBloc", "greenbrick", 0, 400*dx, surface, FLOOR_WIDTH, FLOOR_HEIGHT, false);
                 drawAlternatesBloc("greenbloc", "bloc", 30*dx, staticBlocY, 10, 2, 3);
                 drawLine("Objet", "greybrick2", 0, 400*dx, 0, 3*dx, 3*dx, false);
                 drawLine("BrownBloc", "greybrick2", 0, 186*dx, 3*dx, 3*dx, 3*dx, false);
@@ -256,7 +256,7 @@ public class GameActivity extends AppCompatActivity {
                 drawLine("BrownBloc", "greybrick", 164*dx, 194*dx, surface-greyBrickDim, greyBrickDim, greyBrickDim, true);
 
                 drawThwomp(186*dx, (int) (-8*dx*1.2513));
-                drawLine("BrownBloc", "greybrick", 194*dx, 403*dx, surface - greyBrickDim, greyBrickDim, greyBrickDim, false);
+                drawLine("BrownBloc", "greybrick", 194*dx, 400*dx, surface - greyBrickDim, greyBrickDim, greyBrickDim, false);
                 drawColumn("BrownBloc", "greybrick", 200*dx, surface-greyBrickDim, 5, greyBrickDim, greyBrickDim, false);
                 drawColumn("BrownBloc", "greybrick", 248*dx, surface-greyBrickDim, 5, greyBrickDim, greyBrickDim, true);
                 drawSkelerex(223*dx, surface-greyBrickDim-6*dx, true, false);
@@ -288,6 +288,21 @@ public class GameActivity extends AppCompatActivity {
 
                 drawBloc("greenbloc", 302*dx, surface - greyBrickDim - BLOC_WIDTH, BLOC_WIDTH, BLOC_HEIGHT, 2);
                 drawBloc("greenbloc", 346*dx, surface - greyBrickDim - BLOC_WIDTH, BLOC_WIDTH, BLOC_HEIGHT, 2);
+                drawPlatformeEphemereLine("tile1", 405*dx, surface - 12*dx, 3*dx, 3*dx, 70, false, false, 10);
+                drawPlatformeEphemereLine("tile1", 435*dx, surface - 9*dx, 3*dx, 3*dx, 70, false, false, 10);
+                drawPlatformeEphemereLine("tile1", 465*dx, surface - 12*dx, 3*dx, 3*dx, 70, false, false, 10);
+                drawPlatformeEphemereLine("tile1", 495*dx, surface - 9*dx, 3*dx, 3*dx, 70, false, false, 10);
+                drawPlatformeEphemereLine("tile1", 525*dx, surface - 6*dx, 3*dx, 3*dx, 70, false, false,4);
+                drawPlatformeEphemereLine("tile1", 537*dx, surface - 3*dx, 3*dx, 3*dx, 70, false, false,4);
+                drawPlatformeEphemereLine("tile1", 549*dx, surface, 3*dx, 3*dx, 70, false, false,4);
+
+
+                drawBoo(432*dx, surface - 9*dx, "tile1_1");
+                drawBoo(465*dx, surface - 9*dx, "tile1_1");
+                drawSkelerex(440*dx, surface-13*dx, false, true);
+                drawSkelerex(500*dx, surface-13*dx, false, true);
+                drawAlternatesBloc("greenbloc", "bloc", 414*dx, surface - 26*dx, 3, 2, 3);
+                drawLine("BrownBloc", "greenbrick", 561*dx, 562*dx + CASTLE_WIDTH, surface, FLOOR_WIDTH, FLOOR_HEIGHT, false);
 
                 return;
             case 3 :
@@ -374,9 +389,9 @@ public class GameActivity extends AppCompatActivity {
                 drawKoopa("redkoopa", 90*dx, surface - 6*dx, false, false);
                 drawKoopa("redkoopa", 130*dx, surface-5*dx, false, true);
                 drawPodoboo("podoboo", 155*dx, surface - 9*dx, 3*dx, 3*dx);
-                drawPlatformeEphemereLine("tile1", 160*dx, surface, 3*dx, 3*dx, 400, true, false, 5);
-                drawPlatformeEphemereLine("tile1", 175*dx, surface - 6*dx, 3*dx, 3*dx, 400, true, false, 5);
-                drawPlatformeEphemereLine("tile1", 190*dx, surface - 12*dx, 3*dx, 3*dx, 400, true, false, 5);
+                drawPlatformeEphemereLine("tile1", 160*dx, surface, 3*dx, 3*dx, 100, true, false, 5);
+                drawPlatformeEphemereLine("tile1", 175*dx, surface - 6*dx, 3*dx, 3*dx, 100, true, false, 5);
+                drawPlatformeEphemereLine("tile1", 190*dx, surface - 12*dx, 3*dx, 3*dx, 100, true, false, 5);
                 drawPodoboo("podoboo", 207*dx, surface-15*dx, 3*dx, 3*dx);
                 drawLine("BrownBloc", "platforme_rouge", 212*dx, 252*dx, surface - 12*dx, 20*dx, 20*dx, false);
                 drawAlternatesBloc("darkbloc", "bloc", 226*dx, surface - 22*dx - BLOC_HEIGHT, 3, 2, 4 );
