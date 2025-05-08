@@ -32,6 +32,7 @@ public class Parakoopa extends Koopa {
         this.deltaY = 0;
         this.gravity = false;
         this.koopaMode = false;
+        isRecalibrable = false;
         setBitmaps();
     }
     @Override
@@ -170,6 +171,7 @@ public class Parakoopa extends Koopa {
     }
     private void setKoopaMode(){
         koopaMode = true;
+        isRecalibrable = true;
         gravity =  true;
         setWidth((int) (getWidth()*0.87));
     }

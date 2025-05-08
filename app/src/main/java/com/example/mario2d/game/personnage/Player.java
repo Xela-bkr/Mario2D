@@ -50,35 +50,26 @@ public class Player extends Personnage{
     @Override
     public void decreaseLife(){
         if (fire) {
+            Audio.playSound(context, R.raw.mario_power_down);
             fire = false;
             skin = "";
             setBitmaps();
         } else if (life > 1) {
+            Audio.playSound(context, R.raw.mario_power_down);
             isResting = true;
             life --;
-        } else {
-            life --;
-            dead();
-        }
-        /*this.life --;
-        isResting = true;
-        if (this.life == 1){
-            int newWidth = getWidth() / 2;
+            int newWidth = getWidth()*2/3;
             int newHeight = (int) (agrCoeff*newWidth);
             setWidth(newWidth);
             setHeight(newHeight);
             setBitmaps();
-            setY(getY()-getWidth());
-            if(isWalking){
-                if(isRight){this.bitmap = marche_droite;}
-                else{this.bitmap = marche_gauche;}
-            }
-            else{
-                if(isRight){this.bitmap = arret_droite;}
-                else{this.bitmap = arret_gauche;}
-            }
+            //setY(getY()-getWidth());
+            if(isRight){this.bitmap = arret_droite;}
+            else{this.bitmap = arret_gauche;}
+        } else {
+            life --;
+            dead();
         }
-        if(this.life == 0){dead();}*/
     }
     @Override
     public void increaseLife(){
@@ -199,11 +190,10 @@ public class Player extends Personnage{
     @Override
     public void rest(){
         isResting = true;
-        if(restCompteur < 100){
-            if (!isResting) setResting(true);
-
+        if(restCompteur%3==0) {
+            this.bitmap = null;
         }
-        else{
+        if (restCompteur > 60){
             restCompteur = 0;
             this.isResting = false;
         }

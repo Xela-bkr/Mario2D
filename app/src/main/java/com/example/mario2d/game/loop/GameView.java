@@ -202,6 +202,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 if(player.fire) {
                     boolean insideFireButton = fireButton.pointerIn(x, y);
                     if(insideFireButton) {
+                        Audio.playSound(getContext(), R.raw.fireball);
                         firePointerId = pointerId;
                         player.dropFireBowl();
                         return true;
@@ -331,7 +332,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         if(joystick.getIsPressed()){
             dx = 0;
             if (joystick.orientedInRight()) {
-                dx = -8;
+                dx = -GameActivity.dx/3;
                 if(castles.get(1).getX() <= displayWidth - castles.get(1).getWidth()) {
                     player.translateX(-dx);
                     return;
@@ -342,7 +343,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 }
             }
             if (!joystick.orientedInRight()) {
-                dx = 8;
+                dx = GameActivity.dx/3;
                 if(castles.get(0).getX() >= 0) {
                     player.translateX(-dx);
                     return;
@@ -695,14 +696,18 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             if(tab[2]){player.addCollisionValue("pipe", 2, true);}
             if(tab[3]){player.addCollisionValue("pipe", 3, true);}
         }
-        for (Ennemy en : ennemies) {
+        for(Platforme pl : platformes) {
+            boolean[] tab = player.detectCollision(pl, pipeOffset);
+            if(tab[0]){player.addCollisionValue("brownbloc", 0, true);}
+        }
+        /*for (Ennemy en : ennemies) {
             if (en == player) {continue;}
             boolean[] tab = player.detectCollision(en, 5, -5);
             if(tab[0]){player.addCollisionValue("ennemy", 0, true);}
             if(tab[1]){player.addCollisionValue("ennemy", 1, true);}
             if(tab[2]){player.addCollisionValue("ennemy", 2, true);}
             if(tab[3]){player.addCollisionValue("ennemy", 3, true);}
-        }
+        }*/
     }
     public void updateCollision(Item item){
 
@@ -746,6 +751,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             if(tab[1]){item.addCollisionValue("objet", 1, true);}
             if(tab[2]){item.addCollisionValue("objet", 2, true);}
             if(tab[3]){item.addCollisionValue("objet", 3, true);}
+        }
+        for(Platforme pl : platformes) {
+            boolean[] tab = item.detectCollision(pl, pipeOffset);
+            if(tab[0]){item.addCollisionValue("brownbloc", 0, true);}
         }
     }
     public void gravity(){
@@ -890,7 +899,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
     public void gameOver(Canvas canvas, Paint paint){
         gameOver = true;
-        if(gameCompteur <= 200) {
+        if(gameCompteur <= 100) {
             if(gameCompteur == 0){
                 Audio.playSound(getContext(), R.raw.mario_dead);
             }

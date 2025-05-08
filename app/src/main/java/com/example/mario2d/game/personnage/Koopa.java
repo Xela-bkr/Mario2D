@@ -32,7 +32,7 @@ public class Koopa extends Ennemy {
         this.restCompteur = 0;
         this.deadCompteur = 100;
         this.frequenceMarche = 20;
-        this.frequenceRotation = 16;
+        this.frequenceRotation = 4;
         this.compteurRotation = 0;
         this.gravityFall = true;
         this.rotable = false;
@@ -256,10 +256,8 @@ public class Koopa extends Ennemy {
             if(!getInvincible()) {
                 if(!getResting()) {
                     Audio.playSound(context, R.raw.kick_2);
-                    System.out.println("koopa resting 0");
                     rest();
                 } else {
-                    System.out.println("koopa invincible 0");
                     invincible();
                 }
             }

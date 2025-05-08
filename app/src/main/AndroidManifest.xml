@@ -25,6 +25,9 @@
         <activity android:name=".game.loop.GameActivity"
             android:screenOrientation="landscape">
         </activity>
+        <activity android:name=".game.loop.GameActivity2"
+            android:screenOrientation="landscape">
+        </activity>
     </application>
 
 </manifest>

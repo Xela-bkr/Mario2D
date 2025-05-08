@@ -42,21 +42,7 @@ public class PlantePirhana extends Ennemy{
     @Override
     public void update(){
         if(activated) {
-            boolean[] tab = player.detectCollision(this, (int) (-getHeight() * 0.1), (int) (-getWidth() * 0.1));
-            if (tab[0] || tab[1] || tab[2] || tab[3]) {
-                if (!player.getResting()) {
-                    if(!player.getInvincible()) {
-                        player.decreaseLife();
-                        player.rest();
-                    } else {
-                        dead();
-                    }
-                }
-            }
-            if (tab[0]) {
-                player.setJumping(true);
-                player.recalibrerY(this);
-            }
+            updateCollisions();
             if(isResting){
                 rest();
             }
@@ -118,7 +104,7 @@ public class PlantePirhana extends Ennemy{
         waitingLineForRemoving.add(this);
     }
     public void updateCollisions() {
-        boolean[] tab = player.detectCollision(this, 0, (int) (getWidth()*0.1), 0, (int) (getWidth()*0.1));
+        boolean[] tab = player.detectCollision(this, (int) (getHeight()*0.15), (int) (getWidth()*0.2), 0, (int) (getWidth()*0.2));
         if(tab[0]) {
             if(!player.getInvincible()) {
                 if(!player.getResting()) {player.decreaseLife();}

@@ -283,6 +283,7 @@ public abstract class Personnage extends Origin{
             collisionMatrix.put("floor", tab);
             collisionMatrix.put("yellowbloc", tab);
             collisionMatrix.put("brownbloc", tab);
+            collisionMatrix.put("platforme", tab);
             collisionMatrix.put("pipe", tab);
             collisionMatrix.put("piece", tab);
             collisionMatrix.put("item", tab);
@@ -440,6 +441,11 @@ public abstract class Personnage extends Origin{
         boolean b = false;
         for(String key : keys){
             if(collisionMatrix.get(key)[direction]){
+                b = true;
+            }
+        }
+        if(direction == 0) {
+            if(collisionMatrix.get("platforme")[0]) {
                 b = true;
             }
         }

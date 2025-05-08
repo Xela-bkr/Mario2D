@@ -94,18 +94,18 @@ public class Magikoopa extends Ennemy{
                         translateX(3);
                     }
                 }
-                if(waiting <= 150) {
+                if(waiting <= 50) {
                     updateImage();
                 } else {
                     castSpell();
-                    if(waiting > 240) {
+                    if(waiting > 140) {
                         waiting = 0;
                     }
                 }
                 if(!isResting) updateCollisions();
                 waiting ++;
             }
-        } else if (getX() < displayWidth*2/3) {
+        } else if (getX() + getWidth() + 10*dx < displayWidth) {
             activated = true;
         }
     }

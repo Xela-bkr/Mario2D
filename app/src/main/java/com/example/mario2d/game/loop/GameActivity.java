@@ -19,6 +19,7 @@ import com.example.mario2d.game.objet.PlateformeEphemere;
 import com.example.mario2d.game.objet.Platforme;
 import com.example.mario2d.game.objet.YellowBloc;
 import com.example.mario2d.game.personnage.Boo;
+import com.example.mario2d.game.personnage.Coconut;
 import com.example.mario2d.game.personnage.Ennemy;
 import com.example.mario2d.game.personnage.FireBowl;
 import com.example.mario2d.game.personnage.Goomba;
@@ -37,7 +38,7 @@ import java.util.ArrayList;
 
 public class GameActivity extends AppCompatActivity {
 
-    private int  CHARACTER_WIDTH, CHARACTER_HEIGHT, FLOOR_WIDTH, FLOOR_HEIGHT, FLOOR_RATE,
+    public static int  CHARACTER_WIDTH, CHARACTER_HEIGHT, FLOOR_WIDTH, FLOOR_HEIGHT, FLOOR_RATE,
             CASTLE_WIDTH, CASTLE_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT, PIPE_WIDTH, PIPE_HEIGHT, LEVEL_SELECTED,
             CHARACTER_SELECTED, PIECE_WIDTH, PIECE_HEIGHT;
     public static int displayWidth, displayHeight;
@@ -136,8 +137,8 @@ public class GameActivity extends AppCompatActivity {
                 final int hardSquareY = displayHeight - FLOOR_HEIGHT - hardSquareHeight;
 
                 drawCastle("castle", 0);
-                drawCastle("castle", 400*dx);
-                drawLine("BrownBloc", "redbrick", 0, 270*dx, surface, FLOOR_WIDTH, FLOOR_HEIGHT, false);
+                drawCastle("castle", 450*dx);
+                drawLine("BrownBloc", "redbrick", 0, 450*dx+CASTLE_WIDTH, surface, FLOOR_WIDTH, FLOOR_HEIGHT, false);
 
                 drawDecoration("colline_petite", 40*dx,15*dx, 7*dx);
                 drawDecoration("colline_grande", 80*dx, 20*dx, 10*dx);
@@ -151,35 +152,79 @@ public class GameActivity extends AppCompatActivity {
                 drawDecoration("nuage", 100*dx, 1*dx, nuageSimpeWidth, nuageSimpleHeight);
                 drawDecoration("nuage", 137*dx, 4*dx, nuageSimpeWidth, nuageSimpleHeight);
                 drawDecoration("nuage", 145*dx, 3*dx, nuageSimpeWidth, nuageSimpleHeight);
-                drawDecoration("nuage", 163*dx, 4*dx, nuageSimpeWidth, nuageSimpleHeight);
                 drawDecoration("nuage", 175*dx, 1*dx, nuageSimpeWidth, nuageSimpleHeight);
+                drawDecoration("nuage", 200*dx, 4*dx, nuageSimpeWidth, nuageSimpleHeight);
+                drawDecoration("nuage", 229*dx, 3*dx, nuageSimpeWidth, nuageSimpleHeight);
+                drawDecoration("nuage", 245*dx, 2*dx, nuageSimpeWidth, nuageSimpleHeight);
+                drawDecoration("nuage", 263*dx, 5*dx, nuageSimpeWidth, nuageSimpleHeight);
+                drawDecoration("nuage", 280*dx, 1*dx, nuageSimpeWidth, nuageSimpleHeight);
+                drawDecoration("nuage", 312*dx, 3*dx, nuageSimpeWidth, nuageSimpleHeight);
+                drawDecoration("nuage", 330*dx, 2*dx, nuageSimpeWidth, nuageSimpleHeight);
+                drawDecoration("nuage", 367*dx, 1*dx, nuageSimpeWidth, nuageSimpleHeight);
+                drawDecoration("nuage", 385*dx, 4*dx, nuageSimpeWidth, nuageSimpleHeight);
+                drawDecoration("nuage", 418*dx, 3*dx, nuageSimpeWidth, nuageSimpleHeight);
+                drawDecoration("nuage", 448*dx, 1*dx, nuageSimpeWidth, nuageSimpleHeight);
+                drawDecoration("hills1", 230*dx, 30*dx, 30*dx);
+                drawDecoration("buisson_simple", 25*dx, 5*dx, (int) (2.5*dx));
+                drawDecoration("buisson_triple", 140*dx, 15*dx, 3*dx);
+                drawDecoration("buisson_triple", 180*dx, surface - 5*dx, 15*dx, 3*dx);
 
-
-                drawAlternatesBloc("brownbloc", "bloc", 30*dx, displayHeight-FLOOR_HEIGHT-BLOC_HEIGHT*4, 3, 2, 4);
+                drawGoomba("goomba", 65*dx, surface-4*dx, true, true);
+                drawAlternatesBloc("brownbloc", "bloc", 42*dx, surface - 15*dx, 3, 2, 4);
                 drawStaticPlatform("pillier_champi_platforme", "champi_platforme", 80*dx, 4*dx, 10*dx, 12*dx, 4*dx, 2);
                 drawStaticPlatform("pillier_champi_platforme", "champi_platforme", 120*dx, 4*dx, 15*dx, 15*dx, 4*dx, 2);
                 drawStaticPlatform("pillier_champi_platforme", "champi_platforme", 160*dx, 4*dx, 10*dx, 12*dx, 4*dx, 2);
                 drawLine("BrownBloc", "hardbloc", 164*dx, 200*dx, displayHeight-FLOOR_HEIGHT-hardSquareHeight, hardsquareWidth, hardSquareHeight, false);
-                drawScale("BrownBloc", "hardbloc", 199*dx, 7, displayHeight-FLOOR_HEIGHT-hardSquareHeight, hardsquareWidth, hardSquareHeight);
-                drawLine("BrownBloc", "hardbloc", 199*dx+7*hardsquareWidth,199*dx+7*hardsquareWidth+10*hardsquareWidth ,displayHeight-FLOOR_HEIGHT-7*hardSquareHeight, hardsquareWidth, hardSquareHeight, false);
-                drawPieceSquare(199*dx+7*hardsquareWidth+dx, displayHeight-FLOOR_HEIGHT-PIECE_HEIGHT-dx, 5);
-                drawBloc("bloc", 178*dx, displayHeight-FLOOR_HEIGHT-hardSquareHeight-4*BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT, 4);
-
+                drawScale("BrownBloc", "hardbloc", 199*dx, 4, displayHeight-FLOOR_HEIGHT-hardSquareHeight, hardsquareWidth, hardSquareHeight);
+                drawColumn("BrownBloc", "hardbloc", 229*dx, surface - hardSquareHeight, 4, hardsquareWidth, hardSquareHeight, false);
+                drawColumn("BrownBloc", "hardbloc", 232*dx, surface - hardSquareHeight, 3, hardsquareWidth, hardSquareHeight, false);
+                drawColumn("BrownBloc", "hardbloc", 235*dx, surface - hardSquareHeight, 2, hardsquareWidth, hardSquareHeight, false);
+                drawBloc("hardbloc", 238*dx, surface-hardSquareHeight, hardsquareWidth, hardSquareHeight, 1);
+                //drawLine("BrownBloc", "hardbloc", 199*dx+7*hardsquareWidth,199*dx+7*hardsquareWidth+10*hardsquareWidth ,displayHeight-FLOOR_HEIGHT-7*hardSquareHeight, hardsquareWidth, hardSquareHeight, false);
+                //drawPieceSquare(199*dx+7*hardsquareWidth+dx, displayHeight-FLOOR_HEIGHT-PIECE_HEIGHT-dx, 5);
+                //drawBloc("bloc", 190*dx, displayHeight-FLOOR_HEIGHT-hardSquareHeight-4*BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT, 4);
                 drawGoomba("goomba", 85*dx, surface-4*dx, true, true);
-                drawGoomba("goomba", 70*dx, surface-4*dx, true, true);
                 drawKoopa("greenkoopa", 125*dx, (int) (surface-(displayWidth*0.03 - 1.7458) - 3*dx), true, false);
                 drawKoopa("greenkoopa", 170*dx, (int) (surface-(displayWidth*0.03 - 1.7458) - 6*dx),true, false);
-                drawParakoopa("greenparakoopa", 240*dx, surface - 30*dx, false, true);
-
+                drawParakoopa("greenparakoopa", 275*dx, surface - 27*dx, false, true);
+                drawBloc("bloc", 219*dx, displayHeight-FLOOR_HEIGHT-hardSquareHeight-4*BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT, 3);
+                drawGoomba("goomba", 220*dx, surface - 5*dx, false, false);
                 drawMovablePlatform("platforme", 100*dx, surface - 10*dx, 10*dx, (int) (20*dx*0.1657), true, 10*dx, surface-6*dx);
                 drawMovablePlatform("platforme", 275*dx, surface - 6*dx, 10*dx, (int) (20*dx*0.1657), true, 10*dx, surface-6*dx);
                 drawMovablePlatform("platforme", 295*dx, 10*dx, 10*dx, (int) (20*dx*0.1657), false, 10*dx, surface-6*dx);
                 drawMovablePlatform("platforme", 315*dx, surface - 6*dx, 10*dx, (int) (20*dx*0.1657), true, 10*dx, surface-6*dx);
                 drawMovablePlatform("platforme", 335*dx, 10*dx, 10*dx, (int) (20*dx*0.1657), false, 10*dx, surface-6*dx);
+                drawParakoopa("greenparakoopa", 320*dx, surface - 27*dx, true, true);
+                drawPieceLine(275*dx, surface - 22*dx, 24);
+                drawPieceLine(275*dx, surface - 27*dx, 10);
+                drawAlternatesBloc("brownbloc", "bloc", 304*dx, surface-27*dx, 3, 1, 4);
+                drawPieceLine(317*dx, surface - 27*dx, 10);
+                drawPieceLine(275*dx, surface - 32*dx, 24);
+                drawPipe("greenpipe", 288*dx, surface-PIPE_HEIGHT);
+                drawPipe("greenpipe", 350*dx, surface-PIPE_HEIGHT);
+                //drawBloc("brownbloc", 304*dx, surface-BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT, 1);
+                //drawBloc("brownbloc", 340*dx, surface-BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT, 1);
+                drawGoomba("goomba", 260*dx, surface - 4*dx, false, true);
+                drawGoomba("goomba", 263*dx, surface - 4*dx, false, true);
+                drawGoomba("goomba", 330*dx, surface - 5*dx, false, true);
+                drawDecoration("buisson_simple", 260*dx, 5*dx, (int) (2.5*dx));
+                drawDecoration("buisson_simple", 310*dx, 5*dx, (int) (2.5*dx));
+                drawDecoration("colline_petite", 315*dx, 15*dx, 7*dx);
 
-                drawParakoopa("greenparakoopa", 285*dx, surface - 10*dx, true, true);
-                drawLine("BrownBloc", "redbrick", 345*dx, 420*dx, surface , FLOOR_WIDTH, FLOOR_HEIGHT, false);
+                drawUnmovablePlatforme("herbe_platforme", 360*dx, surface - 15*dx, 17*dx, 4*dx);
+                drawDecoration("pillier_terre", 361*dx, surface - 12*dx,14*dx, 14*dx);
+                drawUnmovablePlatforme("herbe_platforme", 374*dx, surface - 27*dx, 17*dx, 4*dx);
+                drawDecoration("pillier_terre", 375*dx, surface - 24*dx,14*dx, 14*dx);
+                drawDecoration("pillier_terre", 375*dx, surface - 12*dx,14*dx, 14*dx);
+                drawUnmovablePlatforme("herbe_platforme", 387*dx, surface - 8*dx, 17*dx, 4*dx);
+                drawDecoration("pillier_terre", 389*dx, (int) (surface - 6*dx),14*dx, 14*dx);
 
+                drawKoopa("greenkoopa", 390*dx, surface-31*dx, false, true);
+                drawKoopa("greenkoopa", 368*dx, surface - 19*dx, false, true);
+                drawGoomba("goomba", 395*dx, surface-12*dx, false, false);
+                drawPieceColumn(395*dx, surface - 12*dx, 5);
+                drawDecoration("colline_grande", 420*dx, 16*dx, 7*dx);
+                drawDecoration("buisson_triple", 439*dx, 12*dx, 4*dx);
 
                 return;
             case 2 :
@@ -246,37 +291,73 @@ public class GameActivity extends AppCompatActivity {
 
                 return;
             case 3 :
+
+                final int nuageWidth = (int) (7*dx);
+                final int nuageHeight = (int) (0.9465*nuageWidth);
+
+                drawDecoration("nuage", 30*dx, 2*dx, nuageWidth, nuageHeight);
+                drawDecoration("nuage", 60*dx, 3*dx, nuageWidth, nuageHeight);
+                drawDecoration("nuage", 75*dx, 1*dx, nuageWidth, nuageHeight);
+                drawDecoration("nuage", 100*dx, 5*dx, nuageWidth, nuageHeight);
+                drawDecoration("nuage", 130*dx, 1*dx, nuageWidth, nuageHeight);
+                drawDecoration("nuage", 143*dx, 4*dx, nuageWidth, nuageHeight);
+                drawDecoration("nuage", 160*dx, 3*dx, nuageWidth, nuageHeight);
+                drawDecoration("nuage", 184*dx, 4*dx, nuageWidth, nuageHeight);
+                drawDecoration("nuage", 200*dx, 1*dx, nuageWidth, nuageHeight);
                 drawCastle("castle", 0);
-                drawCastle("castle", 400*dx );
-                drawLine("BrownBloc", "yellowbrick", 0, 400*dx, surface, FLOOR_WIDTH, FLOOR_HEIGHT, false);
+                drawCastle("castle", 450*dx );
+                drawLine("BrownBloc", "yellowbrick", 0, 470*dx, surface, FLOOR_WIDTH, FLOOR_HEIGHT, false);
                 drawDecoration("pyramides", CASTLE_WIDTH,0, displayWidth, displayHeight-FLOOR_HEIGHT);
                 drawDecoration("sable", CASTLE_WIDTH + displayWidth,0, displayWidth, displayHeight-FLOOR_HEIGHT);
                 drawDecoration("sable", CASTLE_WIDTH + displayWidth*2,0, displayWidth, displayHeight-FLOOR_HEIGHT);
                 drawDecoration("sable", CASTLE_WIDTH + displayWidth*3,0, displayWidth, displayHeight-FLOOR_HEIGHT);
                 drawDecoration("sable", CASTLE_WIDTH + displayWidth*4,0, displayWidth, displayHeight-FLOOR_HEIGHT);
                 drawDecoration("pyramides", CASTLE_WIDTH + displayWidth*5,0, displayWidth, displayHeight-FLOOR_HEIGHT);
-                drawDecoration("palmier", 40*dx, 10*dx, 30*dx);
-                drawDecoration("palmier", 140*dx, 10*dx, 30*dx);
-                drawPyramid("BrownBloc", "brique_jaune", 280*dx, 12, surface-BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT);
-                //drawPyramid("BrownBloc", "brique_jaune", 328*dx, 12, surface-BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT);
-                drawKoopa("redkoopa", 60*dx, surface-8*BLOC_WIDTH , false, false);
-                //drawParakoopa("redparakoopa", 50*dx, (int) (surface-(displayWidth*0.03 - 1.7458) - dx), true);
-                drawAlternatesBloc("goldenbloc", "bloc", 50*dx, surface-3*BLOC_WIDTH, 20, 2, 3);
-                drawAlternatesBloc("goldenbloc", "bloc", 50*dx, surface-6*BLOC_WIDTH, 9, 2, 3);
-                drawAlternatesBloc("goldenbloc", "bloc", 94*dx, surface - 6*BLOC_WIDTH, 9, 2, 3);
-                //drawKoopa("redkoopa", 70*dx, surface - 5*dx, false);
-                drawColumn("BrownBloc", "goldenbloc", 130*dx, surface-BLOC_HEIGHT, 6, BLOC_WIDTH, BLOC_HEIGHT, false);
-                drawSpiny("spiny", 70*dx,surface-17*dx , 3*dx, 3*dx, false, true);
-                drawKoopa("redkoopa", 100*dx, surface-8*BLOC_WIDTH, false, true);
+                drawDecoration("palmier", 40*dx, 12*dx, 30*dx);
+                drawDecoration("palmier", 80*dx, 12*dx, 30*dx);
 
-                drawPlantPirhanaWithGreenPipe(160*dx, surface - PIPE_HEIGHT);
-                drawBloc("bloc", 160*dx + (PIPE_WIDTH-BLOC_WIDTH)/2, surface - PIPE_HEIGHT - 4*BLOC_WIDTH, BLOC_WIDTH, BLOC_HEIGHT, 4);
-                drawColumn("BrownBloc", "goldenbloc", 180*dx, surface - 5*BLOC_HEIGHT, 6, BLOC_WIDTH, BLOC_HEIGHT, false);
-                drawLine("BrownBloc", "goldenbloc", 184*dx, 250*dx, surface - 5*BLOC_WIDTH, BLOC_WIDTH, BLOC_HEIGHT, true );
-                drawPlantPirhanaWithGreenPipe(255*dx, surface -PIPE_HEIGHT);
-                drawBloc("bloc", 190*dx, surface - 9*BLOC_WIDTH, BLOC_WIDTH, BLOC_HEIGHT, 5);
-                drawAlternatesBloc("goldenbloc", "bloc", 194*dx, surface -9*BLOC_WIDTH, 9, 1, 3);
-                drawSpiny("spiny", 250*dx, surface - 4*dx, 3*dx, 3*dx, true, false);
+                drawAlternatesBloc("goldenbloc", "bloc", 60*dx, surface - 15*dx, 3, 2, 3);
+                drawPlantPirhanaWithGreenPipe(100*dx, surface-PIPE_HEIGHT);
+                drawPlantPirhanaWithGreenPipe(180*dx, surface-PIPE_HEIGHT);
+                drawSpiny("spiny", 139*dx, surface - 5*dx, 3*dx, 3*dx, true, true) ;
+                drawAlternatesBloc("goldenbloc", "bloc", 134*dx, surface - 15*dx, 3, 1, 3);
+                drawBloc("bloc", 138*dx, surface - 30*dx, BLOC_WIDTH, BLOC_HEIGHT, 5);
+
+                drawDecoration("palmier", 190*dx, 12*dx, 30*dx);
+                drawCoconut("coconut", 189*dx, surface - 26*dx, 3*dx, 3*dx);
+                drawDecoration("palmier", 270*dx, 12*dx, 30*dx);
+                drawCoconut("coconut", 270*dx, surface - 29*dx, 3*dx, 3*dx);
+                drawCoconut("coconut", 275*dx, surface - 26*dx, 3*dx, 3*dx);
+                drawCoconut("coconut", 280*dx, surface - 27*dx, 3*dx, 3*dx);
+                drawColumn("BrownBloc", "brique_jaune", 210*dx, surface-4*dx, 3, 4*dx, 4*dx, true);
+                drawColumn("BrownBloc", "brique_jaune", 210*dx, surface-24*dx, 3, 4*dx, 4*dx, true);
+                drawColumn("BrownBloc", "brique_jaune", 258*dx, surface-4*dx, 3, 4*dx, 4*dx, true);
+                drawColumn("BrownBloc", "brique_jaune", 258*dx, surface-24*dx, 3, 4*dx, 4*dx, true);
+                drawLine("BrownBloc", "brique_jaune", 214*dx, 228*dx, surface-12*dx, BLOC_WIDTH, BLOC_HEIGHT, false);
+                drawLine("BrownBloc", "brique_jaune", 246*dx, 258*dx, surface-12*dx, BLOC_WIDTH, BLOC_HEIGHT, false);
+                drawLine("BrownBloc", "brique_jaune", 228*dx, 246*dx, surface-24*dx, BLOC_WIDTH, BLOC_HEIGHT, false);
+                drawPieceLine(215*dx, surface-PIECE_HEIGHT-dx, 14);
+                drawGoomba("goomba", 225*dx, surface - 27*dx, false, true);
+                drawSpiny("spiny", 240*dx, surface - 4*dx, 3*dx, 3*dx, false, true);
+                drawColumn("BrownBloc", "brique_jaune", 290*dx, surface - 4*dx, 3, 4*dx, 4*dx, false);
+                drawGoomba("goomba", 282*dx, surface-4*dx, true, true);
+                drawDecoration("palmier", 320*dx, surface - 17*dx, 5*dx, 15*dx);
+                drawDecoration("palmier", 340*dx, surface - 17*dx, 5*dx, 15*dx);
+                drawDecoration("palmier", 360*dx, surface - 16*dx, 5*dx, 15*dx);
+                drawDecoration("palmier", 305*dx, 15*dx, 38*dx);
+                drawDecoration("palmier", 314*dx, 10*dx, 25*dx);
+                drawDecoration("palmier", 325*dx, 12*dx, 30*dx);
+                drawDecoration("palmier", 336*dx, 8*dx, 20*dx);
+                drawDecoration("palmier", 345*dx, 13*dx, 34*dx);
+                drawDecoration("palmier", 358*dx, 16*dx, 39*dx);
+                drawCoconut("coconut", 306*dx, surface - 26*dx, 3*dx, 3*dx);
+                drawCoconut("coconut", 322*dx, surface - 23*dx, 3*dx, 3*dx);
+                drawCoconut("coconut", 350*dx, surface - 30*dx, 3*dx, 3*dx);
+                drawCoconut("coconut", 360*dx, surface - 39*dx, 3*dx, 3*dx);
+                drawCoconut("coconut", 371*dx, surface - 39*dx, 3*dx, 3*dx);
+                drawKoopa("redkoopa", 320*dx, surface-5*dx, true, false);
+                drawKoopa("redkoopa", 320*dx, surface-5*dx, true, true);
+                drawColumn("BrownBloc", "brique_jaune", 385*dx, surface-4*dx, 3, 4*dx, 4*dx, true);
 
                 return;
             case 4 :
@@ -303,8 +384,7 @@ public class GameActivity extends AppCompatActivity {
                 drawLine("BrownBloc", "brique_marron", 260*dx, 400*dx, surface - 4*dx, 5*dx, 5*dx, false);
                 /*drawBloc("brique_marron", 260*dx, surface-9*dx, 5*dx, 5*dx, 2);
                 drawBloc("brique_marron", 345*dx, surface-9*dx, 5*dx, 5*dx, 2);*/
-                drawMagikoopa(330*dx, surface - 15*dx);
-                drawBloc("bloc", 302*dx, surface - 20*dx, BLOC_WIDTH, BLOC_HEIGHT, 6);
+                drawMagikoopa(350*dx, surface - 15*dx);
                 return;
             case 5 :
                 drawCastle("castle", 0);
@@ -784,5 +864,19 @@ public class GameActivity extends AppCompatActivity {
         int magHeight = (int) (magWidth*1.2);
         Magikoopa mag = new Magikoopa(this, "magikoopa", x, y, magWidth, magHeight);
         ennemies.add(mag);
+    }
+    public void drawCoconut(String name, int x, int y, int width, int height) {
+        Coconut cc = new Coconut(this, name, x, y, width, height);
+        ennemies.add(cc);
+    }
+    public void drawPipe(String key, int x, int y) {
+        Pipe pipe = new Pipe(this, key, x, y, PIPE_WIDTH, PIPE_HEIGHT);
+        pipes.add(pipe);
+    }
+    public void drawPieceColumn(int x, int y, int quantite){
+        for (int i = 0; i<quantite; i++) {
+            Piece piece = new Piece(this, "piece_jaune", x, y-i*PIECE_HEIGHT-dx, PIECE_WIDTH, PIECE_HEIGHT);
+            pieces.add(piece);
+        }
     }
 }

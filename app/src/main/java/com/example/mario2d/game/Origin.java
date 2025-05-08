@@ -309,6 +309,10 @@ public abstract class Origin {
         spriteBank.put("pyramides", R.drawable.pyramides);
         spriteBank.put("sable", R.drawable.sable);
         spriteBank.put("palmier", R.drawable.palmier);
+        spriteBank.put("coconut", R.drawable.coconut);
+
+        spriteBank.put("buisson_simple", R.drawable.buisson_simple);
+        spriteBank.put("buisson_triple", R.drawable.buisson_triple);
 
     }
     public void translateX(int dx){this.setX(this.getX()+dx);}

@@ -19,14 +19,17 @@ public class Pipe extends Objet{
     @Override
     public void update(){
         boolean[] t = player.detectCollision(this);
-        if(t[0]){player.recalibrerY(this);}
+        if(t[0]){
+            player.recalibrerY(this);
+            if (isPassage) {}
+        }
         for(Personnage perso : GameActivity.persos){
             if(perso.getActivated()){
                 boolean[] tab = perso.detectCollision(this);
                 if(tab[0]){perso.recalibrerY(this);}
                 if(tab[2] && perso.getJumping()){perso.setJumping(false);}
-                if(tab[1]){perso.setRight(true);}
-                if(tab[3]){perso.setRight(false);}
+                if(tab[1]){perso.setRight(false);}
+                if(tab[3]){perso.setRight(true);}
             }
         }
     }
