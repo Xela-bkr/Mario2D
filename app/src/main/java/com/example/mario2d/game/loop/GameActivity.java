@@ -376,7 +376,11 @@ public class GameActivity extends AppCompatActivity {
                 drawKoopa("redkoopa", 320*dx, surface-5*dx, true, false);
                 drawKoopa("redkoopa", 320*dx, surface-5*dx, true, true);
                 drawColumn("BrownBloc", "brique_jaune", 385*dx, surface-4*dx, 3, 4*dx, 4*dx, true);
-                drawPokey("pokey", 40*dx, surface-25*dx);
+                drawPokey("pokey", 120*dx, surface-20*dx);
+                drawPokey("pokey", 160*dx, surface - 20*dx);
+                drawPokey("pokey", 390*dx, surface - 20*dx);
+                drawPokey("pokey", 440*dx, surface - 20*dx);
+                drawPokey("pokey", 490*dx, surface - 20*dx);
                 return;
             case 4 :
 
