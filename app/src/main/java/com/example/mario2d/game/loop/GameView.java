@@ -226,6 +226,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 if(insideMenuButton){
                     if(menuButton.getIsPressed()){
                         menuButton.setPressed(false);
+                        menuPointerId = pointerId;
                     }
                     else{
                         menuButton.setPressed(true);
@@ -233,17 +234,17 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     }
                     Audio.playSound(getContext(), R.raw.pause);
                 }
-                if(insidePauseButton){
+                if(insidePauseButton && menuButtonPressed){
                     pauseButton.setPressed(true);
                     pausePointerId = pointerId;
                     Audio.playSound(getContext(), R.raw.open_close);
                 }
-                if(insideRetryButton){
+                if(insideRetryButton && menuButtonPressed){
                     retryPointerId = pointerId;
                     retryButton.setPressed(true);
                     Audio.playSound(getContext(), R.raw.open_close);
                 }
-                if(insideExitButton){
+                if(insideExitButton && menuButtonPressed){
                     exitPointerId = pointerId;
                     exitButton.setPressed(true);
                     Audio.playSound(getContext(), R.raw.open_close);

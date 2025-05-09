@@ -198,6 +198,7 @@ public abstract class Origin {
         spriteBank.put("nuageplatform2", R.drawable.nuageplatform2);
         spriteBank.put("forest_platform", R.drawable.forest_platform);
         spriteBank.put("bloc_jaune", R.drawable.bloc_jaune);
+        spriteBank.put("volcan_decor2", R.drawable.volcan_decor_2);
         /*
         spriteBank.put("", R.drawable.);
         spriteBank.put("", R.drawable.);*/

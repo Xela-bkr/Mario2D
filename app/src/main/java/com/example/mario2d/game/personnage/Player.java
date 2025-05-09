@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.example.mario2d.R;
+import com.example.mario2d.game.loop.GameView;
 import com.example.mario2d.game.objet.Item;
 import com.example.mario2d.tool.Audio;
 
@@ -54,6 +55,7 @@ public class Player extends Personnage{
             fire = false;
             skin = "";
             setBitmaps();
+            return;
         } else if (life > 1) {
             Audio.playSound(context, R.raw.mario_power_down);
             isResting = true;
@@ -168,6 +170,7 @@ public class Player extends Personnage{
             if(!this.isInvincible)
             {
                 setInvincible(true);
+                GameView.theme.stop();
                 star = new Audio(context, R.raw.star);
                 star.setLoop(true);
                 star.play();
@@ -176,7 +179,6 @@ public class Player extends Personnage{
                 star = new Audio(context, R.raw.staritem);
                 star.setLoop(true);
             }*/
-
             invincibleCompteur --;
         }
         else{
@@ -192,6 +194,11 @@ public class Player extends Personnage{
         isResting = true;
         if(restCompteur%3==0) {
             this.bitmap = null;
+        } else {
+            if (!isWalking) {
+                if(isRight) this.bitmap = arret_droite;
+                else this.bitmap = arret_gauche;
+            }
         }
         if (restCompteur > 60){
             restCompteur = 0;
