@@ -30,6 +30,7 @@ import com.example.mario2d.game.personnage.Personnage;
 import com.example.mario2d.game.personnage.PlantePirhana;
 import com.example.mario2d.game.personnage.Player;
 import com.example.mario2d.game.personnage.Podoboo;
+import com.example.mario2d.game.personnage.Pokey;
 import com.example.mario2d.game.personnage.Skelerex;
 import com.example.mario2d.game.personnage.Spiny;
 import com.example.mario2d.game.personnage.Thwomp;
@@ -319,9 +320,11 @@ public class GameActivity extends AppCompatActivity {
                 drawDecoration("nuage", 160*dx, 3*dx, nuageWidth, nuageHeight);
                 drawDecoration("nuage", 184*dx, 4*dx, nuageWidth, nuageHeight);
                 drawDecoration("nuage", 200*dx, 1*dx, nuageWidth, nuageHeight);
+
                 drawCastle("castle", 0);
-                drawCastle("castle", 450*dx );
-                drawLine("BrownBloc", "yellowbrick", 0, 470*dx, surface, FLOOR_WIDTH, FLOOR_HEIGHT, false);
+                drawCastle("castle", 500*dx );
+
+                drawLine("BrownBloc", "yellowbrick", 0, 550*dx, surface, FLOOR_WIDTH, FLOOR_HEIGHT, false);
                 drawDecoration("pyramides", CASTLE_WIDTH,0, displayWidth, displayHeight-FLOOR_HEIGHT);
                 drawDecoration("sable", CASTLE_WIDTH + displayWidth,0, displayWidth, displayHeight-FLOOR_HEIGHT);
                 drawDecoration("sable", CASTLE_WIDTH + displayWidth*2,0, displayWidth, displayHeight-FLOOR_HEIGHT);
@@ -373,7 +376,7 @@ public class GameActivity extends AppCompatActivity {
                 drawKoopa("redkoopa", 320*dx, surface-5*dx, true, false);
                 drawKoopa("redkoopa", 320*dx, surface-5*dx, true, true);
                 drawColumn("BrownBloc", "brique_jaune", 385*dx, surface-4*dx, 3, 4*dx, 4*dx, true);
-
+                drawPokey("pokey", 40*dx, surface-25*dx);
                 return;
             case 4 :
 
@@ -893,5 +896,11 @@ public class GameActivity extends AppCompatActivity {
             Piece piece = new Piece(this, "piece_jaune", x, y-i*PIECE_HEIGHT-dx, PIECE_WIDTH, PIECE_HEIGHT);
             pieces.add(piece);
         }
+    }
+    public void drawPokey(String key, int x, int y){
+        int pokeyWidth = 4*dx;
+        int pokeyHeight = 16*dx;
+        Pokey pok = new Pokey(this, key, x, y, pokeyWidth, pokeyHeight);
+        ennemies.add(pok);
     }
 }

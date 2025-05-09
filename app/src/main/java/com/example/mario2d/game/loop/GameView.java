@@ -754,7 +754,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
         for(Platforme pl : platformes) {
             boolean[] tab = item.detectCollision(pl, pipeOffset);
-            if(tab[0]){item.addCollisionValue("brownbloc", 0, true);}
+            if(tab[0]){item.addCollisionValue("objet", 0, true);}
         }
     }
     public void gravity(){
