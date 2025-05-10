@@ -443,7 +443,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     afficherMenuLateral(canvas);
                 }
                 menuButton.draw(canvas);
-                afficherScore(canvas, paint);
                 drawLife(canvas, paint);
 
                 if(player.fire) {
@@ -830,14 +829,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             ff.update();
         }
     }
+    @Deprecated
     public void afficherScore(Canvas canvas, Paint paint){
 
-        final int PIECE_WIDTH = (int)(displayWidth*0.04);
+        final int PIECE_WIDTH = (int) (displayWidth*0.03);
         final int PIECE_HEIGHT = (int)(PIECE_WIDTH*1.1378);
 
         final float textSize = (float) (displayHeight * 0.05);
 
-        float stringX = (float)(displayWidth*0.9);
+        float stringX = (float)(displayWidth*3/4);
         float iconX = stringX - PIECE_WIDTH;
 
         float iconY = (float)(displayHeight * 0.07);
@@ -897,6 +897,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         paint.setTypeface(font);
 
         canvas.drawText(life, StringX, StringY, paint);
+
+        String score = String.format("Score : %d", player.score);
+        int scoreX = (int) (displayWidth/4 - textSize*score.length()/2);
+        canvas.drawText(score, scoreX, StringY, paint);
+
+        String piece = String.format("Pieces : %d", player.getPiecesCount());
+        int pieceX = (int) (displayWidth*3/4 - textSize*piece.length()/2);
+        canvas.drawText(piece, pieceX, StringY, paint);
     }
     public void gameOver(Canvas canvas, Paint paint){
         gameOver = true;
@@ -991,7 +999,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
             JSONObject newData = new JSONObject();
             newData.put("piece", player.getPiecesCount());
-            newData.put("point", 0);
+            newData.put("point", player.score);
             newData.put("temps", 0);
 
             String key = String.format("Niveau%d", LEVEL_SELECTED);

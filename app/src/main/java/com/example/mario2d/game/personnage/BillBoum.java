@@ -65,6 +65,7 @@ public class BillBoum extends Ennemy{
     }
     @Override
     public void dead() {
+        player.score += 15;
         setAlive(false);
         setActivated(false);
         waitingLineForRemoving.add(this);

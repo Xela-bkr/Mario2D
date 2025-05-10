@@ -58,6 +58,7 @@ public class Spiny extends Ennemy{
                     if(!player.getInvincible()) {
                         player.decreaseLife();
                     } else {
+                        player.score += 100;
                         Audio.playSound(context, R.raw.kick_2);
                         dead();
                     }

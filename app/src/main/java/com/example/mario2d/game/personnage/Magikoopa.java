@@ -194,6 +194,7 @@ public class Magikoopa extends Ennemy{
                 Audio.playSound(context, R.raw.kick_2);
                 this.decreaseLife();
                 System.out.printf("after decreaselife func %d\n", life);
+                player.score += 100;
             }
             player.jump2();
         } else if (tab[1] || tab[2] || tab[3]) {

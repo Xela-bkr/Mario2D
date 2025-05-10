@@ -110,8 +110,7 @@ public class Parakoopa extends Koopa {
     @Override public void update() {
         if (activated)
         {
-            if (collisionWithObject(1) || collisionWithObject(3))
-            {
+            if (collisionWithObject(1) || collisionWithObject(3)) {
                 reverseDirection();
             }
             updateCollisions();
@@ -131,12 +130,10 @@ public class Parakoopa extends Koopa {
                 }
             }
         }
-        for(Ennemy en : ennemies)
-        {
+        for (Ennemy en : ennemies) {
             boolean[] tab = detectCollision(en);
-            if(tab[0] || tab[1] || tab[2] || tab[3]){
-                if(isInvincible && !en.getInvincible() && en.getAlive())
-                {
+            if (tab[0] || tab[1] || tab[2] || tab[3]) {
+                if (isInvincible && !en.getInvincible() && en.getAlive()) {
                     Audio.playSound(context, R.raw.kick_2);
                     en.dead();
                 }

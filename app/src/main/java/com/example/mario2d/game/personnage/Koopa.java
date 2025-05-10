@@ -188,6 +188,7 @@ public class Koopa extends Ennemy {
     public void invincible(){
         if(!isInvincible)
         {
+            player.score += 20;
             isInvincible = true;
             invincibleAudio.play();
         }
@@ -255,9 +256,11 @@ public class Koopa extends Ennemy {
         if (tab[0]) {
             if(!getInvincible()) {
                 if(!getResting()) {
+                    player.score += 90;
                     Audio.playSound(context, R.raw.kick_2);
                     rest();
                 } else {
+                    player.score += 35;
                     invincible();
                 }
             }
@@ -273,6 +276,7 @@ public class Koopa extends Ennemy {
                             player.decreaseLife();
                         }
                     } else {
+                        player.score += 100;
                         dead();
                     }
                 } else {

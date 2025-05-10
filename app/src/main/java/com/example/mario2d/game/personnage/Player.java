@@ -22,6 +22,7 @@ public class Player extends Personnage{
     private String skin;
     private Audio star;
     private int initialWidth, initialHeight;
+    public int score;
     public boolean fire, droppingFire;
     private Bitmap arret_droite, arret_gauche, marche_droite, marche_gauche, saute_droite, saute_gauche, mort_droite, mort_gauche,
             victoire, feu_droite_1, feu_droite_2, feu_gauche_1, feu_gauche_2;
@@ -38,6 +39,7 @@ public class Player extends Personnage{
         this.isResting = false;
         this.restCompteur = 0;
         this.smallJump = false;
+        score = 0;
         compteurPetitSaut = 0;
         shotCount = 0;
         droppingFire = false;

@@ -44,6 +44,7 @@ public class Coconut extends Ennemy{
         boolean[] tab = player.detectCollision(this, (int) (getHeight()*0.2), (int) (getWidth()*0.2), (int) (getHeight()*0.2), (int) (getWidth()*0.2));
         if (tab[0]) {
             if (isAlive) {
+                player.score += 15;
                 Audio.playSound(context, R.raw.kick_2);
                 isAlive = false;
             }
@@ -57,6 +58,7 @@ public class Coconut extends Ennemy{
                 }
             } else {
                 if (isAlive) {
+                    player.score += 10;
                     Audio.playSound(context, R.raw.kick_2);
                     isAlive = false;
                 }

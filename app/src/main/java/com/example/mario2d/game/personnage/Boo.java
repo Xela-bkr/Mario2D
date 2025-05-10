@@ -141,6 +141,7 @@ public class Boo extends Ennemy{
         if(tab[0]) {
             Audio.playSound(context, R.raw.boo_08);
             player.jump2();
+            player.score += 80;
             dead();
         } else if (tab[1] || tab[2] || tab[3]) {
             if (!player.getResting()) {
@@ -148,6 +149,7 @@ public class Boo extends Ennemy{
                     Audio.playSound(context, R.raw.boo_02);
                     player.decreaseLife();
                 } else {
+                    player.score += 70;
                     Audio.playSound(context, R.raw.kick_2);
                     dead();
                 }

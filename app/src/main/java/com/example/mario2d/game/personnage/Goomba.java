@@ -124,6 +124,7 @@ public class Goomba extends Ennemy{
         boolean[] tab = player.detectCollision(this, (int) (-getWidth()*0.2), (int) (getWidth()*0.2), (int) (-getWidth()*0.05), (int) (getWidth()*0.2));
         if (tab[0]) {
             if(isAlive) {
+                player.score += 100;
                 Audio.playSound(context, R.raw.kick_2);
             }
             dead();

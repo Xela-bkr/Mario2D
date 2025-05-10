@@ -88,6 +88,7 @@ public class Pokey extends Ennemy{
                     decreaseLife();
                     isResting = true;
                     isWalking = false;
+                    player.score += 50;
                 }
             }
             player.jump2();
@@ -98,6 +99,7 @@ public class Pokey extends Ennemy{
                     player.decreaseLife();
                 }
             } else {
+                player.score += 180;
                 dead();
             }
         }

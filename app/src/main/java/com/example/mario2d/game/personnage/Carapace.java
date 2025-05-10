@@ -50,18 +50,6 @@ public class Carapace extends Ennemy{
         }
     }
     private void deplacer() {
-        /*if (getX() < player.getX()) {
-            translateX(8);
-        }
-        if (getX() > player.getX() + player.getWidth()) {
-            translateX(-8);
-        }
-        if(getY() < player.getY()) {
-            translateY(6);
-        }
-        if(getY() > player.getY() + player.getHeight()) {
-            translateY(-6);
-        }*/
         translateX(vectors[0]);
         translateY(vectors[1]);
     }
@@ -94,6 +82,7 @@ public class Carapace extends Ennemy{
     }
     @Override
     public void dead() {
+        player.score += 40;
         setAlive(false);
         setActivated(false);
         waitingLineForRemoving.add(this);
