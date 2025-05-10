@@ -261,6 +261,9 @@ public class Koopa extends Ennemy {
                     invincible();
                 }
             }
+            if(player.getInvincible()) {
+                dead();
+            }
             player.jump2();
         } else if (tab[1] || tab[2] || tab[3]) {
             if(!isInvincible) {

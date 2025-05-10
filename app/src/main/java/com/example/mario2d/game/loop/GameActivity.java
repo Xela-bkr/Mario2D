@@ -904,46 +904,80 @@ public class GameActivity extends AppCompatActivity {
         final int hardSquareY = displayHeight - FLOOR_HEIGHT - hardSquareHeight;
 
         drawCastle("castle", 0);
-        drawCastle("castle", 550*dx );
+        drawCastle("castle", 565*dx, surface - 33*dx);
         drawBloc("forest_platform",0, surface, CASTLE_WIDTH, CASTLE_HEIGHT/3, 1 );
         drawLine("BrownBloc", "brownbloc", CASTLE_WIDTH + 2*BLOC_WIDTH, 76*dx, surface, BLOC_WIDTH, BLOC_HEIGHT, true);
         drawStaticPlatform("pillier_champi_platforme", "champi_platforme", 80*dx, displayHeight-15*dx,5*dx, 20*dx, 20*dx, 5*dx, 3);
         drawStaticPlatform("pillier_champi_platforme", "champi_platforme_jaune", 110*dx, displayHeight-20*dx,5*dx, 21*dx, 20*dx, 5*dx, 2);
-        drawMovablePlatform("platforme", 130*dx, surface - 10*dx, 10*dx, (int) (20*dx*0.1657), true, 10*dx, surface-6*dx);
-        drawMovablePlatform("platforme", 150*dx, surface - 10*dx, 10*dx, (int) (20*dx*0.1657), false, 10*dx, surface-6*dx);
-        drawMovablePlatform("platforme", 170*dx, surface - 10*dx, 10*dx, (int) (20*dx*0.1657), true, 10*dx, surface-6*dx);
-        drawMovablePlatform("platforme", 190*dx, surface - 10*dx, 10*dx, (int) (20*dx*0.1657), false, 10*dx, surface-6*dx);
-        drawLine("BrownBloc", "brownbloc", 210*dx, 255*dx, surface - 5*BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT, true);
-        drawBloc("bloc", 254*dx, surface - 5*BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT, 5);
-        drawLine("BrownBloc", "brownbloc", 258*dx, 300*dx, surface - 5*BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT, true);
-        drawLine("BrownBloc", "brownbloc", 210*dx, 300*dx, displayHeight-BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT, true);
-        drawBloc("bloc_jaune", 294*dx, surface - 6*BLOC_HEIGHT, BLOC_WIDTH, BLOC_HEIGHT, 1);
-        drawMovablePlatform("nuageplatform2", 300*dx, displayHeight-BLOC_HEIGHT, 10*dx, 3*dx, true, surface - 5*BLOC_HEIGHT, displayHeight - BLOC_HEIGHT);
-        drawMovablePlatform("nuageplatform2", 310*dx, displayHeight-BLOC_HEIGHT, 10*dx, 3*dx, false, surface - 5*BLOC_HEIGHT, displayHeight - BLOC_HEIGHT);
-        drawPlatformeEphemereLine("tile1", 322*dx, surface - 2*BLOC_HEIGHT, 3*dx, 3*dx, 50, false, false, 10);
-        drawPlatformeEphemereLine("tile1", 352*dx, surface - 2*BLOC_HEIGHT-3*dx, 3*dx, 3*dx, 50, false, false, 10);
-        drawBloc("forest_platform", 385*dx, surface - 2*BLOC_HEIGHT-3*dx, CASTLE_WIDTH, CASTLE_HEIGHT/3, 2);
-        drawBloc("forest_platform", 385*dx+CASTLE_WIDTH +4*dx, surface - 8*dx, CASTLE_WIDTH, CASTLE_HEIGHT/3, 1);
-        drawCanon("canon", 425*dx, surface - 18*dx, 5*dx, 10*dx, false);
-        drawBloc("forest_platform", 440*dx, surface - 8*dx, CASTLE_WIDTH, CASTLE_HEIGHT/3, 1);
-        drawPyramid("BrownBloc", "brique_jaune", 480*dx, 10, surface-8*dx, 4*dx, 4*dx);
-        drawUnmovablePlatforme("nuageplatform2", 479*dx, (int) (surface - 6.5*dx), 10*dx, 3*dx);
-        drawUnmovablePlatforme("nuageplatform2", 496*dx, (int) (surface - 6.5*dx), 10*dx, 3*dx);
-        drawUnmovablePlatforme("nuageplatform2", 511*dx, (int) (surface - 6.5*dx), 10*dx, 3*dx);
-        drawUnmovablePlatforme("nuageplatform2", 487*dx, (int) (surface - 6.5*dx), 10*dx, 3*dx);
-        drawUnmovablePlatforme("nuageplatform2", 503*dx, (int) (surface - 6.5*dx), 10*dx, 3*dx);
-        drawGoomba("goomba", 120*dx, displayHeight-26*dx, false, true);
+        drawGoomba("goomba", 115*dx, displayHeight-30*dx, false, true);
+        drawParakoopa("greenparakoopa", 150*dx, surface - 20*dx, true, false);
+        drawParakoopa("greenparakoopa", 180*dx, surface - 20*dx, true, true);
+        drawPieceLine(135*dx, 10*dx, 20);
+        drawPieceLine(135*dx, surface-8*dx, 20);
         drawAlternatesBloc("bloc_jaune", "bloc", 76*dx, displayHeight - 33*dx, 3, 1, 3);
+        drawMovablePlatform("nuageplatform2", 130*dx, surface - 10*dx, 10*dx, 3*dx, true, 10*dx, surface);
+        drawMovablePlatform("nuageplatform2", 150*dx, surface - 10*dx, 10*dx, 3*dx, false, 10*dx, surface);
+        drawMovablePlatform("nuageplatform2", 170*dx, surface - 10*dx, 10*dx, 3*dx, true, 10*dx, surface);
+        drawMovablePlatform("nuageplatform2", 190*dx, surface - 10*dx, 10*dx, 3*dx, false, 10*dx, surface);
+        drawUnmovablePlatforme("forest_platform",210*dx, surface - 3*dx, CASTLE_WIDTH, CASTLE_HEIGHT/3);
+        drawAlternatesBloc("brownbloc", "bloc", 216*dx, surface - 18*dx, 3, 2, 4);
+        drawKoopa("greenkoopa", 220*dx, surface - 10*dx, false, true);
+        drawStaticPlatform("pillier_champi_platforme", "champi_platforme_jaune", 250*dx, displayHeight-10*dx,3*dx, 10*dx, 15*dx, 4*dx, 2);
+        drawStaticPlatform("pillier_champi_platforme", "champi_platforme", 280*dx, displayHeight-10*dx,3*dx, 10*dx, 15*dx, 4*dx, 3);
+        drawCanon("canon", 300*dx, surface - 14*dx, 5*dx, 10*dx, false);
+        drawColumn("BrownBloc", "brique_marron",300*dx ,displayHeight, 3,5*dx, 5*dx, false );
+        drawUnmovablePlatforme("forest_platform",310*dx, surface - 5*dx, CASTLE_WIDTH, CASTLE_HEIGHT/3);
+        drawUnmovablePlatforme("forest_platform",322*dx, surface - 20*dx, CASTLE_WIDTH, CASTLE_HEIGHT/3);
+        drawUnmovablePlatforme("forest_platform",334*dx, surface - 5*dx, CASTLE_WIDTH, CASTLE_HEIGHT/3);
+        drawGoomba("goomba", 320*dx, surface - 8*dx, false, true);
+        drawGoomba("goomba", 324*dx, surface - 8*dx, false, true);
+        drawGoomba("goomba", 328*dx, surface - 8*dx, false, true);
+        drawKoopa("greenkoopa", 320*dx, surface - 25*dx, false, false);
+        drawStaticPlatform("pillier_champi_platforme", "champi_platforme_jaune", 382*dx, surface-15*dx,5*dx, 22*dx, 20*dx, 5*dx, 2);
+        drawAlternatesBloc("brownbloc", "bloc", 355*dx, surface - 20*dx, 3, 1, 5);
+        drawLine("BrownBloc", "brownbloc", 350*dx, 382*dx, surface - 5*dx, BLOC_WIDTH, BLOC_HEIGHT, false);
+        drawPlatformeEphemereLine("tile1", 400*dx, surface - 20*dx, 3*dx, 3*dx, 70, false, false, 3);
+        drawPlatformeEphemereLine("tile1", 418*dx, surface - 20*dx, 3*dx, 3*dx, 70, false, false, 3);
+        drawPlatformeEphemereLine("tile1", 436*dx, surface - 20*dx, 3*dx, 3*dx, 70, false, false, 3);
+        drawPlatformeEphemereLine("tile1", 454*dx, surface - 20*dx, 3*dx, 3*dx, 70, false, false, 3);
+        drawPlatformeEphemereLine("tile1", 409*dx, surface - 6*dx, 3*dx, 3*dx, 70, false, false, 3);
+        drawPlatformeEphemereLine("tile1", 427*dx, surface - 6*dx, 3*dx, 3*dx, 70, false, false, 3);
+        drawPlatformeEphemereLine("tile1", 445*dx, surface - 6*dx, 3*dx, 3*dx, 70, false, false, 3);
+        drawPlatformeEphemereLine("tile1", 463*dx, surface - 6*dx, 3*dx, 3*dx, 70, false, false, 3);
+        drawParakoopa("greenparakoopa", 420*dx, surface - 13*dx, false, false);
+        drawParakoopa("greenparakoopa", 440*dx, surface - 13*dx, false, true);
+        drawMovablePlatform("nuageplatform2", 475*dx, surface - 10*dx, 10*dx, 3*dx, true, 10*dx, surface);
+        drawColumn("BrownBloc", "brique_marron",490*dx ,displayHeight, 6,5*dx, 5*dx, false );
+        drawCanon("canon", 490*dx, surface - 27*dx, 5*dx, 10*dx, false);
+        drawUnmovablePlatforme("nuageplatform2", 495*dx, surface - 10*dx, 10*dx, 3*dx);
+        drawUnmovablePlatforme("nuageplatform2", 505*dx, surface - 10*dx, 10*dx, 3*dx);
+        drawUnmovablePlatforme("nuageplatform2", 515*dx, surface - 10*dx, 10*dx, 3*dx);
+        drawUnmovablePlatforme("nuageplatform2", 525*dx, surface - 10*dx, 10*dx, 3*dx);
+        drawUnmovablePlatforme("nuageplatform2", 545*dx, surface - 10*dx, 10*dx, 3*dx);
+        drawUnmovablePlatforme("nuageplatform2", 555*dx, surface - 10*dx, 10*dx, 3*dx);
+        drawUnmovablePlatforme("nuageplatform2", 565*dx, surface - 10*dx, 10*dx, 3*dx);
+        drawUnmovablePlatforme("nuageplatform2", 575*dx, surface - 10*dx, 10*dx, 3*dx);
+        drawUnmovablePlatforme("nuageplatform2", 585*dx, surface - 10*dx, 10*dx, 3*dx);
+
+        drawPlatformeEphemereLine("tile1", 495*dx, displayHeight-3*dx, 3*dx, 3*dx, 70, false, false, 22);
+        drawColumn("BrownBloc", "brownbloc", 561*dx,displayHeight - BLOC_HEIGHT, 3, BLOC_WIDTH, BLOC_HEIGHT, false );
+        drawPieceLine(495*dx, surface - 4*dx, 23);
+        drawGoomba("goomba", 500*dx, surface, true, true);
+        drawGoomba("goomba", 500*dx, surface - 13*dx, false, true);
+
     }
     /**
      * DrawCastle dessine un château
      * @param key
      * @param x
-     * @param floorKey
      */
-    public void drawCastle(String key, int x, String...floorKey){
+    public void drawCastle(String key, int x){
         int castleY = displayHeight - FLOOR_HEIGHT - CASTLE_HEIGHT;
         Castle castle = new Castle(this, key, x, castleY, CASTLE_WIDTH, CASTLE_HEIGHT);
+        castles.add(castle);
+    }
+    public void drawCastle(String key, int x, int y){
+        Castle castle = new Castle(this, key, x, y, CASTLE_WIDTH, CASTLE_HEIGHT);
         castles.add(castle);
     }
     public void setCharacters(){

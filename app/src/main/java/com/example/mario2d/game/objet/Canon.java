@@ -68,5 +68,8 @@ public class Canon extends BrownBloc{
         } else {
             right = false;
         }
+        if (getX() < - displayWidth*3/2) {
+            activated = false;
+        }
     }
 }

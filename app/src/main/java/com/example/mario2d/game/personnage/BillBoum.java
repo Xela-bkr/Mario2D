@@ -51,12 +51,12 @@ public class BillBoum extends Ennemy{
         }
     }
     private void updateCollisions() {
-        boolean[] tab = player.detectCollision(this, 0, (int) (getWidth()*0.2), (int) (getHeight()*0.1), (int) (getWidth()*0.2));
+        boolean[] tab = player.detectCollision(this, 0, (int) (getWidth()*0.1), (int) (getHeight()*0.1), (int) (getWidth()*0.1));
         if (tab[0]) {
             dead();
             Audio.playSound(context, R.raw.kick_2);
         }
-        if (tab[1] || tab[2] || tab[3]) {
+        else if (tab[1] || tab[2] || tab[3]) {
             if(!player.getResting()) {
                 if (!player.getInvincible()) player.decreaseLife();
                 else dead(); Audio.playSound(context, R.raw.kick_2);
