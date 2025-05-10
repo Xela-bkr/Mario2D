@@ -28,6 +28,15 @@ import androidx.fragment.app.FragmentManager;
 import com.example.mario2d.R;
 import com.example.mario2d.game.loop.GameActivity;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 /**
@@ -74,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -381,19 +389,73 @@ public class MainActivity extends AppCompatActivity {
         switch(level){
             case 1 :
                 tv.setText("World : Prairie");
+                afficherScore(1);
                 break;
             case 2 :
-                tv.setText("World = Ghostland");
+                tv.setText("World : Ghostland");
+                afficherScore(2);
                 break;
             case 3 :
                 tv.setText("World : Egypt");
+                afficherScore(3);
                 break;
             case 4 :
                 tv.setText("World : Volcano");
+                afficherScore(4);
                 break;
             case 5 :
                 tv.setText("World : Sky");
+                afficherScore(5);
                 break;
         }
     }
+    public void afficherScore(int level) {
+        TextView scoreTV = findViewById(R.id.score);
+        TextView pieceTV = findViewById(R.id.score_piece);
+
+        String json = null;
+        InputStream jsonFile = null;
+        try {
+
+            json = lireJSONDepuisStockageInterne();
+
+            JSONObject jsonObject = new JSONObject(json);
+
+            JSONArray levelData = jsonObject.getJSONArray(String.format("Niveau%d", level));
+
+            int dataSize = levelData.length();
+            int bestPiece = 0;
+            int bestScore = 0;
+
+            for (int i = 0; i < dataSize; i++) {
+                JSONObject levelDataObject = levelData.getJSONObject(i);
+                if (levelDataObject.getInt("piece") > bestPiece)
+                    bestPiece = levelDataObject.getInt("piece");
+                if (levelDataObject.getInt("point") > bestScore)
+                    bestScore = levelDataObject.getInt("point");
+            }
+            scoreTV.setText(String.format("Score : %d", bestScore));
+            pieceTV.setText(String.format("Pieces : %d", bestPiece));
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public String lireJSONDepuisStockageInterne() {
+        try {
+            // Utilise requireContext() dans un Fragment pour obtenir le contexte de l'Activity
+            FileInputStream fis = openFileInput("data.json");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
+            StringBuilder builder = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                builder.append(line);
+            }
+            reader.close();
+            return builder.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }
