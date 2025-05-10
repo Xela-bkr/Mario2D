@@ -23,6 +23,7 @@ public class Podoboo extends Ennemy {
         topIsHurting = true;
         gravity = false;
         jumpImpulse = (int) (getHeight()*0.15);
+        setBitmaps();
     }
     @Override
     public void setBitmaps(){
@@ -79,8 +80,7 @@ public class Podoboo extends Ennemy {
             }
         } else if (compteurSaut < 30)
         {
-            if (up && this.bitmap != up3)
-            {
+            if (up && this.bitmap != up3) {
                 this.bitmap = up3;
             } else {
                 if(this.bitmap != down3)
@@ -100,7 +100,6 @@ public class Podoboo extends Ennemy {
             if (getY() < upLimit)
             {
                 up = false;
-                setBitmaps();
             } else {
                 translateY();
             }
@@ -108,7 +107,6 @@ public class Podoboo extends Ennemy {
             if (getY() > downLimit)
             {
                 up = true;
-                setBitmaps();
             } else {
                 translateY();
             }

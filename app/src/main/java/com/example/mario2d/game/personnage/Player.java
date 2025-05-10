@@ -57,6 +57,7 @@ public class Player extends Personnage{
             fire = false;
             skin = "";
             setBitmaps();
+            isResting = true;
             return;
         } else if (life > 1) {
             Audio.playSound(context, R.raw.mario_power_down);

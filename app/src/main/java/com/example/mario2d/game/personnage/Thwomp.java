@@ -41,16 +41,19 @@ public class Thwomp extends Ennemy{
     }
     @Override
     public void invincible(){
-        if(!isInvincible){isInvincible = true;}
-        if(isUp){
+        if (!isInvincible) {
+            isInvincible = true;
+        }
+        if (isUp) {
             if(this.bitmap != up){this.bitmap = up;}
             translateY(-7);
         }
         else if(isDown){
-            if(this.bitmap != down){this.bitmap = down;}
-            if(!gravity){gravity = true;}
+            if (this.bitmap != down) {this.bitmap = down;}
+            if (!gravity) {gravity = true;}
         }
-        if(collisionWithObject(0)){
+        if (collisionWithObject(0)) {
+
             if(compteurSaut < 40){
                 compteurSaut ++;
             }

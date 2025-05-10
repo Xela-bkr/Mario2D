@@ -4,6 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.example.mario2d.R;
+import com.example.mario2d.tool.Audio;
+
 public class Skelerex extends Koopa{
     private Bitmap demi_mort_droite, demi_mort_gauche, mort_droite, mort_gauche;
     public Skelerex(Context context, String name, int x, int y, int width, int height) {
@@ -46,6 +49,9 @@ public class Skelerex extends Koopa{
     public void rest(){
         if(isWalking){isWalking = false;}
         if(!isResting){isResting = true;}
+        if(restCompteur == 0){
+            Audio.playSound(context, R.raw.skelerex_fall);
+        }
         if(restCompteur < 20){
             if(isRight && this.bitmap != demi_mort_droite){this.bitmap = demi_mort_droite;}
             else if(!isRight && this.bitmap!=demi_mort_gauche){this.bitmap = demi_mort_gauche;}
