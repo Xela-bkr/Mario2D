@@ -1,10 +1,8 @@
 package com.example.mario2d.menu;
 
-import static com.example.mario2d.game.loop.GameActivity.LEVEL_SELECTED;
 import static java.security.AccessController.getContext;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -21,6 +19,12 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Switch;
 import android.widget.TextView;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -35,14 +39,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 /**
@@ -420,28 +420,33 @@ public class MainActivity extends AppCompatActivity {
 
         String json = null;
         InputStream jsonFile = null;
-        try {
-            String filename = "data.json";
-            File file = new File(getFilesDir(), filename);
 
-            if (!file.exists()) {
+        String filename = "data.json";
+        File file = new File(getFilesDir(), filename);
+
+        if (!file.exists()) {
+            try {
                 JSONObject defaultData = new JSONObject();
-                JSONArray levelArray = new JSONArray();
-                JSONObject initialEntry = new JSONObject();
-                initialEntry.put("piece", 0);
-                initialEntry.put("point", 0);
-                initialEntry.put("temps", 0);
-                levelArray.put(initialEntry);
-
-                for(int i = 1; i<6; i++){
+                for (int i = 1; i <= 5; i++) {
+                    JSONArray levelArray = new JSONArray();
+                    JSONObject initialEntry = new JSONObject();
+                    initialEntry.put("piece", 0);
+                    initialEntry.put("point", 0);
+                    initialEntry.put("temps", 0);
+                    levelArray.put(initialEntry);
                     defaultData.put(String.format("Niveau%d", i), levelArray);
                 }
 
-                FileOutputStream fos = openFileOutput(filename, Context.MODE_PRIVATE);
+                FileOutputStream fos = openFileOutput(filename, MODE_PRIVATE);
                 OutputStreamWriter writer = new OutputStreamWriter(fos);
                 writer.write(defaultData.toString(4));
                 writer.close();
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+                return; // quitte la fonction si création échoue
             }
+        }
+        try {
 
             json = lireJSONDepuisStockageInterne();
 
@@ -463,10 +468,6 @@ public class MainActivity extends AppCompatActivity {
             scoreTV.setText(String.format("Score : %d", bestScore));
             pieceTV.setText(String.format("Pieces : %d", bestPiece));
         } catch (JSONException e) {
-            throw new RuntimeException(e);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
