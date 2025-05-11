@@ -227,6 +227,35 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
+        Button delete = findViewById(R.id.delete);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String filename = "data.json";
+                File file = new File(getFilesDir(), filename);
+                try {
+                    JSONObject defaultData = new JSONObject();
+                    for (int i = 1; i <= 5; i++) {
+                        JSONArray levelArray = new JSONArray();
+                        JSONObject initialEntry = new JSONObject();
+                        initialEntry.put("piece", 0);
+                        initialEntry.put("point", 0);
+                        initialEntry.put("temps", 0);
+                        levelArray.put(initialEntry);
+                        defaultData.put(String.format("Niveau%d", i), levelArray);
+                    }
+
+                    FileOutputStream fos = openFileOutput(filename, MODE_PRIVATE);
+                    OutputStreamWriter writer = new OutputStreamWriter(fos);
+                    writer.write(defaultData.toString(4));
+                    writer.close();
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                    return; // quitte la fonction si création échoue
+                }
+                moveFragment(fragmentManager);
+            }
+        });
 
     }
     //****GETTERS****//
