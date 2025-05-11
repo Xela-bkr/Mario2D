@@ -947,10 +947,20 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
     private void win(){
         if(gameCompteur == 0){
+            Audio.playSound(getContext(), R.raw.world_clear);
             writeData();
             gameCompteur ++;
+        } else if (gameCompteur < 100) {
+            player.win();
+            gameCompteur ++;
+        } else if (gameCompteur < 350) {
+            if (player.getX() + player.getWidth()/2 < castles.get(1).getX() + castles.get(1).getWidth()/2) {
+                player.walk(8);
+                player.translateX(2);
+            }
+            gameCompteur ++;
         }
-        else if(gameCompteur < 200){
+        else if(gameCompteur < 420){
             player.win();
             gameCompteur++;
         }
